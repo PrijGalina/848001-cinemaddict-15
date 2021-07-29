@@ -1,7 +1,7 @@
 # Проект «Киноман»
 
 * Студент: [Галина Коцарь](https://up.htmlacademy.ru/ecmascript/15/user/848001).
-* Наставник: `Неизвестно`.
+* Наставник: [RAMAN LAURYNIUK](https://htmlacademy.ru/profile/id1666565).
 
 ---
 
