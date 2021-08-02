@@ -3,6 +3,8 @@ import {createSortingTemplate} from './view/sorting.js';
 import {createProfileTemplate} from './view/profile.js';
 import {createFilmsContainer} from './view/films-container.js';
 import {createMovieCardTemplate} from './view/movie-card.js';
+import {createMovieCounter} from './view/movie-counter.js';
+import {createPopupMovieInfo} from './view/popup-movie-info.js';
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -24,12 +26,17 @@ const allFilmsElement = filmListsContainer[0].querySelector('.films-list__contai
 const ratedFilmsElement = filmListsContainer[1].querySelector('.films-list__container');
 const commentedFilmsElement = filmListsContainer[2].querySelector('.films-list__container');
 
-const displayMovieCard = (container, function_name, count) => {
+const displayMovieCard = (container, functionName, method, count) => {
   for (let i = 0; i < count; i++) {
-    render(container, function_name, 'beforeend');
+    render(container, functionName, method, count);
   }
 };
 
-//render(allFilmsElement, createMovieCardTemplate(), 'beforeend');
-//render(ratedFilmsElement, createMovieCardTemplate(), 'beforeend');
-//render(commentedFilmsElement, createMovieCardTemplate(), 'beforeend');
+displayMovieCard(allFilmsElement, createMovieCardTemplate(), 'beforeend', ALL_FILMS_COUNT);
+displayMovieCard(ratedFilmsElement, createMovieCardTemplate(), 'beforeend', RATED_FILMS_COUNT);
+displayMovieCard(commentedFilmsElement, createMovieCardTemplate(), 'beforeend', COMMENTED_FILMS_COUNT);
+
+const movieCounterElement = document.querySelector('.footer__statistics');
+render(movieCounterElement, createMovieCounter(), 'beforeend');
+
+render(siteMainElement, createPopupMovieInfo(), 'beforeend');
