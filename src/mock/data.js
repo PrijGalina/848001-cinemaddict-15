@@ -1,5 +1,5 @@
 
-const arrayMovieTitles = {
+const arrayMovieInfo = {
   1: {
     title: 'Popeye the Sailor Meets Sindbad the Sailor',
     original: 'Popeye Meets Sindbad',
@@ -45,5 +45,7 @@ const descriptionText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit
 let descriptionTextArray = descriptionText.split('. ');
 descriptionTextArray.pop();
 descriptionTextArray = descriptionTextArray.map((string) => `${string}. `);
-
-export {arrayMovieTitles, workingGroup, ageRestrictionsArray, durationFilmsArray, countryArray, releaseArray, descriptionTextArray};
+const emojiArray = ['sleeping', 'smile', 'puke', 'angry'];
+const COUNT_MOVIES = 20;
+const COUNT_COMMENTS = 10;
+export {arrayMovieInfo, workingGroup, ageRestrictionsArray, durationFilmsArray, countryArray, releaseArray, descriptionTextArray, emojiArray, COUNT_MOVIES, COUNT_COMMENTS};

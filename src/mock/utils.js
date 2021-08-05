@@ -12,4 +12,21 @@ const getRandomPositiveFloat = (numValue, otherNumValue, digits = 1) => {
   const result = Math.random() * (upper - lower) + lower;
   return result.toFixed(digits);
 };
-export {getRandomPositiveInteger, getRandomPositiveFloat};
+
+const getRandomArray = (array, amount) => {
+  const numberElements = getRandomPositiveInteger(1, amount);
+  const randomArray = [];
+  for (let i = 1; i <= numberElements; i++) {
+    const randomIndex = getRandomPositiveInteger(0, array.length-1);
+    randomArray.push(array[randomIndex]);
+    array.splice(array[randomIndex], 1);
+  }
+  return randomArray;
+};
+
+const getRandomElement = (array) => {
+  const randomIndex = getRandomPositiveInteger(0, array.length-1);
+  return array[randomIndex];
+};
+
+export {getRandomPositiveInteger, getRandomPositiveFloat, getRandomArray, getRandomElement};

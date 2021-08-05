@@ -5,8 +5,8 @@ import {createFilmsContainer} from './view/films-container.js';
 import {createMovieCardTemplate} from './view/movie-card.js';
 import {createMovieCounter} from './view/movie-counter.js';
 import {createPopupMovieInfo} from './view/popup-movie-info.js';
-//import  {generateMovie} from './mock/movie.js';
-import './mock/movie.js';
+import {COUNT_MOVIES} from './mock/data.js';
+import {generateMovie} from './mock/movie.js';
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -43,4 +43,5 @@ render(movieCounterElement, createMovieCounter(), 'beforeend');
 
 render(siteMainElement, createPopupMovieInfo(), 'beforeend');
 
-//console.log(generateMovie);
+const movies = new Array(COUNT_MOVIES).fill().map(generateMovie);
+console.log(movies);
