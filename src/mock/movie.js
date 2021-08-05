@@ -1,6 +1,6 @@
 import {getRandomPositiveInteger, getRandomPositiveFloat, getRandomArray, getRandomElement} from './utils';
-import {arrayMovieInfo, workingGroup, ageRestrictionsArray, durationFilmsArray, countryArray, releaseArray, descriptionTextArray, COUNT_COMMENTS} from './data';
-import {generateComment} from './mock/comment.js';
+import { arrayMovieInfo, workingGroup, ageRestrictionsArray, durationFilmsArray, countryArray, releaseArray, descriptionTextArray, COUNT_COMMENTS, COUNT_MOVIES} from './data.js';
+import {generateComment} from './comment.js';
 import dayjs from 'dayjs';
 import objectSupport from '../../node_modules/dayjs/plugin/objectSupport';
 import advancedFormat from '../../node_modules/dayjs/plugin/advancedFormat';
@@ -37,9 +37,19 @@ const generateData = () => {
   return [day, monthName, year];
 };
 
+const comment = new Array(COUNT_COMMENTS).fill().map(generateComment);
+console.log('comment', comment);
+const getCountComments = (commentArray, id) => {
+  Object.values(commentArray).forEach((commentElement) => {
+    const countComments = commentArray.count(commentElement.aboutFilm);
+  });
+  console.log('countComments',countComments);
+};
+
 const generateMovie = () => {
   const indexMovieTitle = getRandomPositiveInteger(1, Object.keys(arrayMovieInfo).length);
   const dateArray = generateData();
+  const filmId = indexMovieTitle;
   const movie = {
     originalName: arrayMovieInfo[indexMovieTitle].original,
     title: arrayMovieInfo[indexMovieTitle].title,
@@ -54,14 +64,12 @@ const generateMovie = () => {
     actors: getRandomArray(workingGroup, 6),
     country: getRandomElement(countryArray),
     ageRestrictions: getRandomElement(ageRestrictionsArray),
-    countComments: '',
+    countComments: getCountComments(comment, filmId),
     isFavorite: Boolean(getRandomPositiveInteger(0, 1)),
     isWatched: Boolean(getRandomPositiveInteger(0, 1)),
     isWatchlist: Boolean(getRandomPositiveInteger(0, 1)),
   };
   return movie;
 };
-
-const comment = new Array(COUNT_MOVIES).fill().map(generateMovie);
 
 export {generateMovie};

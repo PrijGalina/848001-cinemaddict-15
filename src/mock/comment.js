@@ -20,7 +20,7 @@ const getCommentDate = () => {
 
 const generateComment = () => {
   const emojiIndex = getRandomElement(emojiArray);
-  const filmId = getRandomPositiveInteger(0, arrayMovieInfo.length);
+  const filmId = getRandomPositiveInteger(1, Object.keys(arrayMovieInfo).length);
   const comment = {
     emoji: emojiIndex,
     text: getRandomArray(descriptionTextArray, 2).join('').trim(),
