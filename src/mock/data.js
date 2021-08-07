@@ -4,36 +4,43 @@ const arrayMovieInfo = {
     title: 'Popeye the Sailor Meets Sindbad the Sailor',
     original: 'Popeye Meets Sindbad',
     poster: '../../images/posters/popeye-meets-sinbad.png',
+    filmId: 0,
   },
   2: {
     title: 'Sagebrush Trail',
     original: 'The trail in the wormwood',
     poster: '../../images/posters/sagebrush-trail.jpg',
+    filmId: 1,
   },
   3: {
     title: 'The Dance of Life',
     original: 'The Dance your life',
     poster: '../../images/posters/the-dance-of-life.jpg',
+    filmId: 2,
   },
   4: {
     title: 'The Man with the Golden Arm',
     original: 'The man with the golden leg',
     poster: '../../images/posters/the-man-with-the-golden-arm.jpg',
+    filmId: 3,
   },
   5: {
     title: 'The Great Flamarion',
     original: 'The Flamarion',
     poster: '../../images/posters/the-great-flamarion.jpg',
+    filmId: 4,
   },
   6: {
     title: 'Santa Claus Conquers the Martian',
     original: 'Santa Claus',
     poster: '../../images/posters/santa-claus-conquers-the-martians.jpg',
+    filmId: 5,
   },
   7: {
     title: 'Made for Each Other',
     original: 'Made for Each Other',
     poster: '../../images/posters/made-for-each-other.png',
+    filmId: 6,
   },
 };
 const workingGroup = ['Anthony Mann', 'Anne Wigton', 'Heinz Herald', 'Richard Weil', 'Erich von Stroheim', 'Mary Beth Hughes', 'Dan Duryea', 'Anthony von Stroheim', 'Anne Duryea', 'Heinz Beth Hughes', 'Richard Duryea', 'Erich Mann', 'Mary Herald', 'Dan Wigton', 'Anthony Weil'];

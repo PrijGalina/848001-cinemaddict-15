@@ -15,12 +15,17 @@ const getRandomPositiveFloat = (numValue, otherNumValue, digits = 1) => {
 
 const getRandomArray = (array, amount) => {
   const numberElements = getRandomPositiveInteger(1, amount);
-  const randomArray = [];
+  const arrayCopy = array;
+  /*const randomArray = [];
   for (let i = 1; i <= numberElements; i++) {
-    const randomIndex = getRandomPositiveInteger(0, array.length-1);
-    randomArray.push(array[randomIndex]);
-    array.splice(array[randomIndex], 1);
-  }
+    const randomIndex = getRandomPositiveInteger(0, arrayCopy.length-1);
+    randomArray.push(arrayCopy[randomIndex]);
+    arrayCopy.splice(arrayCopy[randomIndex], 1);
+  }*/
+  const randomArray = new Array(numberElements).fill().map((el) => {
+    const randomIndex = getRandomPositiveInteger(0, arrayCopy.length - 1);
+    return arrayCopy[randomIndex];
+  });
   return randomArray;
 };
 

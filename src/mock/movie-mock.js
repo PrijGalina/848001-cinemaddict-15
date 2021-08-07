@@ -1,9 +1,9 @@
 import {getRandomPositiveInteger, getRandomPositiveFloat, getRandomArray, getRandomElement} from './utils';
-import { arrayMovieInfo, workingGroup, ageRestrictionsArray, durationFilmsArray, countryArray, releaseArray, descriptionTextArray, COUNT_COMMENTS, COUNT_MOVIES} from './data.js';
+import { arrayMovieInfo, workingGroup, ageRestrictionsArray, durationFilmsArray, countryArray, releaseArray, descriptionTextArray, COUNT_COMMENTS} from './data.js';
 import {generateComment} from './comment.js';
 import dayjs from 'dayjs';
-import objectSupport from '../../node_modules/dayjs/plugin/objectSupport';
-import advancedFormat from '../../node_modules/dayjs/plugin/advancedFormat';
+import objectSupport from 'dayjs/plugin/objectSupport';
+import advancedFormat from 'dayjs/plugin/advancedFormat';
 dayjs.extend(objectSupport);
 dayjs.extend(advancedFormat);
 
@@ -38,19 +38,18 @@ const generateData = () => {
 };
 
 const comment = new Array(COUNT_COMMENTS).fill().map(generateComment);
-console.log('comment', comment);
+const commentIdArray = Array.from(comment).map((el) => el.aboutFilm);
+
 const getCountComments = (commentArray, id) => {
-  Object.values(commentArray).forEach((commentElement) => {
-    const countComments = commentArray.count(commentElement.aboutFilm);
-  });
-  console.log('countComments',countComments);
+  const result = commentArray.filter(i => i === id).length;
+  return result;
 };
 
 const generateMovie = () => {
   const indexMovieTitle = getRandomPositiveInteger(1, Object.keys(arrayMovieInfo).length);
   const dateArray = generateData();
-  const filmId = indexMovieTitle;
   const movie = {
+    filmId: arrayMovieInfo[indexMovieTitle].filmId,
     originalName: arrayMovieInfo[indexMovieTitle].original,
     title: arrayMovieInfo[indexMovieTitle].title,
     description: getRandomArray(descriptionTextArray, 5).join('').trim(),
@@ -61,10 +60,10 @@ const generateMovie = () => {
     genres: getRandomArray(releaseArray, 4),
     directors: getRandomArray(workingGroup, 2),
     writers: getRandomArray(workingGroup, 3),
-    actors: getRandomArray(workingGroup, 6),
+    actors: getRandomArray(workingGroup, 4),
     country: getRandomElement(countryArray),
     ageRestrictions: getRandomElement(ageRestrictionsArray),
-    countComments: getCountComments(comment, filmId),
+    countComments: getCountComments(commentIdArray, arrayMovieInfo[indexMovieTitle].filmId),
     isFavorite: Boolean(getRandomPositiveInteger(0, 1)),
     isWatched: Boolean(getRandomPositiveInteger(0, 1)),
     isWatchlist: Boolean(getRandomPositiveInteger(0, 1)),
