@@ -41,7 +41,7 @@ const comment = new Array(COUNT_COMMENTS).fill().map(generateComment);
 const commentIdArray = Array.from(comment).map((el) => el.aboutFilm);
 
 const getCountComments = (commentArray, id) => {
-  const result = commentArray.filter(i => i === id).length;
+  const result = commentArray.filter((i) => i === id).length;
   return result;
 };
 
@@ -54,7 +54,7 @@ const generateMovie = () => {
     title: arrayMovieInfo[indexMovieTitle].title,
     description: getRandomArray(descriptionTextArray, 5).join('').trim(),
     poster: arrayMovieInfo[indexMovieTitle].poster,
-    release: dateArray[2],
+    release: dateArray,
     rating: getRandomPositiveFloat(1, 10, 1),
     duration: getRandomElement(durationFilmsArray),
     genres: getRandomArray(releaseArray, 4),
@@ -71,4 +71,4 @@ const generateMovie = () => {
   return movie;
 };
 
-export {generateMovie};
+export { generateMovie, comment};
