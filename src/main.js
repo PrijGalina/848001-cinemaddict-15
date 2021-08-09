@@ -45,7 +45,7 @@ render(movieCounterElement, createMovieCounter(), 'beforeend');
 
 const commentsAboutFilm = comment.filter((commentElement) => commentElement.aboutFilm === movies[0].filmId);
 
-//render(siteMainElement, createPopupMovieInfo(movies[0], commentsAboutFilm), 'beforeend');
+render(siteMainElement, createPopupMovieInfo(movies[0], commentsAboutFilm), 'beforeend');
 
 const showMoreButton = document.querySelector('.films-list__show-more');
 
