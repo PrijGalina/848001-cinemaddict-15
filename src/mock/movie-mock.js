@@ -1,5 +1,5 @@
 import {getRandomPositiveInteger, getRandomPositiveFloat, getRandomArray, getRandomElement} from './utils';
-import { arrayMovieInfo, workingGroup, ageRestrictionsArray, durationFilmsArray, countryArray, releaseArray, descriptionTextArray, COUNT_COMMENTS} from './data.js';
+import { arrayMovieInfo, workingGroup, ageRestrictionsArray, durationFilmsArray, countryArray, releaseArray, descriptionTextArray} from './data.js';
 import {generateComment} from './comment.js';
 import dayjs from 'dayjs';
 import objectSupport from 'dayjs/plugin/objectSupport';
@@ -7,6 +7,7 @@ import advancedFormat from 'dayjs/plugin/advancedFormat';
 dayjs.extend(objectSupport);
 dayjs.extend(advancedFormat);
 
+const COMMENT_COUNT = 10;
 const generateData = () => {
   const minYearsGap = 1900;
   const maxYearsGap = dayjs().toDate().getFullYear();
@@ -37,7 +38,7 @@ const generateData = () => {
   return [day, monthName, year];
 };
 
-const comment = new Array(COUNT_COMMENTS).fill().map(generateComment);
+const comment = new Array(COMMENT_COUNT).fill().map(generateComment);
 const commentIdArray = Array.from(comment).map((el) => el.aboutFilm);
 
 const getCountComments = (commentArray, id) => {

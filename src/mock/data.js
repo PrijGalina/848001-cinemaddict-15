@@ -53,6 +53,5 @@ let descriptionTextArray = descriptionText.split('. ');
 descriptionTextArray.pop();
 descriptionTextArray = descriptionTextArray.map((string) => `${string}. `);
 const emojiArray = ['sleeping', 'smile', 'puke', 'angry'];
-const COUNT_MOVIES = 20;
-const COUNT_COMMENTS = 10;
-export {arrayMovieInfo, workingGroup, ageRestrictionsArray, durationFilmsArray, countryArray, releaseArray, descriptionTextArray, emojiArray, COUNT_MOVIES, COUNT_COMMENTS};
+
+export {arrayMovieInfo, workingGroup, ageRestrictionsArray, durationFilmsArray, countryArray, releaseArray, descriptionTextArray, emojiArray};
