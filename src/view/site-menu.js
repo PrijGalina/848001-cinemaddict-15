@@ -19,20 +19,24 @@ const createMenuTemplate = (moviesArray) => {
 };
 
 export default class SiteMenu {
-  constructor() {
-
+  constructor(movies) {
+    this._movies = movies;
     this._element = null;
   }
 
   getTemplate() {
-
+    return createMenuTemplate(this._movies);
   }
 
   getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
 
+    return this._element;
   }
 
   removeElement() {
-
+    this._element = null;
   }
 }

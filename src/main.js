@@ -1,4 +1,4 @@
-import {createMenuTemplate} from './view/site-menu.js';
+import SiteMenuView from './view/site-menu.js';
 import {createSortingTemplate} from './view/sorting.js';
 import {createProfileTemplate} from './view/profile.js';
 import {createFilmsContainer} from './view/films-container.js';
@@ -6,7 +6,7 @@ import {createMovieCardTemplate} from './view/movie-view.js';
 import {createMovieCounter} from './view/movie-counter.js';
 import {createPopupMovieInfo} from './view/popup-movie-info.js';
 import { generateMovie, comment} from './mock/movie-mock.js';
-import {renderTemplate, renderElement} from './utils.js';
+import {renderTemplate, renderElement, RenderPosition} from './utils.js';
 
 const siteHeaderElement = document.querySelector('.header');
 const siteMainElement = document.querySelector('.main');
@@ -15,7 +15,7 @@ const MOVIE_COUNT_PER_STEP = 5;
 const movies = new Array(MOVIE_COUNT).fill().map(generateMovie);
 
 renderTemplate(siteHeaderElement, createProfileTemplate(), 'beforeend');
-renderTemplate(siteMainElement, createMenuTemplate(movies), 'beforeend');
+renderElement(siteMainElement, new SiteMenuView(movies).getElement(), RenderPosition.BEFOREEND);
 renderTemplate(siteMainElement, createSortingTemplate(), 'beforeend');
 renderTemplate(siteMainElement, createFilmsContainer(), 'beforeend');
 
