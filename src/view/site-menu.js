@@ -1,4 +1,6 @@
-export const createMenuTemplate = (moviesArray) => {
+import {createElement} from '../utils.js';
+
+const createMenuTemplate = (moviesArray) => {
   const getWathedCount = (array) => array.filter((film) => film.isWatched === true).length;
 
   const getFavoriteCount = (array) => array.filter((film) => film.isFavorite === true).length;
@@ -15,3 +17,22 @@ export const createMenuTemplate = (moviesArray) => {
     <a href="#stats" class="main-navigation__additional">Stats</a>
   </nav>`;
 };
+
+export default class SiteMenu {
+  constructor() {
+
+    this._element = null;
+  }
+
+  getTemplate() {
+
+  }
+
+  getElement() {
+
+  }
+
+  removeElement() {
+
+  }
+}

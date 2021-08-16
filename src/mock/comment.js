@@ -1,5 +1,5 @@
-import {getRandomArray, getRandomElement, getRandomPositiveInteger} from './utils';
-import {workingGroup, descriptionTextArray, emojiArray, arrayMovieInfo} from './data';
+import {getRandomArray, getRandomElement, getRandomPositiveInteger} from './../utils.js';
+import {workingGroup, descriptionTextArray, emojiArray, arrayMovieInfo} from './../data.js';
 
 const getCommentDate = () => {
   const maxDayAgo = 10;
