@@ -1,4 +1,6 @@
-export const createMovieCardTemplate = (movieData) => {
+import {createElement} from '../utils.js';
+
+const createMovieCardTemplate = (movieData) => {
   const { title, rating, release, duration, genres, poster, description, countComments, isFavorite, isWatched, isWatchlist } = movieData;
   const isActive = (boolean) => (boolean) ? 'film-card__controls-item film-card__controls-item--active' : 'film-card__controls-item';
   const isHidden = (value) => ((value === 0) || (value === 'NULL') || (value === undefined)) ? 'visually-hidden' : '';
@@ -21,3 +23,26 @@ export const createMovieCardTemplate = (movieData) => {
     </div>
   </article>`;
 };
+
+export default class MovieCard {
+  constructor(movie) {
+    this._movie = movie;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createMovieCardTemplate(this._movie);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
