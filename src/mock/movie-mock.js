@@ -1,5 +1,5 @@
-import {getRandomPositiveInteger, getRandomPositiveFloat, getRandomArray, getRandomElement} from './utils';
-import { arrayMovieInfo, workingGroup, ageRestrictionsArray, durationFilmsArray, countryArray, releaseArray, descriptionTextArray} from './data.js';
+import {getRandomPositiveInteger, getRandomPositiveFloat, getRandomArray, getRandomElement} from './../utils.js';
+import { arrayMovieInfo, workingGroup, ageRestrictionsArray, durationFilmsArray, countryArray, releaseArray, descriptionTextArray} from './../data.js';
 import {generateComment} from './comment.js';
 import dayjs from 'dayjs';
 import objectSupport from 'dayjs/plugin/objectSupport';
