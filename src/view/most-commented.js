@@ -1,16 +1,19 @@
 import {createElement} from '../utils.js';
 
-const createFilmsContainer = () => (
-  '<section class="films"></section>'
+const createMostCommentedSection = () => (
+  `<section class="films-list films-list--extra films-list--commented">
+    <h2 class="films-list__title">Most commented</h2>
+    <div class="films-list__container"></div>
+  </section>`
 );
 
-export default class FilmContainer {
+export default class MostCommented {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createFilmsContainer();
+    return createMostCommentedSection();
   }
 
   getElement() {
