@@ -10,13 +10,12 @@ import MovieCounterView from './view/movie-counter.js';
 import MoviePopupView from './view/popup-movie-info.js';
 import NoMovieView from './view/no-movie.js';
 import {generateMovie, comment} from './mock/movie-mock.js';
-import {render, RenderPosition} from './utils.js';
+import {render, RenderPosition} from './utils/utils.js';
 import {MOVIE_COUNT, MOVIE_COUNT_PER_STEP, RATED_FILMS_COUNT, COMMENTED_FILMS_COUNT} from './data.js';
 
 const siteHeaderElement = document.querySelector('.header');
 const siteMainElement = document.querySelector('.main');
 const movies = new Array(MOVIE_COUNT).fill().map(generateMovie);
-//const movieCount = Math.min(movies.length, MOVIE_COUNT_PER_STEP) + RATED_FILMS_COUNT + COMMENTED_FILMS_COUNT;
 
 render(siteHeaderElement, new ProfileView().getElement(), RenderPosition.BEFOREEND);
 render(siteMainElement, new SiteMenuView(movies).getElement(), RenderPosition.BEFOREEND);
