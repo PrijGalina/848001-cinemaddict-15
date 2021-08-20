@@ -1,4 +1,4 @@
-import {getRandomPositiveInteger, getRandomPositiveFloat, getRandomArray, getRandomElement} from './../utils.js';
+import {getRandomPositiveInteger, getRandomPositiveFloat, getRandomArray, getRandomElement} from '../utils/get-random.js';
 import { arrayMovieInfo, workingGroup, ageRestrictionsArray, durationFilmsArray, countryArray, releaseArray, descriptionTextArray} from './../data.js';
 import {generateComment} from './comment.js';
 import dayjs from 'dayjs';
