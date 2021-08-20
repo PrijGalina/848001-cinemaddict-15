@@ -153,9 +153,20 @@ export default class MoviePopup extends AbstractView {
     super();
     this._movie = movie;
     this._comments = comments;
+    this._closeClickHandler = this._closeClickHandler.bind(this);
   }
 
   getTemplate() {
     return createPopupMovieInfo(this._movie, this._comments);
+  }
+
+  _closeClickHandler(e) {
+    e.preventDefault();
+    this._callback.closeClick();
+  }
+
+  setCloseClickHandler(callback) {
+    this._callback.closeClick = callback;
+    this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._closeClickHandler);
   }
 }
