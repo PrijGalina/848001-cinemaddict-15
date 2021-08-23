@@ -1,10 +1,10 @@
 import SiteMenuView from './view/site-menu.js';
 import SortingView from './view/sorting.js';
 import ProfileView from './view/profile.js';
-import FilmContainerView from './view/films-container.js';
-import AllMoviesView from './view/all-movies.js';
-import TopRatedView from './view/top-rated.js';
-import MostCommentedView from './view/most-commented.js';
+import MoviesContainerView from './view/movies-container.js';
+import AllMoviesView from './view/all-movies-block.js';
+import TopRatedView from './view/rated-movies-block.js';
+import MostCommentedView from './view/commented-movies-block.js';
 import MovieCardView from './view/movie-view.js';
 import MovieCounterView from './view/movie-counter.js';
 import MoviePopupView from './view/popup-movie-info.js';
@@ -76,7 +76,7 @@ if(MOVIE_COUNT === 0){
 }
 else {
   render(siteMainElement, new SortingView(), RenderPosition.BEFOREEND);
-  render(siteMainElement, new FilmContainerView(), RenderPosition.BEFOREEND);
+  render(siteMainElement, new MoviesContainerView(), RenderPosition.BEFOREEND);
 
   const filmListsContainer = siteMainElement.querySelector('.films');
   render(filmListsContainer, new AllMoviesView(), RenderPosition.BEFOREEND);
