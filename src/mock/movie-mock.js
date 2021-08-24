@@ -38,11 +38,11 @@ const generateData = () => {
   return [day, monthName, year];
 };
 
-const comment = new Array(COMMENT_COUNT).fill().map(generateComment);
-const commentIdArray = Array.from(comment).map((el) => el.aboutFilm);
+const commentsArray = new Array(COMMENT_COUNT).fill().map(generateComment);
+const commentsIdArray = Array.from(commentsArray).map((el) => el.aboutFilm);
 
-const getCountComments = (commentArray, id) => {
-  const result = commentArray.filter((i) => i === id).length;
+const getCountComments = (comments, id) => {
+  const result = comments.filter((i) => i === id).length;
   return result;
 };
 
@@ -64,7 +64,7 @@ const generateMovie = () => {
     actors: getRandomArray(workingGroup, 4),
     country: getRandomElement(countryArray),
     ageRestrictions: getRandomElement(ageRestrictionsArray),
-    countComments: getCountComments(commentIdArray, arrayMovieInfo[indexMovieTitle].filmId),
+    countComments: getCountComments(commentsIdArray, arrayMovieInfo[indexMovieTitle].filmId),
     isFavorite: Boolean(getRandomPositiveInteger(0, 1)),
     isWatched: Boolean(getRandomPositiveInteger(0, 1)),
     isWatchlist: Boolean(getRandomPositiveInteger(0, 1)),
@@ -72,4 +72,4 @@ const generateMovie = () => {
   return movie;
 };
 
-export { generateMovie, comment};
+export { generateMovie, commentsArray};
