@@ -7,6 +7,7 @@ import NoMovieView from '../view/no-movie';
 import SortingView from '../view/sorting';
 import ShowMoreButtonView from '../view/show-more-button.js';
 import {render, RenderPosition} from '../utils/render.js';
+import MoviePresenter from '../presenter/movie.js';
 
 
 const MOVIE_COUNT_PER_STEP = 5;
@@ -15,7 +16,7 @@ const COMMENTED_MOVIES_COUNT = 2;
 const NUMBER_OF_FIRST = 0;
 
 export default class MoviesList {
-  constructor(mainContainer) {
+  constructor(mainContainer, commentsArray) {
     this._mainContainer = mainContainer; //siteMainElement
     this._moviesContainer = new MoviesContainerView();
     this._allMoviesList = new AllMoviesView();
@@ -28,6 +29,8 @@ export default class MoviesList {
     this._sortedByComments = [];
     this._renderedMoviesCount =  MOVIE_COUNT_PER_STEP;
     this._handlerLoadMoreButtonClick = this._handlerLoadMoreButtonClick.bind(this);
+    this._commentsArray = commentsArray;
+    this._commentsAboutFilm = [];
   }
 
   init(movies) {
@@ -37,14 +40,14 @@ export default class MoviesList {
   }
 
   _renderSort() {
-    render(this._mainContainer, this._commentedMoviesList, RenderPosition.BEFOREEND);
+    render(this._moviesContainer, this._sortComponent, RenderPosition.BEFOREEND);
   }
 
   _renderMovie(movie, container) {
     //отрисует 1 фильм
-    const place = container.getElement().querySelector('.films-list__container');
-    const movieCard = new MovieCardView(movie);
-    render(place, movieCard, RenderPosition.BEFOREEND);
+    this._commentsAboutFilm = this._commentsArray.filter((commentElement) => commentElement.aboutFilm === movie.filmId);
+    const moviePresenter = new MoviePresenter(container, this._commentsAboutFilm);
+    moviePresenter.init(movie);
   }
 
   _renderMovies(from, to, array, container) {
