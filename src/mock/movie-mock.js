@@ -50,6 +50,7 @@ const generateMovie = () => {
   const indexMovieTitle = getRandomPositiveInteger(1, Object.keys(arrayMovieInfo).length);
   const dateArray = generateData();
   const movie = {
+    id: getRandomPositiveInteger(0, 10000),
     filmId: arrayMovieInfo[indexMovieTitle].filmId,
     originalName: arrayMovieInfo[indexMovieTitle].original,
     title: arrayMovieInfo[indexMovieTitle].title,

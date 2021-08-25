@@ -31,6 +31,8 @@ export default class MoviesList {
     this._handlerLoadMoreButtonClick = this._handlerLoadMoreButtonClick.bind(this);
     this._commentsArray = commentsArray;
     this._commentsAboutFilm = [];
+    this._moviePresenter = new Map();
+    this._handleModeChange = this._handleModeChange.bind(this);
   }
 
   init(movies) {
@@ -46,8 +48,9 @@ export default class MoviesList {
   _renderMovie(movie, container) {
     //отрисует 1 фильм
     this._commentsAboutFilm = this._commentsArray.filter((commentElement) => commentElement.aboutFilm === movie.filmId);
-    const moviePresenter = new MoviePresenter(container, this._commentsAboutFilm);
+    const moviePresenter = new MoviePresenter(container, this._commentsAboutFilm, this._handleModeChange);
     moviePresenter.init(movie);
+    this._moviePresenter.set(movie.id, moviePresenter);
   }
 
   _renderMovies(from, to, array, container) {
@@ -99,6 +102,10 @@ export default class MoviesList {
       else {return 0;}
     });
     this._renderMovies(NUMBER_OF_FIRST,  COMMENTED_MOVIES_COUNT, this._sortedByComments, this._commentedMoviesList);
+  }
+
+  _handleModeChange() {
+    this._moviePresenter.forEach((presenter) => presenter.resetPopup());
   }
 
   _renderMoviesContainer(){
