@@ -32,12 +32,19 @@ export default class Movie {
   init(movie) {
     this._movie = movie;
     const prevMovieComponent = this._movieComponent;
+    const prevPopupComponent = this._popupComponent;
 
     this._movieComponent = new MovieCardView(movie);
     this._movieComponent.setOpenClickHandler(this._handleOpenPopupClick);
     this._movieComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._movieComponent.setWatchlistClickHandler(this._handleWatchlistClick);
     this._movieComponent.setHistoryClickHandler(this._handleHistoryClick);
+
+    this._popupComponent = new MoviePopupView(this._movie, this._commentsAbout);
+    this._popupComponent.setCloseClickHandler(this._handleClosePopupClick);
+    this._popupComponent.setFavoriteClickPopupHandler(this._handleFavoriteClick);
+    this._popupComponent.setWatchlistClickPopupHandler(this._handleWatchlistClick);
+    this._popupComponent.setHistoryClickPopupHandler(this._handleHistoryClick);
 
     if(prevMovieComponent === null){
       this._place = this._moviesContainer.getElement().querySelector('.films-list__container');
@@ -46,7 +53,9 @@ export default class Movie {
     }
 
     replace(this._movieComponent, prevMovieComponent);
-    remove(prevMovieComponent);
+    replace(this._popupComponent, prevPopupComponent);
+    //remove(prevMovieComponent);
+    //remove(prevPopupComponent);
   }
 
   destroy() {
@@ -70,11 +79,9 @@ export default class Movie {
 
   _openMoviePopup() {
     const siteMainElement = document.querySelector('.main');
-    this._popupComponent = new MoviePopupView(this._movie, this._commentsAbout);
-    this._popupComponent.setCloseClickHandler(this._handleClosePopupClick);
     render(siteMainElement, this._popupComponent, RenderPosition.BEFOREEND);
-    this._changeMode();
-    this._mode = Mode.CHANGED;
+    //this._changeMode();
+    //this._mode = Mode.CHANGED;
   }
 
   _closeMoviePopup() {
@@ -102,6 +109,7 @@ export default class Movie {
         },
       ),
     );
+    console.log(this);
   }
 
   _handleFavoriteClick() {
