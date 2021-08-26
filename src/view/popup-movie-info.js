@@ -1,7 +1,7 @@
 import AbstractView from './abstract.js';
 
 const createPopupMovieInfo = (movieData, commentsData) => {
-  const { originalName, title, rating, release, duration, genres, poster, description, isFavorite, isWatched, isWatchlist, directors, writers, actors, country, ageRestrictions} = movieData;
+  const { originalName, title, rating, release, duration, genres, poster, description, isFavorite, isHistory, isWatchlist, directors, writers, actors, country, ageRestrictions} = movieData;
   const isActive = (boolean) => (boolean) ? 'film-details__control-button film-details__control-button--active' : 'film-details__control-button';
   const newRelease = `${release[0]} ${release[1]} ${release[2]}`;
   const getGenresList = (genresArray) => {
@@ -101,7 +101,7 @@ const createPopupMovieInfo = (movieData, commentsData) => {
 
           <section class="film-details__controls">
             <button type="button" class="film-details__control-button--watchlist ${isActive(isWatchlist)}" id="watchlist" name="watchlist">Add to watchlist</button>
-            <button type="button" class="film-details__control-button--watched ${isActive(isWatched)}" id="watched" name="watched">Already watched</button>
+            <button type="button" class="film-details__control-button--watched ${isActive(isHistory)}" id="watched" name="watched">Already watched</button>
             <button type="button" class="film-details__control-button--favorite ${isActive(isFavorite)}" id="favorite" name="favorite">Add to favorites</button>
           </section>
         </div>

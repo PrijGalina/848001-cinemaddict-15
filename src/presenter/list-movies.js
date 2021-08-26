@@ -2,11 +2,11 @@ import MoviesContainerView from '../view/movies-container.js';
 import AllMoviesView from '../view/all-movies-block';
 import TopRatedView from '../view/rated-movies-block.js';
 import MostCommentedView from '../view/commented-movies-block.js';
-import MovieCardView from '../view/movie-view';
 import NoMovieView from '../view/no-movie';
 import SortingView from '../view/sorting';
 import ShowMoreButtonView from '../view/show-more-button.js';
-import {render, RenderPosition} from '../utils/render.js';
+import {remove, render, RenderPosition} from '../utils/render.js';
+import {updateItem} from '../utils/common.js';
 import MoviePresenter from '../presenter/movie.js';
 
 
@@ -18,6 +18,14 @@ const NUMBER_OF_FIRST = 0;
 export default class MoviesList {
   constructor(mainContainer, commentsArray) {
     this._mainContainer = mainContainer; //siteMainElement
+    this._commentsArray = commentsArray; //comments about movie
+
+    this._moviePresenter = new Map();
+    this._sortedByRating = [];
+    this._sortedByComments = [];
+    this._commentsAboutFilm = [];
+    this._renderedMoviesCount =  MOVIE_COUNT_PER_STEP;
+
     this._moviesContainer = new MoviesContainerView();
     this._allMoviesList = new AllMoviesView();
     this._ratedMoviesList = new TopRatedView();
@@ -25,14 +33,10 @@ export default class MoviesList {
     this._noMoviesComponent = new NoMovieView();
     this._sortComponent = new SortingView();
     this._showMoreButton = new ShowMoreButtonView();
-    this._sortedByRating = [];
-    this._sortedByComments = [];
-    this._renderedMoviesCount =  MOVIE_COUNT_PER_STEP;
+
     this._handlerLoadMoreButtonClick = this._handlerLoadMoreButtonClick.bind(this);
-    this._commentsArray = commentsArray;
-    this._commentsAboutFilm = [];
-    this._moviePresenter = new Map();
-    this._handleModeChange = this._handleModeChange.bind(this);
+    this._handlerModeChange = this._handlerModeChange.bind(this);
+    this._handlerMovieChange = this._handlerMovieChange.bind(this);
   }
 
   init(movies) {
@@ -41,41 +45,12 @@ export default class MoviesList {
     this._renderMoviesContainer();
   }
 
-  _renderSort() {
-    render(this._moviesContainer, this._sortComponent, RenderPosition.BEFOREEND);
-  }
-
-  _renderMovie(movie, container) {
-    //отрисует 1 фильм
-    this._commentsAboutFilm = this._commentsArray.filter((commentElement) => commentElement.aboutFilm === movie.filmId);
-    const moviePresenter = new MoviePresenter(container, this._commentsAboutFilm, this._handleModeChange);
-    moviePresenter.init(movie);
-    this._moviePresenter.set(movie.id, moviePresenter);
-  }
-
-  _renderMovies(from, to, array, container) {
-    //вызовывает renderMovie и отрисует весь список
-    array
-      .slice(from, to)
-      .forEach((movie)=> this._renderMovie(movie, container));
-  }
-
   _renderNoMovies() {
     render(this._mainContainer, this._noMoviesComponent, RenderPosition.BEFOREEND);
   }
 
-  _handlerLoadMoreButtonClick() {
-    const place = this._allMoviesList.getElement().querySelector('.films-list__container');
-    this._movies
-      .slice(this._renderedMoviesCount, this._renderedMoviesCount + MOVIE_COUNT_PER_STEP)
-      .forEach((movieItem) => {render(place, new MovieCardView(movieItem), RenderPosition.BEFOREEND);});
-    this._renderedMoviesCount += MOVIE_COUNT_PER_STEP;
-    (this._renderedMoviesCount >= this._movies.length) ? this._showMoreButton.getElement().remove() : '';
-  }
-
-  _renderLoadMoreButton() {
-    render(this._allMoviesList, this._showMoreButton, RenderPosition.BEFOREEND);
-    this._showMoreButton.setClickHandler(this._handlerLoadMoreButtonClick);
+  _renderSort() {
+    render(this._moviesContainer, this._sortComponent, RenderPosition.BEFOREEND);
   }
 
   _renderCommonList() {
@@ -104,8 +79,50 @@ export default class MoviesList {
     this._renderMovies(NUMBER_OF_FIRST,  COMMENTED_MOVIES_COUNT, this._sortedByComments, this._commentedMoviesList);
   }
 
-  _handleModeChange() {
-    this._moviePresenter.forEach((presenter) => presenter.resetPopup());
+  _renderMovies(from, to, array, container) {
+    //вызовывает renderMovie и отрисует весь список
+    array
+      .slice(from, to)
+      .forEach((movie)=> this._renderMovie(movie, container));
+  }
+
+  _renderLoadMoreButton() {
+    render(this._allMoviesList, this._showMoreButton, RenderPosition.BEFOREEND);
+    this._showMoreButton.setClickHandler(this._handlerLoadMoreButtonClick);
+  }
+
+  _renderMovie(movie, container) {
+    //отрисует 1 фильм
+    this._commentsAboutFilm = this._commentsArray.filter((commentElement) => commentElement.aboutFilm === movie.filmId);
+    const moviePresenter = new MoviePresenter(container, this._commentsAboutFilm, this._handlerMovieChange, this._handlerModeChange);
+    moviePresenter.init(movie);
+    this._moviePresenter.set(movie.id, moviePresenter);
+  }
+
+  _handlerLoadMoreButtonClick() {
+    this._movies
+      .slice(this._renderedMoviesCount, this._renderedMoviesCount + MOVIE_COUNT_PER_STEP)
+      .forEach((movieItem) => {
+        this._renderMovie(movieItem, this._allMoviesList);
+      });
+    this._renderedMoviesCount += MOVIE_COUNT_PER_STEP;
+    (this._renderedMoviesCount >= this._movies.length) ? this._showMoreButton.getElement().remove() : '';
+  }
+
+  _handlerModeChange() {
+    this._moviePresenter.forEach((presenter) => presenter.resetView());
+  }
+
+  _clearMoviesList() {
+    this._moviePresenter.forEach((presenter) => presenter.destroy());
+    this._moviePresenter.clear();
+    this._renderedMoviesCount =  MOVIE_COUNT_PER_STEP;
+    remove(this._showMoreButton);
+  }
+
+  _handlerMovieChange(updatedMovie) {
+    this._movies = updateItem(this._movies, updatedMovie);
+    this._moviePresenter.get(updatedMovie.id).init(updatedMovie);
   }
 
   _renderMoviesContainer(){

@@ -1,7 +1,8 @@
-import {getRandomPositiveInteger, getRandomPositiveFloat, getRandomArray, getRandomElement} from '../utils/get-random.js';
+import {getRandomPositiveInteger, getRandomPositiveFloat, getRandomArray, getRandomElement} from '../utils/common.js';
 import { arrayMovieInfo, workingGroup, ageRestrictionsArray, durationFilmsArray, countryArray, releaseArray, descriptionTextArray} from './../data.js';
 import {generateComment} from './comment.js';
 import dayjs from 'dayjs';
+import {nanoid} from 'nanoid';
 import objectSupport from 'dayjs/plugin/objectSupport';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 dayjs.extend(objectSupport);
@@ -50,7 +51,7 @@ const generateMovie = () => {
   const indexMovieTitle = getRandomPositiveInteger(1, Object.keys(arrayMovieInfo).length);
   const dateArray = generateData();
   const movie = {
-    id: getRandomPositiveInteger(0, 10000),
+    id: nanoid(),
     filmId: arrayMovieInfo[indexMovieTitle].filmId,
     originalName: arrayMovieInfo[indexMovieTitle].original,
     title: arrayMovieInfo[indexMovieTitle].title,
@@ -67,7 +68,7 @@ const generateMovie = () => {
     ageRestrictions: getRandomElement(ageRestrictionsArray),
     countComments: getCountComments(commentsIdArray, arrayMovieInfo[indexMovieTitle].filmId),
     isFavorite: Boolean(getRandomPositiveInteger(0, 1)),
-    isWatched: Boolean(getRandomPositiveInteger(0, 1)),
+    isHistory: Boolean(getRandomPositiveInteger(0, 1)),
     isWatchlist: Boolean(getRandomPositiveInteger(0, 1)),
   };
   return movie;
