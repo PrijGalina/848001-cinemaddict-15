@@ -54,48 +54,48 @@ export default class Movie {
 
     replace(this._movieComponent, prevMovieComponent);
     replace(this._popupComponent, prevPopupComponent);
-    //remove(prevMovieComponent);
-    //remove(prevPopupComponent);
+    remove(prevMovieComponent);
+    remove(prevPopupComponent);
   }
 
   destroy() {
     remove(this._popupComponent);
+    remove(this._movieComponent);
   }
 
   resetView() {
     if (this._mode !== Mode.DEFAULT) {
-      this._mode = Mode.DEFAULT;
+      this._replacePopupToCard();
     }
+  }
+
+  _replacePopupToCard() {
+    remove(this._popupComponent);
+    this._mode = Mode.DEFAULT;
+  }
+
+  _replaceCardToPopup() {
+    const siteMainElement = document.querySelector('.main');
+    render(siteMainElement, this._popupComponent, RenderPosition.BEFOREEND);
+    this._changeMode();
+    this._mode = Mode.CHANGED;
   }
 
   _handleEscKeydown(e) {
     if(e.key === 'Escape' || e.key === 'Esc') {
       e.preventDefault();
-      this._popupComponent.getElement().remove();
-      this._popupComponent.removeElement();
+      this._replacePopupToCard();
       document.removeEventListener('keydown', this._handleEscKeydown);
     }
   }
 
-  _openMoviePopup() {
-    const siteMainElement = document.querySelector('.main');
-    render(siteMainElement, this._popupComponent, RenderPosition.BEFOREEND);
-    //this._changeMode();
-    //this._mode = Mode.CHANGED;
-  }
-
-  _closeMoviePopup() {
-    remove(this._popupComponent);
-    this._mode = Mode.DEFAULT;
-  }
-
   _handleOpenPopupClick() {
-    this._openMoviePopup();
+    this._replaceCardToPopup();
     document.addEventListener('keydown', this._handleEscKeydown);
   }
 
   _handleClosePopupClick() {
-    this._closeMoviePopup();
+    this._replacePopupToCard();
     document.removeEventListener('keydown', this._handleEscKeydown);
   }
 
@@ -109,7 +109,6 @@ export default class Movie {
         },
       ),
     );
-    console.log(this);
   }
 
   _handleFavoriteClick() {
