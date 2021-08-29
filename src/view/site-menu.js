@@ -1,7 +1,7 @@
 import AbstractView from './abstract.js';
 
 const createMenuTemplate = (moviesArray) => {
-  const getWathedCount = (array) => array.filter((film) => film.isWatched === true).length;
+  const getWathedCount = (array) => array.filter((film) => film.isHistory === true).length;
 
   const getFavoriteCount = (array) => array.filter((film) => film.isFavorite === true).length;
 

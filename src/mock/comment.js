@@ -1,4 +1,4 @@
-import {getRandomArray, getRandomElement, getRandomPositiveInteger} from '../utils/get-random.js';
+import {getRandomArray, getRandomElement, getRandomPositiveInteger} from '../utils/common.js';
 import {workingGroup, descriptionTextArray, emojiArray, arrayMovieInfo} from './../data.js';
 
 const getCommentDate = () => {

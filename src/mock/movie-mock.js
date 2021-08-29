@@ -1,7 +1,8 @@
-import {getRandomPositiveInteger, getRandomPositiveFloat, getRandomArray, getRandomElement} from '../utils/get-random.js';
+import {getRandomPositiveInteger, getRandomPositiveFloat, getRandomArray, getRandomElement} from '../utils/common.js';
 import { arrayMovieInfo, workingGroup, ageRestrictionsArray, durationFilmsArray, countryArray, releaseArray, descriptionTextArray} from './../data.js';
 import {generateComment} from './comment.js';
 import dayjs from 'dayjs';
+import {nanoid} from 'nanoid';
 import objectSupport from 'dayjs/plugin/objectSupport';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 dayjs.extend(objectSupport);
@@ -38,11 +39,11 @@ const generateData = () => {
   return [day, monthName, year];
 };
 
-const comment = new Array(COMMENT_COUNT).fill().map(generateComment);
-const commentIdArray = Array.from(comment).map((el) => el.aboutFilm);
+const commentsArray = new Array(COMMENT_COUNT).fill().map(generateComment);
+const commentsIdArray = Array.from(commentsArray).map((el) => el.aboutFilm);
 
-const getCountComments = (commentArray, id) => {
-  const result = commentArray.filter((i) => i === id).length;
+const getCountComments = (comments, id) => {
+  const result = comments.filter((i) => i === id).length;
   return result;
 };
 
@@ -50,6 +51,7 @@ const generateMovie = () => {
   const indexMovieTitle = getRandomPositiveInteger(1, Object.keys(arrayMovieInfo).length);
   const dateArray = generateData();
   const movie = {
+    id: nanoid(),
     filmId: arrayMovieInfo[indexMovieTitle].filmId,
     originalName: arrayMovieInfo[indexMovieTitle].original,
     title: arrayMovieInfo[indexMovieTitle].title,
@@ -64,12 +66,12 @@ const generateMovie = () => {
     actors: getRandomArray(workingGroup, 4),
     country: getRandomElement(countryArray),
     ageRestrictions: getRandomElement(ageRestrictionsArray),
-    countComments: getCountComments(commentIdArray, arrayMovieInfo[indexMovieTitle].filmId),
+    countComments: getCountComments(commentsIdArray, arrayMovieInfo[indexMovieTitle].filmId),
     isFavorite: Boolean(getRandomPositiveInteger(0, 1)),
-    isWatched: Boolean(getRandomPositiveInteger(0, 1)),
+    isHistory: Boolean(getRandomPositiveInteger(0, 1)),
     isWatchlist: Boolean(getRandomPositiveInteger(0, 1)),
   };
   return movie;
 };
 
-export { generateMovie, comment};
+export { generateMovie, commentsArray};

@@ -54,9 +54,6 @@ descriptionTextArray.pop();
 descriptionTextArray = descriptionTextArray.map((string) => `${string}. `);
 const emojiArray = ['sleeping', 'smile', 'puke', 'angry'];
 
-const MOVIE_COUNT = 23;
-const MOVIE_COUNT_PER_STEP = 5;
-const RATED_FILMS_COUNT = 2;
-const COMMENTED_FILMS_COUNT = 2;
+const MOVIE_COUNT = 12;
 
-export {arrayMovieInfo, workingGroup, ageRestrictionsArray, durationFilmsArray, countryArray, releaseArray, descriptionTextArray, emojiArray, MOVIE_COUNT, MOVIE_COUNT_PER_STEP, RATED_FILMS_COUNT, COMMENTED_FILMS_COUNT};
+export {arrayMovieInfo, MOVIE_COUNT, workingGroup, ageRestrictionsArray, durationFilmsArray, countryArray, releaseArray, descriptionTextArray, emojiArray};
