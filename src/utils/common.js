@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 export const getRandomPositiveInteger = (numValue, otherNumValue) => {
   // Функция взята из интернета и доработана,
   //Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_random
@@ -40,4 +42,18 @@ export const updateItem = (items, update) => {
     update,
     ...items.slice(index + 1),
   ];
+};
+
+export const sortMovieDate = (movieA, movieB) => dayjs(movieB.release).diff(dayjs(movieA.release));
+
+export const sortMovieRating = (movieA, movieB) => {
+  if (movieA.rating < movieB.rating) {return 1;}
+  else if(movieA.rating > movieB.rating) {return -1;}
+  else {return 0;}
+};
+
+export const sortMovieComments = (movieA, movieB) => {
+  if (movieA.countComments < movieB.countComments) {return 1;}
+  else if(movieA.countComments > movieB.countComments) {return -1;}
+  else {return 0;}
 };

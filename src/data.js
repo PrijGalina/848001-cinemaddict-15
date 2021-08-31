@@ -56,4 +56,10 @@ const emojiArray = ['sleeping', 'smile', 'puke', 'angry'];
 
 const MOVIE_COUNT = 12;
 
-export {arrayMovieInfo, MOVIE_COUNT, workingGroup, ageRestrictionsArray, durationFilmsArray, countryArray, releaseArray, descriptionTextArray, emojiArray};
+const SortType = {
+  DEFAULT: 'default',
+  BY_DATE: 'date',
+  BY_RATING: 'rating',
+};
+
+export {arrayMovieInfo, MOVIE_COUNT, workingGroup, ageRestrictionsArray, durationFilmsArray, countryArray, releaseArray, descriptionTextArray, emojiArray, SortType};
