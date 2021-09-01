@@ -79,6 +79,7 @@ export default class Movie {
     render(siteMainElement, this._popupComponent, RenderPosition.BEFOREEND);
     this._changeMode();
     this._mode = Mode.CHANGED;
+    this._changeData(Object.assign({},this._movie));
   }
 
   _handleEscKeydown(e) {
