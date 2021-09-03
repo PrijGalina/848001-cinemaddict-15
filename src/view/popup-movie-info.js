@@ -1,40 +1,74 @@
 import AbstractView from './abstract.js';
+import {emojiArray} from '../data.js';
+
+const createGenresList = (array) => {
+  let code = '';
+  array.forEach((item) => {
+    const partCode = `<span class="film-details__genre">${item}</span>`;
+    code = code + partCode;
+  });
+  return code;
+};
+
+const createCommentsTemplate = (array) => {
+  let code = '';
+  array.forEach((comment) => {
+    const { emoji, text, date, autor } = comment;
+    const oneComment = `
+      <li class="film-details__comment">
+        <span class="film-details__comment-emoji">
+          <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-smile">
+        </span>
+        <div>
+          <p class="film-details__comment-text">${text}</p>
+          <p class="film-details__comment-info">
+            <span class="film-details__comment-author">${autor}</span>
+            <span class="film-details__comment-day">${date}</span>
+            <button class="film-details__comment-delete">Delete</button>
+          </p>
+        </div>
+      </li>`;
+    code = code + oneComment;
+  });
+  return `<ul class="film-details__comments-list">${code}</ul>`;
+};
+
+const createNewCommentContainer = (choosenEmoji) => {
+
+  const createEmojiSelectionTemplate = () => (
+    emojiArray.map((emojiItem) => `
+      <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emojiItem}" value="${emojiItem}" ${choosenEmoji === emojiItem ? 'checked' : ''}>
+      <label class="film-details__emoji-label" for="emoji-${emojiItem}" data-value="${emojiItem}">
+        <img src="./images/emoji/${emojiItem}.png" width="30" height="30" alt="emoji">
+      </label>
+    `).join('')
+  );
+
+  const emojiSelectionTemplate = createEmojiSelectionTemplate();
+
+  return (`
+    <div class="film-details__new-comment">
+      <div class="film-details__add-emoji-label"></div>
+
+      <label class="film-details__comment-label">
+        <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
+      </label>
+
+      <div class="film-details__emoji-list">
+        ${emojiSelectionTemplate}
+      </div>
+    </div>
+  `);
+};
 
 const createPopupMovieInfo = (movieData, commentsData) => {
-  const { originalName, title, rating, release, duration, genres, poster, description, isFavorite, isHistory, isWatchlist, directors, writers, actors, country, ageRestrictions} = movieData;
-  const isActive = (boolean) => (boolean) ? 'film-details__control-button film-details__control-button--active' : 'film-details__control-button';
+  const {originalName, title, rating, release, duration, genres, poster, description, isFavorite, isHistory, isWatchlist, directors, writers, actors, country, ageRestrictions, isComments, countComments, isChoosenSmile, isChoosenSleeping, isChoosenPuke, isChoosenAngry} = movieData;
   const newRelease = `${release[0]} ${release[1]} ${release[2]}`;
-  const getGenresList = (genresArray) => {
-    let finalСode = '';
-    genresArray.forEach((genre) => {
-      const genreElement = `<span class="film-details__genre">${genre}</span>`;
-      finalСode = finalСode + genreElement;
-    });
-    return finalСode;
-  };
-  const getCommentsBlock = (commentsArray) => {
-    let finalСode = '';
-    commentsArray.forEach((comment) => {
-      const { emoji, text, date, autor } = comment;
-      const commentElement = `
-        <li class="film-details__comment">
-          <span class="film-details__comment-emoji">
-            <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-smile">
-          </span>
-          <div>
-            <p class="film-details__comment-text">${text}</p>
-            <p class="film-details__comment-info">
-              <span class="film-details__comment-author">${autor}</span>
-              <span class="film-details__comment-day">${date}</span>
-              <button class="film-details__comment-delete">Delete</button>
-            </p>
-          </div>
-        </li>`;
-      finalСode = finalСode + commentElement;
-    });
-    return finalСode;
-  };
-  const getCountComments = (commentsArray) => commentsArray.length;
+  const genresList = createGenresList(genres);
+  const commentsTemplate = createCommentsTemplate(commentsData);
+  const choosenEmoji = '';
+  const getNewComment = createNewCommentContainer(choosenEmoji);
+
 
   return (
     `<section class="film-details">
@@ -89,9 +123,7 @@ const createPopupMovieInfo = (movieData, commentsData) => {
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Genres</td>
-                  <td class="film-details__cell">
-                    ${getGenresList(genres)}
-                  </td>
+                  <td class="film-details__cell">${genresList}</td>
                 </tr>
               </table>
 
@@ -100,47 +132,17 @@ const createPopupMovieInfo = (movieData, commentsData) => {
           </div>
 
           <section class="film-details__controls">
-            <button type="button" class="film-details__control-button--watchlist ${isActive(isWatchlist)}" id="watchlist" name="watchlist">Add to watchlist</button>
-            <button type="button" class="film-details__control-button--watched ${isActive(isHistory)}" id="watched" name="watched">Already watched</button>
-            <button type="button" class="film-details__control-button--favorite ${isActive(isFavorite)}" id="favorite" name="favorite">Add to favorites</button>
+            <button type="button" class="film-details__control-button--watchlist ${(isWatchlist) ? 'film-details__control-button film-details__control-button--active' : 'film-details__control-button'}" id="watchlist" name="watchlist">Add to watchlist</button>
+            <button type="button" class="film-details__control-button--watched ${(isHistory) ? 'film-details__control-button film-details__control-button--active' : 'film-details__control-button'}" id="watched" name="watched">Already watched</button>
+            <button type="button" class="film-details__control-button--favorite ${(isFavorite) ? 'film-details__control-button film-details__control-button--active' : 'film-details__control-button'}" id="favorite" name="favorite">Add to favorites</button>
           </section>
         </div>
 
         <div class="film-details__bottom-container">
           <section class="film-details__comments-wrap">
-            <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${getCountComments(commentsData)}</span></h3>
-
-            <ul class="film-details__comments-list">${getCommentsBlock(commentsData)}</ul>
-
-            <div class="film-details__new-comment">
-              <div class="film-details__add-emoji-label"></div>
-
-              <label class="film-details__comment-label">
-                <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
-              </label>
-
-              <div class="film-details__emoji-list">
-                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">
-                <label class="film-details__emoji-label" for="emoji-smile">
-                  <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
-                </label>
-
-                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping">
-                <label class="film-details__emoji-label" for="emoji-sleeping">
-                  <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
-                </label>
-
-                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke">
-                <label class="film-details__emoji-label" for="emoji-puke">
-                  <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
-                </label>
-
-                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry">
-                <label class="film-details__emoji-label" for="emoji-angry">
-                  <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
-                </label>
-              </div>
-            </div>
+            <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${countComments}</span></h3>
+            ${isComments ? commentsTemplate : ''}
+            ${getNewComment}
           </section>
         </div>
       </form>
@@ -151,17 +153,23 @@ const createPopupMovieInfo = (movieData, commentsData) => {
 export default class MoviePopup extends AbstractView {
   constructor(movie, comments) {
     super();
-    this._movie = movie;
+    this._data = MoviePopup.parseMovieToData(movie, comments);
     this._comments = comments;
 
     this._closeClickHandler = this._closeClickHandler.bind(this);
     this._watchlistClickPopupHandler = this._watchlistClickPopupHandler.bind(this);
     this._favoriteClickPopupHandler = this._favoriteClickPopupHandler.bind(this);
     this._historyClickPopupHandler = this._historyClickPopupHandler.bind(this);
+    this._emojiClickHandler = this._emojiClickHandler.bind(this);
+
+    const emojis = this.getElement().querySelectorAll('.film-details__emoji-label');
+    emojis.forEach((emoji) => {
+      emoji.addEventListener('click', this._emojiClickHandler);
+    });
   }
 
   getTemplate() {
-    return createPopupMovieInfo(this._movie, this._comments);
+    return createPopupMovieInfo(this._data, this._comments);
   }
 
   setCloseClickHandler(callback) {
@@ -202,5 +210,64 @@ export default class MoviePopup extends AbstractView {
   _historyClickPopupHandler(e) {
     e.preventDefault();
     this._callback.historyClick();
+  }
+
+
+  _emojiClickHandler(e) {
+    e.preventDefault();
+    const value = e.target.parentElement.dataset.value;
+    const formattedValue = `isChoosen${  value[0].toUpperCase()  }${value.slice(1)}`;
+    const formattedValueQ = '_' + formattedValue;
+    console.log(this);
+    this.updateData({
+      [formattedValue] : !this.formattedValue,
+    });
+  }
+
+  static parseMovieToData(movie, comments) { // информация в состояние (когда редактируем)
+    return Object.assign(
+      {},
+      movie,
+      {
+        isComments: comments.length > 0,
+        isChoosenSmile: false,
+        isChoosenSleeping: false,
+        isChoosenPuke: false,
+        isChoosenAngry: false,
+      },
+    );
+  }
+
+  static parseDataToMovie(data) { // превращает состояние в информацию (когда сохраняем)
+    data = Object.assign({}, data);
+    if (!data.isComments) {
+      data.countComments = 0;
+    }
+
+    delete data.isComments;
+    return data;
+  }
+
+  updateElement() {
+    const prevElement = this.getElement();
+    const parent = prevElement.parentElement;
+    this.removeElement();
+
+    const newElement = this.getElement();
+    parent.replaceChild(newElement, prevElement);
+  }
+
+  updateData(update) {
+    if(!update) {
+      return;
+    }
+
+    this.data = Object.assign(
+      {},
+      this._data,
+      update,
+    );
+    console.log(this._data);
+    this.updateElement();
   }
 }

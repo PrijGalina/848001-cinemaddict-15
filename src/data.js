@@ -52,7 +52,8 @@ const descriptionText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit
 let descriptionTextArray = descriptionText.split('. ');
 descriptionTextArray.pop();
 descriptionTextArray = descriptionTextArray.map((string) => `${string}. `);
-const emojiArray = ['sleeping', 'smile', 'puke', 'angry'];
+
+const emojiArray = ['smile', 'sleeping', 'puke', 'angry'];
 
 const MOVIE_COUNT = 12;
 
