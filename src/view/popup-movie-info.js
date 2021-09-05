@@ -34,7 +34,6 @@ const createCommentsTemplate = (array) => {
 };
 
 const createNewCommentContainer = (choosenEmoji) => {
-
   const createEmojiSelectionTemplate = () => (
     emojiArray.map((emojiItem) => `
       <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emojiItem}" value="${emojiItem}" ${choosenEmoji === emojiItem ? 'checked' : ''}>
@@ -66,8 +65,9 @@ const createPopupMovieInfo = (movieData, commentsData) => {
   const newRelease = `${release[0]} ${release[1]} ${release[2]}`;
   const genresList = createGenresList(genres);
   const commentsTemplate = createCommentsTemplate(commentsData);
-  const choosenEmoji = '';
-  const getNewComment = createNewCommentContainer(choosenEmoji);
+  const getNewComment = createNewCommentContainer();
+
+  console.log(isChoosenSmile, isChoosenSleeping, isChoosenPuke, isChoosenAngry);
 
 
   return (
@@ -217,10 +217,9 @@ export default class MoviePopup extends AbstractView {
     e.preventDefault();
     const value = e.target.parentElement.dataset.value;
     const formattedValue = `isChoosen${  value[0].toUpperCase()  }${value.slice(1)}`;
-    const formattedValueQ = '_' + formattedValue;
-    console.log(this);
+
     this.updateData({
-      [formattedValue] : !this.formattedValue,
+      [formattedValue]: !this._data.formattedValue,
     });
   }
 
@@ -230,10 +229,10 @@ export default class MoviePopup extends AbstractView {
       movie,
       {
         isComments: comments.length > 0,
-        isChoosenSmile: false,
-        isChoosenSleeping: false,
-        isChoosenPuke: false,
-        isChoosenAngry: false,
+        isChoosenSmile: movie.isChoosenSmile,
+        isChoosenSleeping: movie.isChoosenSleeping,
+        isChoosenPuke: movie.isChoosenPuke,
+        isChoosenAngry: movie.isChoosenAngry,
       },
     );
   }
@@ -262,12 +261,11 @@ export default class MoviePopup extends AbstractView {
       return;
     }
 
-    this.data = Object.assign(
+    this._data = Object.assign(
       {},
       this._data,
       update,
     );
-    console.log(this._data);
     this.updateElement();
   }
 }
