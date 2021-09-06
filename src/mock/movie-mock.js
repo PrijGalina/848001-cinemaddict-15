@@ -70,10 +70,9 @@ const generateMovie = () => {
     isFavorite: Boolean(getRandomPositiveInteger(0, 1)),
     isHistory: Boolean(getRandomPositiveInteger(0, 1)),
     isWatchlist: Boolean(getRandomPositiveInteger(0, 1)),
-    isChoosenSleeping: false,
-    isChoosenSmile: false,
-    isChoosenPuke: false,
-    isChoosenAngry: false,
+    isChoosenEmojiForComment: '',
+    commentText: '',
+    pagePosition: 0,
   };
   return movie;
 };

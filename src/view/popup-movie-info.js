@@ -1,4 +1,4 @@
-import AbstractView from './abstract.js';
+import SmartView from './smart.js';
 import {emojiArray} from '../data.js';
 
 const createGenresList = (array) => {
@@ -33,7 +33,7 @@ const createCommentsTemplate = (array) => {
   return `<ul class="film-details__comments-list">${code}</ul>`;
 };
 
-const createNewCommentContainer = (choosenEmoji) => {
+const createNewCommentContainer = (choosenEmoji, commentText) => {
   const createEmojiSelectionTemplate = () => (
     emojiArray.map((emojiItem) => `
       <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emojiItem}" value="${emojiItem}" ${choosenEmoji === emojiItem ? 'checked' : ''}>
@@ -44,13 +44,13 @@ const createNewCommentContainer = (choosenEmoji) => {
   );
 
   const emojiSelectionTemplate = createEmojiSelectionTemplate();
-
+  const emojiSrc = (choosenEmoji) ? `style="background-image: url('/images/emoji/${choosenEmoji}.png'); background-size: contain;"` : '';
   return (`
     <div class="film-details__new-comment">
-      <div class="film-details__add-emoji-label"></div>
+      <div class="film-details__add-emoji-label" ${emojiSrc}></div>
 
       <label class="film-details__comment-label">
-        <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
+        <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${commentText}</textarea>
       </label>
 
       <div class="film-details__emoji-list">
@@ -61,14 +61,13 @@ const createNewCommentContainer = (choosenEmoji) => {
 };
 
 const createPopupMovieInfo = (movieData, commentsData) => {
-  const {originalName, title, rating, release, duration, genres, poster, description, isFavorite, isHistory, isWatchlist, directors, writers, actors, country, ageRestrictions, isComments, countComments, isChoosenSmile, isChoosenSleeping, isChoosenPuke, isChoosenAngry} = movieData;
+  const {originalName, title, rating, release, duration, genres, poster, description, isFavorite, isHistory, isWatchlist, directors, writers, actors, country, ageRestrictions, isComments, countComments, isChoosenEmojiForComment, commentText, pagePosition} = movieData;
   const newRelease = `${release[0]} ${release[1]} ${release[2]}`;
   const genresList = createGenresList(genres);
   const commentsTemplate = createCommentsTemplate(commentsData);
-  const getNewComment = createNewCommentContainer();
+  const getNewComment = createNewCommentContainer(isChoosenEmojiForComment, commentText);
 
-  console.log(isChoosenSmile, isChoosenSleeping, isChoosenPuke, isChoosenAngry);
-
+  //window.scrollTo(pagePosition);
 
   return (
     `<section class="film-details">
@@ -150,22 +149,20 @@ const createPopupMovieInfo = (movieData, commentsData) => {
   );
 };
 
-export default class MoviePopup extends AbstractView {
+export default class MoviePopup extends SmartView {
   constructor(movie, comments) {
     super();
     this._data = MoviePopup.parseMovieToData(movie, comments);
     this._comments = comments;
 
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._closeClickHandler = this._closeClickHandler.bind(this);
     this._watchlistClickPopupHandler = this._watchlistClickPopupHandler.bind(this);
     this._favoriteClickPopupHandler = this._favoriteClickPopupHandler.bind(this);
     this._historyClickPopupHandler = this._historyClickPopupHandler.bind(this);
     this._emojiClickHandler = this._emojiClickHandler.bind(this);
-
-    const emojis = this.getElement().querySelectorAll('.film-details__emoji-label');
-    emojis.forEach((emoji) => {
-      emoji.addEventListener('click', this._emojiClickHandler);
-    });
+    this._commentTextareaHandler = this._commentTextareaHandler.bind(this);
+    this._setInnerHandlers();
   }
 
   getTemplate() {
@@ -180,6 +177,20 @@ export default class MoviePopup extends AbstractView {
   _closeClickHandler(e) {
     e.preventDefault();
     this._callback.closeClick();
+  }
+
+  _setInnerHandlers(){
+    const emojis = this.getElement().querySelectorAll('.film-details__emoji-label');
+    emojis.forEach((emoji) => {
+      emoji.addEventListener('click', this._emojiClickHandler);
+    });
+    this.getElement().querySelector('.film-details__comment-input').addEventListener('input', this._commentTextareaHandler);
+    this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._closeClickHandler);
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this.setFormSubmitHandler(this._callback.formSubmit);
   }
 
   setWatchlistClickPopupHandler(callback) {
@@ -216,10 +227,35 @@ export default class MoviePopup extends AbstractView {
   _emojiClickHandler(e) {
     e.preventDefault();
     const value = e.target.parentElement.dataset.value;
-    const formattedValue = `isChoosen${  value[0].toUpperCase()  }${value.slice(1)}`;
 
     this.updateData({
-      [formattedValue]: !this._data.formattedValue,
+      isChoosenEmojiForComment: value,
+      pagePosition: window.pageYOffset,
+    }, false);
+  }
+
+  _formSubmitHandler(e) {
+    e.preventDefault();
+    this._callback.formSubmit(MoviePopup.parseDataToMovie(this._data));
+  }
+
+  _commentTextareaHandler(e) {
+    e.preventDefault();
+    this.updateData({
+      commentText: e.target.value,
+    }, true);
+    if(e.target.value !== ''){
+      this.setFormSubmitHandler(this._callback.formSubmit);
+    }
+  }
+
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    //навесить обработчик
+    document.addEventListener('keydown', (e) => {
+      if((e.code === 'Enter') && e.ctrlKey) {
+        //отправка данных в модель
+      }
     });
   }
 
@@ -229,10 +265,7 @@ export default class MoviePopup extends AbstractView {
       movie,
       {
         isComments: comments.length > 0,
-        isChoosenSmile: movie.isChoosenSmile,
-        isChoosenSleeping: movie.isChoosenSleeping,
-        isChoosenPuke: movie.isChoosenPuke,
-        isChoosenAngry: movie.isChoosenAngry,
+        isChoosenEmoji: movie.isChoosenEmojiForComment,
       },
     );
   }
@@ -243,29 +276,12 @@ export default class MoviePopup extends AbstractView {
       data.countComments = 0;
     }
 
-    delete data.isComments;
-    return data;
-  }
-
-  updateElement() {
-    const prevElement = this.getElement();
-    const parent = prevElement.parentElement;
-    this.removeElement();
-
-    const newElement = this.getElement();
-    parent.replaceChild(newElement, prevElement);
-  }
-
-  updateData(update) {
-    if(!update) {
-      return;
+    if(!data.isChoosenEmojiForComment) {
+      data.isChoosenEmojiForComment = '';
     }
 
-    this._data = Object.assign(
-      {},
-      this._data,
-      update,
-    );
-    this.updateElement();
+    delete data.isChoosenEmojiForComment;
+    delete data.isComments;
+    return data;
   }
 }
