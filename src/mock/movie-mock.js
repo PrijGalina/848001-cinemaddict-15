@@ -70,6 +70,8 @@ const generateMovie = () => {
     isFavorite: Boolean(getRandomPositiveInteger(0, 1)),
     isHistory: Boolean(getRandomPositiveInteger(0, 1)),
     isWatchlist: Boolean(getRandomPositiveInteger(0, 1)),
+    isChoosenEmojiForComment: '',
+    commentText: '',
   };
   return movie;
 };
