@@ -1105,3 +1105,6 @@ button {
   padding-top: 50px;
   padding-bottom: 50px;
 }
+.hidden-scroll {
+  overflow-y: hidden;
+}

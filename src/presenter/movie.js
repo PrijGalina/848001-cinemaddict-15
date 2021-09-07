@@ -87,17 +87,24 @@ export default class Movie {
       e.preventDefault();
       this._replacePopupToCard();
       document.removeEventListener('keydown', this._handleEscKeydown);
+      document.querySelector('body').classList.remove('hidden-scroll');
     }
   }
 
   _handleOpenPopupClick() {
+    const openPopup = document.querySelector('.film-details');
+    if (openPopup) {
+      openPopup.remove();
+    }
     this._replaceCardToPopup();
     document.addEventListener('keydown', this._handleEscKeydown);
+    document.querySelector('body').classList.add('hidden-scroll');
   }
 
   _handleClosePopupClick() {
     this._replacePopupToCard();
     document.removeEventListener('keydown', this._handleEscKeydown);
+    document.querySelector('body').classList.remove('hidden-scroll');
   }
 
   _handleWatchlistClick() {

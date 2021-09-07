@@ -61,13 +61,11 @@ const createNewCommentContainer = (choosenEmoji, commentText) => {
 };
 
 const createPopupMovieInfo = (movieData, commentsData) => {
-  const {originalName, title, rating, release, duration, genres, poster, description, isFavorite, isHistory, isWatchlist, directors, writers, actors, country, ageRestrictions, isComments, countComments, isChoosenEmojiForComment, commentText, pagePosition} = movieData;
+  const {originalName, title, rating, release, duration, genres, poster, description, isFavorite, isHistory, isWatchlist, directors, writers, actors, country, ageRestrictions, isComments, countComments, isChoosenEmojiForComment, commentText} = movieData;
   const newRelease = `${release[0]} ${release[1]} ${release[2]}`;
   const genresList = createGenresList(genres);
   const commentsTemplate = createCommentsTemplate(commentsData);
   const getNewComment = createNewCommentContainer(isChoosenEmojiForComment, commentText);
-
-  //window.scrollTo(pagePosition);
 
   return (
     `<section class="film-details">
@@ -223,14 +221,11 @@ export default class MoviePopup extends SmartView {
     this._callback.historyClick();
   }
 
-
   _emojiClickHandler(e) {
     e.preventDefault();
     const value = e.target.parentElement.dataset.value;
-
     this.updateData({
       isChoosenEmojiForComment: value,
-      pagePosition: window.pageYOffset,
     }, false);
   }
 

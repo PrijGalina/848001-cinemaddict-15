@@ -72,7 +72,6 @@ const generateMovie = () => {
     isWatchlist: Boolean(getRandomPositiveInteger(0, 1)),
     isChoosenEmojiForComment: '',
     commentText: '',
-    pagePosition: 0,
   };
   return movie;
 };

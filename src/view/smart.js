@@ -20,18 +20,18 @@ export default class Smart extends Abstract{
     if(justDataUpdating) {
       return;
     }
-
-    this.updateElement();
+    const position = this.getElement().scrollTop;
+    this.updateElement(position);
   }
 
-  updateElement() {
+  updateElement(scrollPosition) {
     const prevElement = this.getElement();
     const parent = prevElement.parentElement;
     this.removeElement();
 
     const newElement = this.getElement();
     parent.replaceChild(newElement, prevElement);
-
+    this.getElement().scrollTo(0, scrollPosition);
     this.restoreHandlers();
   }
 
