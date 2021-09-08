@@ -1,5 +1,6 @@
 import SmartView from './smart.js';
 import {emojiArray} from '../data.js';
+import dayjs from 'dayjs';
 
 const createGenresList = (array) => {
   let code = '';
@@ -62,7 +63,7 @@ const createNewCommentContainer = (choosenEmoji, commentText) => {
 
 const createPopupMovieInfo = (movieData, commentsData) => {
   const {originalName, title, rating, release, duration, genres, poster, description, isFavorite, isHistory, isWatchlist, directors, writers, actors, country, ageRestrictions, isComments, countComments, isChoosenEmojiForComment, commentText} = movieData;
-  const newRelease = `${release[0]} ${release[1]} ${release[2]}`;
+  const releaseWithFormat = dayjs(release).format('D MMMM YYYY');
   const genresList = createGenresList(genres);
   const commentsTemplate = createCommentsTemplate(commentsData);
   const getNewComment = createNewCommentContainer(isChoosenEmojiForComment, commentText);
@@ -108,7 +109,7 @@ const createPopupMovieInfo = (movieData, commentsData) => {
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Release Date</td>
-                  <td class="film-details__cell">${newRelease}</td>
+                  <td class="film-details__cell">${releaseWithFormat}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Runtime</td>

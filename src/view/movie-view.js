@@ -1,15 +1,18 @@
 import AbstractView from './abstract.js';
+import dayjs from 'dayjs';
+//dayjs.extend(objectSupport);
+//dayjs.extend(advancedFormat);
 
 const createMovieCardTemplate = (movieData) => {
   const { title, rating, release, duration, genres, poster, description, countComments, isFavorite, isHistory, isWatchlist } = movieData;
   const isActive = (boolean) => (boolean) ? 'film-card__controls-item film-card__controls-item--active' : 'film-card__controls-item';
   const isHidden = (value) => ((value === 0) || (value === 'NULL') || (value === undefined)) ? 'visually-hidden' : '';
-
+  const releaseYear = dayjs(release).year();
   return `<article class="film-card">
     <h3 class="film-card__title">${title}</h3>
     <p class="film-card__rating">${rating}</p>
     <p class="film-card__info">
-      <span class="film-card__year">${release[2]}</span>
+      <span class="film-card__year">${releaseYear}</span>
       <span class="film-card__duration">${duration}</span>
       <span class="film-card__genre">${genres[0]}</span>
     </p>

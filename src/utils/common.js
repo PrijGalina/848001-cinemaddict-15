@@ -57,3 +57,9 @@ export const sortMovieComments = (movieA, movieB) => {
   else if(movieA.countComments > movieB.countComments) {return -1;}
   else {return 0;}
 };
+
+export const getRandomDate = (from, to) => {
+  const fromTime = from.getTime();
+  const toTime = to.getTime();
+  return new Date(fromTime + Math.random() * (toTime - fromTime));
+};
