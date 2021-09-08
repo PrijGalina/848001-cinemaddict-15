@@ -1,21 +1,25 @@
-import {getRandomArray, getRandomElement, getRandomPositiveInteger} from '../utils/common.js';
+import {getRandomArray, getRandomElement, getRandomPositiveInteger, getRandomDate} from '../utils/common.js';
 import {workingGroup, descriptionTextArray, emojiArray, arrayMovieInfo} from './../data.js';
+import dayjs from 'dayjs';
+import calendar from 'dayjs/plugin/calendar';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
+dayjs.extend(calendar);
+import updateLocale from 'dayjs/plugin/updateLocale';
+dayjs.extend(updateLocale);
+dayjs.updateLocale('en', {
+  calendar: {
+    lastDay: '[Yesterday]',
+    sameDay: '[Today]',
+    lastWeek: 'd [days ago]',
+    sameElse: 'DD/MM/YYYY h:m',
+  },
+});
 
 const getCommentDate = () => {
-  const maxDayAgo = 10;
-  const daysGap = getRandomPositiveInteger(maxDayAgo, 0);
-  let howLongAgo = '';
-  switch(daysGap) {
-    case 0:
-      howLongAgo = 'today';
-      break;
-    case 1:
-      howLongAgo = 'yesterday';
-      break;
-    default:
-      howLongAgo = `${daysGap} days ago`;
-  }
-  return howLongAgo;
+  const randomDate = getRandomDate(new Date('2021-08-28T01:57:45.271Z'), new Date('2021-09-07T01:57:45.271Z')).toISOString();
+  const randomCommentDate = dayjs(randomDate).calendar();
+  return randomCommentDate;
 };
 
 const generateComment = () => {
