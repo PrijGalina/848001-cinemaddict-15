@@ -55,6 +55,7 @@ descriptionTextArray = descriptionTextArray.map((string) => `${string}. `);
 const emojiArray = ['smile', 'sleeping', 'puke', 'angry'];
 
 const MOVIE_COUNT = 12;
+const COMMENTS_COUNT = 10;
 
 const SortType = {
   DEFAULT: 'default',
@@ -62,4 +63,4 @@ const SortType = {
   BY_RATING: 'rating',
 };
 
-export {arrayMovieInfo, MOVIE_COUNT, workingGroup, ageRestrictionsArray, countryArray, releaseArray, descriptionTextArray, emojiArray, SortType};
+export {arrayMovieInfo, MOVIE_COUNT, workingGroup, ageRestrictionsArray, countryArray, releaseArray, descriptionTextArray, emojiArray, SortType, COMMENTS_COUNT};

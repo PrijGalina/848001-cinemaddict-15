@@ -14,7 +14,6 @@ export default class Movie {
     this._commentsAbout = commentsAbout;
     this._changeData = changeData;
     this._changeMode = changeMode;
-
     this._movieComponent = null;
     this._movie = null;
     this._popupComponent = null;

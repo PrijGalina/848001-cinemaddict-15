@@ -9,7 +9,7 @@ import {remove, render, RenderPosition} from '../utils/render.js';
 import {updateItem, sortMovieDate, sortMovieRating, sortMovieComments} from '../utils/common.js';
 import MoviePresenter from '../presenter/movie.js';
 import {SortType} from '../data.js';
-
+import {comments} from '../main.js';
 
 const MOVIE_COUNT_PER_STEP = 5;
 const RATED_MOVIES_COUNT = 2;
@@ -17,10 +17,9 @@ const COMMENTED_MOVIES_COUNT = 2;
 const NUMBER_OF_FIRST = 0;
 
 export default class MoviesList {
-  constructor(mainContainer, commentsArray) {
-    this._mainContainer = mainContainer; //siteMainElement
-    this._commentsArray = commentsArray; //comments about movie
-
+  constructor(mainContainer) {
+    this._mainContainer = mainContainer;
+    this._commentsArray = [];
     this._allMoviePresenter = new Map();
     this._ratedMoviePresenter = new Map();
     this._commentedMoviePresenter = new Map();
@@ -47,6 +46,7 @@ export default class MoviesList {
   init(movies) {
     this._movies = movies.slice();
     this._sourcedMovies = movies.slice();
+    this._commentsArray = comments;
     render(this._mainContainer, this._moviesContainer, RenderPosition.BEFOREEND);
     this._renderMoviesContainer();
   }

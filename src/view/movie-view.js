@@ -1,10 +1,8 @@
 import AbstractView from './abstract.js';
 import dayjs from 'dayjs';
-//dayjs.extend(objectSupport);
-//dayjs.extend(advancedFormat);
 
 const createMovieCardTemplate = (movieData) => {
-  const { title, rating, release, duration, genres, poster, description, countComments, isFavorite, isHistory, isWatchlist } = movieData;
+  const { title, rating, release, duration, genres, poster, description, comments, isFavorite, isHistory, isWatchlist} = movieData;
   const isActive = (boolean) => (boolean) ? 'film-card__controls-item film-card__controls-item--active' : 'film-card__controls-item';
   const isHidden = (value) => ((value === 0) || (value === 'NULL') || (value === undefined)) ? 'visually-hidden' : '';
   const releaseYear = dayjs(release).year();
@@ -18,7 +16,7 @@ const createMovieCardTemplate = (movieData) => {
     </p>
     <img src="${poster}" alt="" class="film-card__poster">
     <p class="film-card__description">${description}</p>
-    <a class="film-card__comments ${isHidden(countComments)}">${countComments} comments</a>
+    <a class="film-card__comments ${isHidden(comments.length)}">${comments.length} comments</a>
     <div class="film-card__controls">
       <button class="film-card__controls-item--add-to-watchlist ${isActive(isWatchlist)}" type="button">Add to watchlist</button>
       <button class="film-card__controls-item--mark-as-watched ${isActive(isHistory)}" type="button">Mark as watched</button>
