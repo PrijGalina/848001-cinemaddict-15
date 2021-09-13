@@ -13,13 +13,13 @@ export default class Movie {
   constructor(moviesContainer, commentsAbout, changeData, changeMode) {
     this._moviesContainer = moviesContainer;
     this._commentsAbout = commentsAbout;
+    this._allCommentPresenter = new Map();
     this._changeData = changeData;
     this._changeMode = changeMode;
     this._movieComponent = null;
     this._movie = null;
     this._popupComponent = null;
     this._mode = Mode.DEFAULT;
-    this._allComments = null;
     this._handleOpenPopupClick = this._handleOpenPopupClick.bind(this);
     this._handleClosePopupClick = this._handleClosePopupClick.bind(this);
     this._handleEscKeydown = this._handleEscKeydown.bind(this);
@@ -40,13 +40,15 @@ export default class Movie {
     this._movieComponent.setWatchlistClickHandler(this._handleWatchlistClick);
     this._movieComponent.setHistoryClickHandler(this._handleHistoryClick);
 
-    this._popupComponent = new MoviePopupView(this._movie, this._commentsAbout);
+    this._popupComponent = new MoviePopupView(this._movie);
     this._popupComponent.setCloseClickHandler(this._handleClosePopupClick);
     this._popupComponent.setFavoriteClickPopupHandler(this._handleFavoriteClick);
     this._popupComponent.setWatchlistClickPopupHandler(this._handleWatchlistClick);
     this._popupComponent.setHistoryClickPopupHandler(this._handleHistoryClick);
 
-    this._allComments = Map();
+    if (this._movie.comments.length !== 0) {
+      this._renderCommentList();
+    }
 
     if(prevMovieComponent === null){
       this._place = this._moviesContainer.getElement().querySelector('.films-list__container');
@@ -145,10 +147,15 @@ export default class Movie {
     );
   }
 
-  _renderComments() {
+  _renderCommentList() {
     this._commentsAbout.forEach((comment) => {
-      const commentsPresenter = new СommentsPresenter();
-      commentsPresenter.init(comment);
+      this._renderComment(comment);
     });
+  }
+
+  _renderComment(comment) {
+    const allCommentPresenter = new СommentsPresenter();
+    allCommentPresenter.init(comment);
+    //this._allCommentPresenter.set(comment.id, allCommentPresenter);
   }
 }

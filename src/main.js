@@ -20,5 +20,6 @@ moviesPresenter.init(movies);
 
 const movieCounterElement = document.querySelector('.footer__statistics');
 render(movieCounterElement, new MovieCounterView(), RenderPosition.BEFOREEND);
-
+const tr = new MovieCounterView();
+console.log(tr);
 export {comments};

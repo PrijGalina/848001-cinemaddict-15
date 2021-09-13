@@ -1,6 +1,6 @@
 import SmartView from './smart.js';
 import dayjs from 'dayjs';
-import CommentsView from '../view/movie-view';
+//import CommentsView from '../view/movie-view';
 
 const createGenresList = (array) => {
   let code = '';
@@ -11,11 +11,10 @@ const createGenresList = (array) => {
   return code;
 };
 
-const createPopupMovieInfo = (movieData, commentsData) => {
+const createPopupMovieInfo = (movieData) => {
   const {originalName, title, rating, release, duration, genres, poster, description, isFavorite, isHistory, isWatchlist, directors, writers, actors, country, ageRestrictions, comments} = movieData;
   const releaseWithFormat = dayjs(release).format('D MMMM YYYY');
   const genresList = createGenresList(genres);
-  //const commentsBlock = new CommentsView(commentsData);
 
   return (
     `<section class="film-details">
@@ -88,7 +87,6 @@ const createPopupMovieInfo = (movieData, commentsData) => {
           <section class="film-details__comments-wrap">
             <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
             <ul class="film-details__comments-list"></ul>
-
           </section>
         </div>
       </form>
@@ -97,10 +95,9 @@ const createPopupMovieInfo = (movieData, commentsData) => {
 };
 //${comments.length > 0 ? commentsBlock : ''}
 export default class MoviePopup extends SmartView {
-  constructor(movie, comments) {
+  constructor(movie) {
     super();
     this._data = MoviePopup.parseMovieToData(movie);
-    this._comments = comments;
     this._closeClickHandler = this._closeClickHandler.bind(this);
     this._watchlistClickPopupHandler = this._watchlistClickPopupHandler.bind(this);
     this._favoriteClickPopupHandler = this._favoriteClickPopupHandler.bind(this);
@@ -109,7 +106,7 @@ export default class MoviePopup extends SmartView {
   }
 
   getTemplate() {
-    return createPopupMovieInfo(this._data, this._comments);
+    return createPopupMovieInfo(this._data);
   }
 
   setCloseClickHandler(callback) {

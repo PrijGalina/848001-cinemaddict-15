@@ -45,20 +45,8 @@ const createNewCommentContainer = (choosenEmoji, comment) => {
   `);
 };
 
-const createComments = (commentsData) => {
-  console.log(commentsData);
+const createComments = (commentsData) => createCommentsTemplate(commentsData);
 
-  const commentsTemplate = createCommentsTemplate(commentsData);
-  //const getNewComment = createNewCommentContainer(emotion, comment);
-
-  return (
-    `
-      ${commentsTemplate}
-
-    `
-  );
-};
-//      ${getNewComment}
 export default class Comments extends SmartView {
   constructor(comment) {
     super();
