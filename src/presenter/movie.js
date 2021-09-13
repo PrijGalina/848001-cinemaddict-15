@@ -2,6 +2,7 @@
 import MoviePopupView from '../view/popup-movie-info.js';
 import MovieCardView from '../view/movie-view';
 import {render, RenderPosition, remove, replace} from '../utils/render.js';
+import СommentsPresenter from './comment.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -18,7 +19,7 @@ export default class Movie {
     this._movie = null;
     this._popupComponent = null;
     this._mode = Mode.DEFAULT;
-
+    this._allComments = null;
     this._handleOpenPopupClick = this._handleOpenPopupClick.bind(this);
     this._handleClosePopupClick = this._handleClosePopupClick.bind(this);
     this._handleEscKeydown = this._handleEscKeydown.bind(this);
@@ -44,6 +45,8 @@ export default class Movie {
     this._popupComponent.setFavoriteClickPopupHandler(this._handleFavoriteClick);
     this._popupComponent.setWatchlistClickPopupHandler(this._handleWatchlistClick);
     this._popupComponent.setHistoryClickPopupHandler(this._handleHistoryClick);
+
+    this._allComments = Map();
 
     if(prevMovieComponent === null){
       this._place = this._moviesContainer.getElement().querySelector('.films-list__container');
@@ -140,5 +143,12 @@ export default class Movie {
         },
       ),
     );
+  }
+
+  _renderComments() {
+    this._commentsAbout.forEach((comment) => {
+      const commentsPresenter = new СommentsPresenter();
+      commentsPresenter.init(comment);
+    });
   }
 }

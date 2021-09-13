@@ -17,6 +17,7 @@ render(siteMainElement, new SiteMenuView(movies), RenderPosition.BEFOREEND);
 
 const moviesPresenter = new MoviesListPresenter(siteMainElement);
 moviesPresenter.init(movies);
+
 const movieCounterElement = document.querySelector('.footer__statistics');
 render(movieCounterElement, new MovieCounterView(), RenderPosition.BEFOREEND);
 
