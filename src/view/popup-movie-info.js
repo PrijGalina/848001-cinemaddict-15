@@ -1,6 +1,6 @@
 import SmartView from './smart.js';
 import dayjs from 'dayjs';
-//import CommentsView from '../view/movie-view';
+
 
 const createGenresList = (array) => {
   let code = '';
@@ -12,7 +12,7 @@ const createGenresList = (array) => {
 };
 
 const createPopupMovieInfo = (movieData) => {
-  const {originalName, title, rating, release, duration, genres, poster, description, isFavorite, isHistory, isWatchlist, directors, writers, actors, country, ageRestrictions, comments} = movieData;
+  const {originalName, title, rating, release, duration, genres, poster, description, isFavorite, isHistory, isWatchlist, directors, writers, actors, country, ageRestrictions} = movieData;
   const releaseWithFormat = dayjs(release).format('D MMMM YYYY');
   const genresList = createGenresList(genres);
 
@@ -83,21 +83,16 @@ const createPopupMovieInfo = (movieData) => {
             <button type="button" class="film-details__control-button--favorite ${(isFavorite) ? 'film-details__control-button film-details__control-button--active' : 'film-details__control-button'}" id="favorite" name="favorite">Add to favorites</button>
           </section>
         </div>
-        <div class="film-details__bottom-container">
-          <section class="film-details__comments-wrap">
-            <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
-            <ul class="film-details__comments-list"></ul>
-          </section>
-        </div>
       </form>
     </section>`
   );
 };
-//${comments.length > 0 ? commentsBlock : ''}
+
 export default class MoviePopup extends SmartView {
   constructor(movie) {
     super();
-    this._data = MoviePopup.parseMovieToData(movie);
+    //this._data = MoviePopup.parseMovieToData(movie);
+    this._data = movie;
     this._closeClickHandler = this._closeClickHandler.bind(this);
     this._watchlistClickPopupHandler = this._watchlistClickPopupHandler.bind(this);
     this._favoriteClickPopupHandler = this._favoriteClickPopupHandler.bind(this);
@@ -157,7 +152,7 @@ export default class MoviePopup extends SmartView {
     e.preventDefault();
     this._callback.historyClick();
   }
-
+/*
   static parseMovieToData(movie) { // информация в состояние (когда редактируем)
     return Object.assign(
       {},
@@ -177,4 +172,5 @@ export default class MoviePopup extends SmartView {
     delete data.isComments;
     return data;
   }
+*/
 }

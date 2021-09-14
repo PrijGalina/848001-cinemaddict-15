@@ -7,6 +7,7 @@ import {MOVIE_COUNT, COMMENTS_COUNT} from './data.js';
 import MoviesListPresenter from './presenter/list-movies.js';
 import {generateComment} from './mock/comment.js';
 
+
 const siteHeaderElement = document.querySelector('.header');
 const siteMainElement = document.querySelector('.main');
 const comments = new Array(COMMENTS_COUNT).fill().map(generateComment);
@@ -16,10 +17,9 @@ render(siteHeaderElement, new ProfileView(), RenderPosition.BEFOREEND);
 render(siteMainElement, new SiteMenuView(movies), RenderPosition.BEFOREEND);
 
 const moviesPresenter = new MoviesListPresenter(siteMainElement);
-moviesPresenter.init(movies);
+moviesPresenter.init(movies, comments);
 
 const movieCounterElement = document.querySelector('.footer__statistics');
 render(movieCounterElement, new MovieCounterView(), RenderPosition.BEFOREEND);
-const tr = new MovieCounterView();
-console.log(tr);
+
 export {comments};

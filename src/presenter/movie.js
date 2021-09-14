@@ -2,7 +2,7 @@
 import MoviePopupView from '../view/popup-movie-info.js';
 import MovieCardView from '../view/movie-view';
 import {render, RenderPosition, remove, replace} from '../utils/render.js';
-import СommentsPresenter from './comment.js';
+import СommentsPresenter from './comment';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -13,20 +13,20 @@ export default class Movie {
   constructor(moviesContainer, commentsAbout, changeData, changeMode) {
     this._moviesContainer = moviesContainer;
     this._commentsAbout = commentsAbout;
-    this._allCommentPresenter = new Map();
     this._changeData = changeData;
     this._changeMode = changeMode;
     this._movieComponent = null;
     this._movie = null;
     this._popupComponent = null;
+    this._commentsComponent = null;
     this._mode = Mode.DEFAULT;
     this._handleOpenPopupClick = this._handleOpenPopupClick.bind(this);
     this._handleClosePopupClick = this._handleClosePopupClick.bind(this);
     this._handleEscKeydown = this._handleEscKeydown.bind(this);
-
     this._handleWatchlistClick = this._handleWatchlistClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleHistoryClick = this._handleHistoryClick.bind(this);
+    this._commentsPlace = null;
   }
 
   init(movie) {
@@ -34,7 +34,7 @@ export default class Movie {
     const prevMovieComponent = this._movieComponent;
     const prevPopupComponent = this._popupComponent;
 
-    this._movieComponent = new MovieCardView(movie);
+    this._movieComponent = new MovieCardView(this._movie);
     this._movieComponent.setOpenClickHandler(this._handleOpenPopupClick);
     this._movieComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._movieComponent.setWatchlistClickHandler(this._handleWatchlistClick);
@@ -46,9 +46,9 @@ export default class Movie {
     this._popupComponent.setWatchlistClickPopupHandler(this._handleWatchlistClick);
     this._popupComponent.setHistoryClickPopupHandler(this._handleHistoryClick);
 
-    if (this._movie.comments.length !== 0) {
-      this._renderCommentList();
-    }
+    this._commentsPresenter = new СommentsPresenter();
+    this._commentsPresenter.init(this._commentsAbout);
+
 
     if(prevMovieComponent === null){
       this._place = this._moviesContainer.getElement().querySelector('.films-list__container');
@@ -80,6 +80,7 @@ export default class Movie {
 
   _replaceCardToPopup() {
     const siteMainElement = document.querySelector('.main');
+
     render(siteMainElement, this._popupComponent, RenderPosition.BEFOREEND);
     this._changeMode();
     this._mode = Mode.CHANGED;
@@ -101,6 +102,7 @@ export default class Movie {
       openPopup.remove();
     }
     this._replaceCardToPopup();
+
     document.addEventListener('keydown', this._handleEscKeydown);
     document.querySelector('body').classList.add('hidden-scroll');
   }
@@ -145,17 +147,5 @@ export default class Movie {
         },
       ),
     );
-  }
-
-  _renderCommentList() {
-    this._commentsAbout.forEach((comment) => {
-      this._renderComment(comment);
-    });
-  }
-
-  _renderComment(comment) {
-    const allCommentPresenter = new СommentsPresenter();
-    allCommentPresenter.init(comment);
-    //this._allCommentPresenter.set(comment.id, allCommentPresenter);
   }
 }

@@ -9,7 +9,6 @@ import {remove, render, RenderPosition} from '../utils/render.js';
 import {updateItem, sortMovieDate, sortMovieRating, sortMovieComments} from '../utils/common.js';
 import MoviePresenter from '../presenter/movie.js';
 import {SortType} from '../data.js';
-import {comments} from '../main.js';
 
 const MOVIE_COUNT_PER_STEP = 5;
 const RATED_MOVIES_COUNT = 2;
@@ -43,7 +42,7 @@ export default class MoviesList {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
 
-  init(movies) {
+  init(movies, comments) {
     this._movies = movies.slice();
     this._sourcedMovies = movies.slice();
     this._commentsArray = comments;
@@ -132,7 +131,7 @@ export default class MoviesList {
   _handlerModeChange() {
     this._allMoviePresente !== undefined ? this._allMoviePresenter.forEach((presenter) => presenter.resetView()) : '';
     this._ratedMoviePresenter !== undefined ? this._ratedMoviePresenter.forEach((presenter) => presenter.resetView()): '';
-    this._commentedoviePresenter !== undefined ? this._commentedoviePresenter.forEach((presenter) => presenter.resetView()) : '';
+    this._commentedMoviePresenter !== undefined ? this._commentedMoviePresenter.forEach((presenter) => presenter.resetView()) : '';
   }
 
   _clearCommonList() {
