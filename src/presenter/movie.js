@@ -2,7 +2,8 @@
 import MoviePopupView from '../view/popup-movie-info.js';
 import MovieCardView from '../view/movie-view';
 import {render, RenderPosition, remove, replace} from '../utils/render.js';
-import СommentsPresenter from './comment';
+import СommentListPresenter from './list-comments';
+//import СommentsPresenter from './comment';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -18,7 +19,7 @@ export default class Movie {
     this._movieComponent = null;
     this._movie = null;
     this._popupComponent = null;
-    this._commentsComponent = null;
+    this._commentListPresenter = null;
     this._mode = Mode.DEFAULT;
     this._handleOpenPopupClick = this._handleOpenPopupClick.bind(this);
     this._handleClosePopupClick = this._handleClosePopupClick.bind(this);
@@ -27,13 +28,13 @@ export default class Movie {
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleHistoryClick = this._handleHistoryClick.bind(this);
     this._commentsPlace = null;
+    this._container = document.querySelector('.film-details__inner');
   }
 
   init(movie) {
     this._movie = movie;
     const prevMovieComponent = this._movieComponent;
     const prevPopupComponent = this._popupComponent;
-
     this._movieComponent = new MovieCardView(this._movie);
     this._movieComponent.setOpenClickHandler(this._handleOpenPopupClick);
     this._movieComponent.setFavoriteClickHandler(this._handleFavoriteClick);
@@ -45,10 +46,6 @@ export default class Movie {
     this._popupComponent.setFavoriteClickPopupHandler(this._handleFavoriteClick);
     this._popupComponent.setWatchlistClickPopupHandler(this._handleWatchlistClick);
     this._popupComponent.setHistoryClickPopupHandler(this._handleHistoryClick);
-
-    this._commentsPresenter = new СommentsPresenter();
-    this._commentsPresenter.init(this._commentsAbout);
-
 
     if(prevMovieComponent === null){
       this._place = this._moviesContainer.getElement().querySelector('.films-list__container');
@@ -73,6 +70,11 @@ export default class Movie {
     }
   }
 
+  _commentsListInit() {
+    this._commentListPresenter = new СommentListPresenter();
+    this._commentListPresenter.init(this._commentsAbout);
+  }
+
   _replacePopupToCard() {
     remove(this._popupComponent);
     this._mode = Mode.DEFAULT;
@@ -80,7 +82,6 @@ export default class Movie {
 
   _replaceCardToPopup() {
     const siteMainElement = document.querySelector('.main');
-
     render(siteMainElement, this._popupComponent, RenderPosition.BEFOREEND);
     this._changeMode();
     this._mode = Mode.CHANGED;
@@ -102,9 +103,9 @@ export default class Movie {
       openPopup.remove();
     }
     this._replaceCardToPopup();
-
     document.addEventListener('keydown', this._handleEscKeydown);
     document.querySelector('body').classList.add('hidden-scroll');
+    this._commentsListInit();
   }
 
   _handleClosePopupClick() {
@@ -123,6 +124,7 @@ export default class Movie {
         },
       ),
     );
+    this._commentsListInit();
   }
 
   _handleFavoriteClick() {
@@ -135,6 +137,7 @@ export default class Movie {
         },
       ),
     );
+    this._commentsListInit();
   }
 
   _handleHistoryClick() {
@@ -147,5 +150,6 @@ export default class Movie {
         },
       ),
     );
+    this._commentsListInit();
   }
 }

@@ -6,13 +6,14 @@ export default class Comments {
     this._comment = null;
     this._commentsComponent = null;
     this._container = document.querySelector('.film-details__inner');
-    //this._handleDeleteClick = this._handleDeleteClick.bind(this);
-    //this._handleAddComment = this._handleAddComment.bind(this);
+    this._handleDeleteClick = this._handleDeleteClick.bind(this);
   }
 
   init(comments){
     this._comments = comments;
     this._commentsComponent = new CommentsView(this._comments);
+    this._commentsComponent.setDeleteClickHandler(this._handleDeleteClick);
+    this._renderComments();
   }
 
   destroy() {
@@ -20,7 +21,8 @@ export default class Comments {
   }
 
   _handleDeleteClick() {
-    this._commentComponent.destroy();
+    //this._commentComponent.destroy();
+    console.log('gfds');
   }
 
   _renderComments() {

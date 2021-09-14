@@ -68,6 +68,7 @@ export default class Comments extends SmartView {
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._emojiClickHandler = this._emojiClickHandler.bind(this);
     this._commentTextareaHandler = this._commentTextareaHandler.bind(this);
+    this._deleteClickHandler = this._deleteClickHandler.bind(this);
     this._setInnerHandlers();
   }
 
