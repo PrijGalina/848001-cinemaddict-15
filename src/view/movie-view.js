@@ -33,7 +33,6 @@ export default class MovieCard extends AbstractView {
     this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._historyClickHandler = this._historyClickHandler.bind(this);
-    this._deleteCommentHandler = this._deleteCommentHandler.bind(this);
   }
 
   getTemplate() {
@@ -80,16 +79,5 @@ export default class MovieCard extends AbstractView {
   _historyClickHandler(e) {
     e.preventDefault();
     this._callback.historyClick();
-  }
-
-  setDeleteCommentClick(callback) {
-    this._callback.deleteComment = callback;
-    console.log('нужно повесить обработчик на событие удаления комментария, или как-то получать об этом инф');
-    console.log('movie', this._movie);
-  }
-
-  _deleteCommentHandler(e){
-    e.preventDefault();
-    this._callback.deleteComment();
   }
 }

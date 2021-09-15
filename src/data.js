@@ -1,3 +1,6 @@
+import AllMoviesView from './view/all-movies-block';
+import TopRatedView from './view/rated-movies-block';
+import MostCommentedView from './view/commented-movies-block';
 
 const arrayMovieInfo = {
   1: {
@@ -53,7 +56,6 @@ descriptionTextArray.pop();
 descriptionTextArray = descriptionTextArray.map((string) => `${string}. `);
 
 const emojiArray = ['smile', 'sleeping', 'puke', 'angry'];
-
 const MOVIE_COUNT = 12;
 const COMMENTS_COUNT = 10;
 
@@ -63,4 +65,30 @@ const SortType = {
   BY_RATING: 'rating',
 };
 
-export {arrayMovieInfo, MOVIE_COUNT, workingGroup, ageRestrictionsArray, countryArray, releaseArray, descriptionTextArray, emojiArray, SortType, COMMENTS_COUNT};
+const RenderPosition = {
+  AFTERBEGIN: 'afterbegin',
+  BEFOREEND: 'beforeend',
+};
+
+const MoviesListType = {
+  ALL: {
+    view: new AllMoviesView(),
+    presenter: '',
+    container: 0,
+    movieCount: 5,
+  },
+  COMMENTED: {
+    view: new MostCommentedView(),
+    presenter: '',
+    container: 1,
+    movieCount: 2,
+  },
+  RATED: {
+    view: new TopRatedView(),
+    presenter: '',
+    container: 2,
+    movieCount: 2,
+  },
+};
+
+export { RenderPosition, MoviesListType, arrayMovieInfo, MOVIE_COUNT, workingGroup, ageRestrictionsArray, countryArray, releaseArray, descriptionTextArray, emojiArray, SortType, COMMENTS_COUNT};

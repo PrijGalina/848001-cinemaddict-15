@@ -1,9 +1,10 @@
 
 import MoviePopupView from '../view/popup-movie-info.js';
 import MovieCardView from '../view/movie-view';
-import {render, RenderPosition, remove, replace} from '../utils/render.js';
+import {render, remove, replace} from '../utils/render.js';
 import СommentsListPresenter from './list-comments';
 import {deleteItem} from '../utils/common.js';
+import {RenderPosition} from './../data.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -42,7 +43,6 @@ export default class Movie {
     this._movieComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._movieComponent.setWatchlistClickHandler(this._handleWatchlistClick);
     this._movieComponent.setHistoryClickHandler(this._handleHistoryClick);
-    this._movieComponent.setDeleteCommentClick(this._handleDeleteTest);
 
     this._popupComponent = new MoviePopupView(this._movie);
     this._popupComponent.setCloseClickHandler(this._handleClosePopupClick);
@@ -130,19 +130,6 @@ export default class Movie {
     this._commentsListInit();
   }
 
-  _handleDeleteTest() {
-    this._changeData(
-      Object.assign(
-        {},
-        this._movie,
-        {
-          comments: this._commentsAbout.length,
-        },
-      ),
-    );
-    console.log('_handleDeleteTest');
-  }
-
   _handleFavoriteClick() {
     this._changeData(
       Object.assign(
@@ -170,10 +157,9 @@ export default class Movie {
   }
 
   _handlerCommentListChange(updatedComment) {
+    console.log('удалили комментарий, знаю об этом в презентере movie, функция _handlerCommentListChange');
     this._commentsAbout = deleteItem(this._commentsAbout, updatedComment);
     this._commentsListPresenter.init(this._commentsAbout);
-    /*this._changeCommentsList();*/
-    console.log('удалили комментарий, знаю об этом в муви');
-    console.log('updated in movie', this._movie);
+    this._changeCommentsList(this);
   }
 }

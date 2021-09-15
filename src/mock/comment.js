@@ -2,8 +2,7 @@ import {getRandomArray, getRandomElement, getRandomPositiveInteger, getRandomDat
 import {workingGroup, descriptionTextArray, emojiArray} from './../data.js';
 import dayjs from 'dayjs';
 import calendar from 'dayjs/plugin/calendar';
-//import relativeTime from 'dayjs/plugin/relativeTime';
-//dayjs.extend(relativeTime);
+
 dayjs.extend(calendar);
 import updateLocale from 'dayjs/plugin/updateLocale';
 dayjs.extend(updateLocale);

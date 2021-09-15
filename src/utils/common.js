@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 
 export const getRandomPositiveInteger = (numValue, otherNumValue) => {
-  // Функция взята из интернета и доработана,
+  //Функция взята из интернета и доработана,
   //Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_random
   const lower = Math.ceil(Math.min(Math.abs(numValue), Math.abs(otherNumValue)));
   const upper = Math.floor(Math.max(Math.abs(numValue), Math.abs(otherNumValue)));
@@ -66,8 +66,8 @@ export const sortMovieRating = (movieA, movieB) => {
 };
 
 export const sortMovieComments = (movieA, movieB) => {
-  if (movieA.countComments < movieB.countComments) {return 1;}
-  else if(movieA.countComments > movieB.countComments) {return -1;}
+  if (movieA.comments < movieB.comments) {return 1;}
+  else if(movieA.comments > movieB.comments) {return -1;}
   else {return 0;}
 };
 
@@ -75,4 +75,11 @@ export const getRandomDate = (from, to) => {
   const fromTime = from.getTime();
   const toTime = to.getTime();
   return new Date(fromTime + Math.random() * (toTime - fromTime));
+};
+
+export const createElement = (template) => {
+  const newElement = document.createElement('div');
+  newElement.innerHTML = template;
+
+  return newElement.firstChild;
 };

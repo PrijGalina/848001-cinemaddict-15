@@ -2,8 +2,8 @@ import SiteMenuView from './view/site-menu.js';
 import ProfileView from './view/profile.js';
 import MovieCounterView from './view/movie-counter.js';
 import {generateMovie} from './mock/movie-mock.js';
-import {render, RenderPosition} from './utils/render.js';
-import {MOVIE_COUNT, COMMENTS_COUNT} from './data.js';
+import {render} from './utils/render.js';
+import { MOVIE_COUNT, COMMENTS_COUNT, RenderPosition} from './data.js';
 import MoviesListPresenter from './presenter/list-movies.js';
 import {generateComment} from './mock/comment.js';
 

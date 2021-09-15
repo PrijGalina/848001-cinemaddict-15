@@ -1,6 +1,7 @@
-import {render, RenderPosition, remove, replace} from '../utils/render';
+import {render, remove, replace} from '../utils/render';
 import CommentsListView from '../view/list-comment';
 import СommentsPresenter from './comment';
+import {RenderPosition} from './../data';
 
 export default class CommentsList {
   constructor(commentsListChange) {
@@ -25,6 +26,7 @@ export default class CommentsList {
 
     replace(this._commentsListComponent, prevCommentsList);
     render(this._container, this._commentsListComponent, RenderPosition.BEFOREEND);
+    (this._comments.length > 0) ? this._commentsRender(this._comments) : '';
     remove(prevCommentsList);
   }
 
@@ -35,13 +37,13 @@ export default class CommentsList {
   _commentsRender(commentsArray) {
     commentsArray.forEach((commentItem) => {
       this._commentItemPresenter = new СommentsPresenter(this._handlerCommentChange);
+      //this._commentItemPresenter.set
       this._commentItemPresenter.init(commentItem);
     });
   }
 
   _handlerCommentChange(updated) {
+    console.log('удалили комментарий, знаю об этом в презентере list-comments, функция _handlerCommentChange(commentChange -> )');
     this._commentsListChange(updated);
-    (this._comments.length > 0) ? this._commentsRender(this._comments) : '';
-    //this.destroy();
   }
 }

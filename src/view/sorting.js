@@ -26,6 +26,13 @@ export default class Sorting extends AbstractView {
 
     e.preventDefault();
     this._callback.sortTypeChange(e.target.dataset.sortType);
+    /*
+    const prevActiveSortValue = this.getElement().querySelector('.sort__button--active');
+    console.log(prevActiveSortValue);
+    const activeSortValue = this.getElement().querySelector(`a[data-sort-type=${e.target.dataset.sortType}`);
+    prevActiveSortValue.classList.remove('.sort__button--active');
+    activeSortValue.classList.add('.sort__button--active');
+    */
   }
 
   setSortTypeChangeHandler(callback) {

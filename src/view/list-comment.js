@@ -118,4 +118,6 @@ export default class CommentsList extends SmartView {
     delete data.isChoosenEmojiForComment;
     return data;
   }
+
+
 }
