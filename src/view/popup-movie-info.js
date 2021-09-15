@@ -152,6 +152,7 @@ export default class MoviePopup extends SmartView {
     e.preventDefault();
     this._callback.historyClick();
   }
+
 /*
   static parseMovieToData(movie) { // информация в состояние (когда редактируем)
     return Object.assign(

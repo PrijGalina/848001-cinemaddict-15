@@ -2,16 +2,18 @@ import {render, RenderPosition, remove} from '../utils/render';
 import CommentsView from '../view/comment';
 
 export default class Comments {
-  constructor(){
+  constructor(commentChange){
     this._comment = null;
     this._commentsComponent = null;
-    this._container = document.querySelector('.film-details__inner');
+    this._container = document.querySelector('.film-details__comments-list');
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
+    this._commentChange = commentChange;
+
   }
 
   init(comments){
     this._comments = comments;
-    this._commentsComponent = new CommentsView(this._comments);
+    this._commentsComponent = new CommentsView(this._comments, this._handlerListChange);
     this._commentsComponent.setDeleteClickHandler(this._handleDeleteClick);
     this._renderComments();
   }
@@ -20,12 +22,12 @@ export default class Comments {
     remove(this._commentComponent);
   }
 
-  _handleDeleteClick() {
-    //this._commentComponent.destroy();
-    console.log('gfds');
-  }
-
   _renderComments() {
     render(this._container, this._commentsComponent, RenderPosition.BEFOREEND);
+  }
+
+  _handleDeleteClick() {
+    this._commentChange(this);
+    remove(this._commentsComponent);
   }
 }

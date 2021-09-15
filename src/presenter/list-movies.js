@@ -38,6 +38,7 @@ export default class MoviesList {
 
     this._handlerLoadMoreButtonClick = this._handlerLoadMoreButtonClick.bind(this);
     this._handlerModeChange = this._handlerModeChange.bind(this);
+    this._handlerCommentsChange = this._handlerCommentsChange.bind(this);
     this._handlerMovieChange = this._handlerMovieChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
@@ -97,7 +98,7 @@ export default class MoviesList {
   _renderCommonMovie(movie, container) {
     //отрисует 1 фильм в блок "все фильмы"
     this._commentsAboutFilm = this._commentsArray.filter((commentElement) => commentElement.aboutFilm === movie.filmId);
-    const allMoviePresenter = new MoviePresenter(container, this._commentsAboutFilm, this._handlerMovieChange, this._handlerModeChange);
+    const allMoviePresenter = new MoviePresenter(container, this._commentsAboutFilm, this._handlerMovieChange, this._handlerModeChange, this._handlerCommentsChange);
     allMoviePresenter.init(movie);
     this._allMoviePresenter.set(movie.id, allMoviePresenter);
   }
@@ -105,7 +106,7 @@ export default class MoviesList {
   _renderRatedMovie(movie, container) {
     //отрисует 1 фильм в блок "рейтинговые"
     this._commentsAboutFilm = this._commentsArray.filter((commentElement) => commentElement.aboutFilm === movie.filmId);
-    const commentedMoviePresenter = new MoviePresenter(container, this._commentsAboutFilm, this._handlerMovieChange, this._handlerModeChange);
+    const commentedMoviePresenter = new MoviePresenter(container, this._commentsAboutFilm, this._handlerMovieChange, this._handlerModeChange, this._handlerCommentsChange);
     commentedMoviePresenter.init(movie);
     this._commentedMoviePresenter.set(movie.id, commentedMoviePresenter);
   }
@@ -113,7 +114,7 @@ export default class MoviesList {
   _renderCommentedMovie(movie, container) {
     //отрисует 1 фильм в блок "комментируемые"
     this._commentsAboutFilm = this._commentsArray.filter((commentElement) => commentElement.aboutFilm === movie.filmId);
-    const ratedMoviePresenter = new MoviePresenter(container, this._commentsAboutFilm, this._handlerMovieChange, this._handlerModeChange);
+    const ratedMoviePresenter = new MoviePresenter(container, this._commentsAboutFilm, this._handlerMovieChange, this._handlerModeChange, this._handlerCommentsChange);
     ratedMoviePresenter.init(movie);
     this._ratedMoviePresenter.set(movie.id, ratedMoviePresenter);
   }
@@ -187,7 +188,7 @@ export default class MoviesList {
     this._renderCommonList();
   }
 
-  _renderMoviesContainer(){
+  _renderMoviesContainer() {
     //главный метод, вызывающий все остальные
     if(this._movies.length === 0){
       this._renderNoMovies();
@@ -195,5 +196,9 @@ export default class MoviesList {
     }
     this._renderSort();
     this._renderContainersMovieCategory();
+  }
+
+  _handlerCommentsChange() {
+
   }
 }

@@ -2,8 +2,8 @@
 import MoviePopupView from '../view/popup-movie-info.js';
 import MovieCardView from '../view/movie-view';
 import {render, RenderPosition, remove, replace} from '../utils/render.js';
-import СommentListPresenter from './list-comments';
-//import СommentsPresenter from './comment';
+import СommentsListPresenter from './list-comments';
+import {deleteItem} from '../utils/common.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -11,15 +11,16 @@ const Mode = {
 };
 
 export default class Movie {
-  constructor(moviesContainer, commentsAbout, changeData, changeMode) {
+  constructor(moviesContainer, commentsAbout, changeData, changeMode, changeCommentsList) {
     this._moviesContainer = moviesContainer;
     this._commentsAbout = commentsAbout;
     this._changeData = changeData;
     this._changeMode = changeMode;
+    this._changeCommentsList = changeCommentsList;
     this._movieComponent = null;
     this._movie = null;
     this._popupComponent = null;
-    this._commentListPresenter = null;
+    this._commentsListPresenter = null;
     this._mode = Mode.DEFAULT;
     this._handleOpenPopupClick = this._handleOpenPopupClick.bind(this);
     this._handleClosePopupClick = this._handleClosePopupClick.bind(this);
@@ -29,6 +30,7 @@ export default class Movie {
     this._handleHistoryClick = this._handleHistoryClick.bind(this);
     this._commentsPlace = null;
     this._container = document.querySelector('.film-details__inner');
+    this._handlerCommentListChange = this._handlerCommentListChange.bind(this);
   }
 
   init(movie) {
@@ -40,6 +42,7 @@ export default class Movie {
     this._movieComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._movieComponent.setWatchlistClickHandler(this._handleWatchlistClick);
     this._movieComponent.setHistoryClickHandler(this._handleHistoryClick);
+    this._movieComponent.setDeleteCommentClick(this._handleDeleteTest);
 
     this._popupComponent = new MoviePopupView(this._movie);
     this._popupComponent.setCloseClickHandler(this._handleClosePopupClick);
@@ -71,8 +74,8 @@ export default class Movie {
   }
 
   _commentsListInit() {
-    this._commentListPresenter = new СommentListPresenter();
-    this._commentListPresenter.init(this._commentsAbout);
+    this._commentsListPresenter = new СommentsListPresenter(this._handlerCommentListChange);
+    this._commentsListPresenter.init(this._commentsAbout);
   }
 
   _replacePopupToCard() {
@@ -127,6 +130,19 @@ export default class Movie {
     this._commentsListInit();
   }
 
+  _handleDeleteTest() {
+    this._changeData(
+      Object.assign(
+        {},
+        this._movie,
+        {
+          comments: this._commentsAbout.length,
+        },
+      ),
+    );
+    console.log('_handleDeleteTest');
+  }
+
   _handleFavoriteClick() {
     this._changeData(
       Object.assign(
@@ -151,5 +167,13 @@ export default class Movie {
       ),
     );
     this._commentsListInit();
+  }
+
+  _handlerCommentListChange(updatedComment) {
+    this._commentsAbout = deleteItem(this._commentsAbout, updatedComment);
+    this._commentsListPresenter.init(this._commentsAbout);
+    /*this._changeCommentsList();*/
+    console.log('удалили комментарий, знаю об этом в муви');
+    console.log('updated in movie', this._movie);
   }
 }

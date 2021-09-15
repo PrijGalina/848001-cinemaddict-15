@@ -44,6 +44,19 @@ export const updateItem = (items, update) => {
   ];
 };
 
+export const deleteItem = (items, deleteElement) => {
+  const index = items.findIndex((item) => item.id === deleteElement._comments.id);
+
+  if (index === -1) {
+    return items;
+  }
+
+  return [
+    ...items.slice(0, index),
+    ...items.slice(index + 1),
+  ];
+};
+
 export const sortMovieDate = (movieA, movieB) => dayjs(movieB.release).diff(dayjs(movieA.release));
 
 export const sortMovieRating = (movieA, movieB) => {
