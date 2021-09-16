@@ -91,8 +91,8 @@ const createPopupMovieInfo = (movieData) => {
 export default class MoviePopup extends SmartView {
   constructor(movie) {
     super();
-    //this._data = MoviePopup.parseMovieToData(movie);
-    this._data = movie;
+    this._data = MoviePopup.parseMovieToData(movie);
+    //this._data = movie;
     this._closeClickHandler = this._closeClickHandler.bind(this);
     this._watchlistClickPopupHandler = this._watchlistClickPopupHandler.bind(this);
     this._favoriteClickPopupHandler = this._favoriteClickPopupHandler.bind(this);
@@ -153,25 +153,24 @@ export default class MoviePopup extends SmartView {
     this._callback.historyClick();
   }
 
-/*
   static parseMovieToData(movie) { // информация в состояние (когда редактируем)
     return Object.assign(
       {},
       movie,
       {
-        isComments: movie.countComments > 0,
+        comments: movie.comments.length,
       },
     );
   }
 
   static parseDataToMovie(data) { // превращает состояние в информацию (когда сохраняем)
     data = Object.assign({}, data);
-    if (!data.isComments) {
-      data.countComments = 0;
+    if (!data.commentsCount) {
+      data.comments = 0;
     }
 
-    delete data.isComments;
+    delete data.commentsCount;
     return data;
   }
-*/
+
 }

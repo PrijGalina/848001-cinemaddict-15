@@ -157,9 +157,17 @@ export default class Movie {
   }
 
   _handlerCommentListChange(updatedComment) {
-    console.log('удалили комментарий, знаю об этом в презентере movie, функция _handlerCommentListChange');
     this._commentsAbout = deleteItem(this._commentsAbout, updatedComment);
     this._commentsListPresenter.init(this._commentsAbout);
-    this._changeCommentsList(this);
+    this._changeData(
+      Object.assign(
+        {},
+        this._movie,
+        {
+          comments: this._commentsAbout,
+        },
+      ),
+    );
+    this._commentsListInit();
   }
 }

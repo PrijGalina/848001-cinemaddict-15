@@ -87,15 +87,15 @@ export default class MoviesList {
     this._sourcedMovies = updateItem(this._sourcedMovies, updatedMovie);
 
     if(this._allMoviePresenter.has(updatedMovie.id)) {
-      this._allmoviePresenter.get(updatedMovie.id).init(updatedMovie);
+      this._allMoviePresenter.get(updatedMovie.id).init(updatedMovie);
     }
 
     if (this._ratedMoviePresenter.has(updatedMovie.id)) {
-      this._ratedmoviePresenter.get(updatedMovie.id).init(updatedMovie);
+      this._ratedMoviePresenter.get(updatedMovie.id).init(updatedMovie);
     }
 
     if (this._commentedMoviePresenter.has(updatedMovie.id)) {
-      this._commentedmoviePresenter.get(updatedMovie.id).init(updatedMovie);
+      this._commentedMoviePresenter.get(updatedMovie.id).init(updatedMovie);
     }
   }
 
@@ -130,9 +130,7 @@ export default class MoviesList {
   }
 
   _handlerCommentsChange(changedMovie) {
-    console.log('удалили комментарий, знаю об этом в презентере list-movie, функция _handlerCommentsChange');
     this._handlerMovieChange(changedMovie);
-    console.log('меняю массив фильмов в _handlerMovieChange, и вызываю init для измененного фильма');
   }
 
   _renderMovieItem(movie, type) {
