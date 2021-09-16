@@ -10,6 +10,7 @@ export default class CommentsList {
     this._commentsListChange = commentsListChange;
     this._container = document.querySelector('.film-details__inner');
     this._handlerCommentChange = this._handlerCommentChange.bind(this);
+    this._handlerEmojiChange = this._handlerEmojiChange.bind(this);
   }
 
   init(comments) {
@@ -43,7 +44,10 @@ export default class CommentsList {
   }
 
   _handlerCommentChange(updated) {
-    console.log('удалили комментарий, знаю об этом в презентере list-comments, функция _handlerCommentChange(commentChange -> )');
     this._commentsListChange(updated);
+  }
+
+  __handlerEmojiChange() {
+    console.log('EmojiChange');
   }
 }

@@ -68,6 +68,7 @@ export default class CommentsList extends SmartView {
   _emojiClickHandler(e) {
     e.preventDefault();
     const value = e.target.parentElement.dataset.value;
+    console.log(e.target.parentElement.dataset.value);
     this.updateData({
       isChoosenEmojiForComment: value,
     }, false);
