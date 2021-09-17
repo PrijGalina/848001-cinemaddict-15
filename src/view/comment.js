@@ -1,4 +1,4 @@
-import SmartView from './smart.js';
+import SmartView from './smart';
 
 const createCommentsTemplate = (commentData) => {
   const {emotion, comment, date, autor} = commentData;
@@ -28,13 +28,13 @@ export default class Comments extends SmartView {
     return createCommentsTemplate(this._comment);
   }
 
-  setDeleteClickHandler(callback) {
-    this._callback.deleteClick = callback;
-    this.getElement().querySelector('.film-details__comment-delete').addEventListener('click', this._deleteClickHandler);
-  }
-
   _deleteClickHandler(e) {
     e.preventDefault();
     this._callback.deleteClick();
+  }
+
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement().querySelector('.film-details__comment-delete').addEventListener('click', this._deleteClickHandler);
   }
 }

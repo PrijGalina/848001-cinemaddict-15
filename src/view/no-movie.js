@@ -1,4 +1,4 @@
-import AbstractView from './abstract.js';
+import AbstractView from './abstract';
 
 const createNoMovieTemplate = () => {
   const activeFilter = document.querySelector('.main-navigation__item--active');

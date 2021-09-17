@@ -1,4 +1,4 @@
-import SmartView from './smart.js';
+import SmartView from './smart';
 import dayjs from 'dayjs';
 
 
@@ -91,22 +91,16 @@ const createPopupMovieInfo = (movieData) => {
 export default class MoviePopup extends SmartView {
   constructor(movie) {
     super();
-    this._data = MoviePopup.parseMovieToData(movie);
-    //this._data = movie;
+    this._movie = movie;
+
     this._closeClickHandler = this._closeClickHandler.bind(this);
     this._watchlistClickPopupHandler = this._watchlistClickPopupHandler.bind(this);
     this._favoriteClickPopupHandler = this._favoriteClickPopupHandler.bind(this);
     this._historyClickPopupHandler = this._historyClickPopupHandler.bind(this);
-    this._setInnerHandlers();
   }
 
   getTemplate() {
-    return createPopupMovieInfo(this._data);
-  }
-
-  setCloseClickHandler(callback) {
-    this._callback.closeClick = callback;
-    this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._closeClickHandler);
+    return createPopupMovieInfo(this._movie);
   }
 
   _closeClickHandler(e) {
@@ -114,28 +108,9 @@ export default class MoviePopup extends SmartView {
     this._callback.closeClick();
   }
 
-  _setInnerHandlers(){
-    this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._closeClickHandler);
-  }
-
-  restoreHandlers() {
-    this._setInnerHandlers();
-    this.setFormSubmitHandler(this._callback.formSubmit);
-  }
-
-  setWatchlistClickPopupHandler(callback) {
-    this._callback.watchlistClick = callback;
-    this.getElement().querySelector('.film-details__control-button--watchlist').addEventListener('click', this._watchlistClickPopupHandler);
-  }
-
   _watchlistClickPopupHandler(e) {
     e.preventDefault();
     this._callback.watchlistClick();
-  }
-
-  setFavoriteClickPopupHandler(callback) {
-    this._callback.favoriteClick = callback;
-    this.getElement().querySelector('.film-details__control-button--favorite').addEventListener('click', this._favoriteClickPopupHandler);
   }
 
   _favoriteClickPopupHandler(e) {
@@ -143,34 +118,28 @@ export default class MoviePopup extends SmartView {
     this._callback.favoriteClick();
   }
 
-  setHistoryClickPopupHandler(callback) {
-    this._callback.historyClick = callback;
-    this.getElement().querySelector('.film-details__control-button--watched').addEventListener('click', this._historyClickPopupHandler);
-  }
-
   _historyClickPopupHandler(e) {
     e.preventDefault();
     this._callback.historyClick();
   }
 
-  static parseMovieToData(movie) { // информация в состояние (когда редактируем)
-    return Object.assign(
-      {},
-      movie,
-      {
-        comments: movie.comments.length,
-      },
-    );
+  setCloseClickHandler(callback) {
+    this._callback.closeClick = callback;
+    this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._closeClickHandler);
   }
 
-  static parseDataToMovie(data) { // превращает состояние в информацию (когда сохраняем)
-    data = Object.assign({}, data);
-    if (!data.commentsCount) {
-      data.comments = 0;
-    }
-
-    delete data.commentsCount;
-    return data;
+  setWatchlistClickPopupHandler(callback) {
+    this._callback.watchlistClick = callback;
+    this.getElement().querySelector('.film-details__control-button--watchlist').addEventListener('click', this._watchlistClickPopupHandler);
   }
 
+  setFavoriteClickPopupHandler(callback) {
+    this._callback.favoriteClick = callback;
+    this.getElement().querySelector('.film-details__control-button--favorite').addEventListener('click', this._favoriteClickPopupHandler);
+  }
+
+  setHistoryClickPopupHandler(callback) {
+    this._callback.historyClick = callback;
+    this.getElement().querySelector('.film-details__control-button--watched').addEventListener('click', this._historyClickPopupHandler);
+  }
 }

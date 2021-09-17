@@ -1,4 +1,4 @@
-import AbstractView from './abstract.js';
+import AbstractView from './abstract';
 
 const createProfileTemplate = () => (
   `<section class="header__profile profile">

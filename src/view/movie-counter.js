@@ -1,4 +1,4 @@
-import AbstractView from './abstract.js';
+import AbstractView from './abstract';
 
 const createMovieCounter = () => (
   '<p>130 291 movies inside</p>'

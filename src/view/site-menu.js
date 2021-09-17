@@ -1,4 +1,4 @@
-import AbstractView from './abstract.js';
+import AbstractView from './abstract';
 
 const createMenuTemplate = (moviesArray) => {
   const getWathedCount = (array) => array.filter((film) => film.isHistory === true).length;
@@ -22,9 +22,23 @@ export default class SiteMenu extends AbstractView {
   constructor(movies) {
     super();
     this._movies = movies;
+    this._filterDataChangeHandler = this._filterDataChangeHandler.bind(this);
   }
 
   getTemplate() {
     return createMenuTemplate(this._movies);
+  }
+
+  _filterDataChangeHandler(e) {
+    e.preventDefault();
+    this._callback.menuClick();
+  }
+
+  setFilterDataChange(callback) {
+    this._callback.menuClick = callback;
+
+    this.getElement().querySelectorAll('.main-navigation__item').forEach((item) => {
+      item.addEventListener('click', this._filterDataChangeHandler);
+    });
   }
 }

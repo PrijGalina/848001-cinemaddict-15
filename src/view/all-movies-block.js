@@ -1,4 +1,4 @@
-import AbstractView from './abstract.js';
+import AbstractView from './abstract';
 
 const createAllMoviesSection = () => (
   `<section class="films-list films-list--all">

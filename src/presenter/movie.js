@@ -1,10 +1,10 @@
 
-import MoviePopupView from '../view/popup-movie-info.js';
+import MoviePopupView from '../view/popup-movie-info';
 import MovieCardView from '../view/movie-view';
-import {render, remove, replace} from '../utils/render.js';
+import {render, remove, replace} from '../utils/render';
 import СommentsListPresenter from './list-comments';
-import {deleteItem} from '../utils/common.js';
-import {RenderPosition} from './../data.js';
+import {deleteItem} from '../utils/common';
+import {RenderPosition} from './../data';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -26,9 +26,15 @@ export default class Movie {
     this._handleOpenPopupClick = this._handleOpenPopupClick.bind(this);
     this._handleClosePopupClick = this._handleClosePopupClick.bind(this);
     this._handleEscKeydown = this._handleEscKeydown.bind(this);
-    this._handleWatchlistClick = this._handleWatchlistClick.bind(this);
-    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
-    this._handleHistoryClick = this._handleHistoryClick.bind(this);
+
+    this._handleCardWatchlistClick = this._handleCardWatchlistClick.bind(this);
+    this._handleCardFavoriteClick = this._handleCardFavoriteClick.bind(this);
+    this._handleCardHistoryClick = this._handleCardHistoryClick.bind(this);
+
+    this._handlePopupWatchlistClick = this._handlePopupWatchlistClick.bind(this);
+    this._handlePopupFavoriteClick = this._handlePopupFavoriteClick.bind(this);
+    this._handlePopupHistoryClick = this._handlePopupHistoryClick.bind(this);
+
     this._commentsPlace = null;
     this._container = document.querySelector('.film-details__inner');
     this._handlerCommentListChange = this._handlerCommentListChange.bind(this);
@@ -40,15 +46,14 @@ export default class Movie {
     const prevPopupComponent = this._popupComponent;
     this._movieComponent = new MovieCardView(this._movie);
     this._movieComponent.setOpenClickHandler(this._handleOpenPopupClick);
-    this._movieComponent.setFavoriteClickHandler(this._handleFavoriteClick);
-    this._movieComponent.setWatchlistClickHandler(this._handleWatchlistClick);
-    this._movieComponent.setHistoryClickHandler(this._handleHistoryClick);
-
+    this._movieComponent.setFavoriteClickHandler(this._handleCardFavoriteClick);
+    this._movieComponent.setWatchlistClickHandler(this._handleCardWatchlistClick);
+    this._movieComponent.setHistoryClickHandler(this._handleCardHistoryClick);
     this._popupComponent = new MoviePopupView(this._movie);
     this._popupComponent.setCloseClickHandler(this._handleClosePopupClick);
-    this._popupComponent.setFavoriteClickPopupHandler(this._handleFavoriteClick);
-    this._popupComponent.setWatchlistClickPopupHandler(this._handleWatchlistClick);
-    this._popupComponent.setHistoryClickPopupHandler(this._handleHistoryClick);
+    this._popupComponent.setFavoriteClickPopupHandler(this._handlePopupFavoriteClick);
+    this._popupComponent.setWatchlistClickPopupHandler(this._handlePopupWatchlistClick);
+    this._popupComponent.setHistoryClickPopupHandler(this._handlePopupHistoryClick);
 
     if(prevMovieComponent === null){
       this._place = this._moviesContainer.getElement().querySelector('.films-list__container');
@@ -117,7 +122,43 @@ export default class Movie {
     document.querySelector('body').classList.remove('hidden-scroll');
   }
 
-  _handleWatchlistClick() {
+  _handleCardWatchlistClick() {
+    this._changeData(
+      Object.assign(
+        {},
+        this._movie,
+        {
+          isWatchlist: !this._movie.isWatchlist,
+        },
+      ),
+    );
+  }
+
+  _handleCardFavoriteClick() {
+    this._changeData(
+      Object.assign(
+        {},
+        this._movie,
+        {
+          isFavorite: !this._movie.isFavorite,
+        },
+      ),
+    );
+  }
+
+  _handleCardHistoryClick() {
+    this._changeData(
+      Object.assign(
+        {},
+        this._movie,
+        {
+          isHistory: !this._movie.isHistory,
+        },
+      ),
+    );
+  }
+
+  _handlePopupWatchlistClick() {
     this._changeData(
       Object.assign(
         {},
@@ -130,7 +171,7 @@ export default class Movie {
     this._commentsListInit();
   }
 
-  _handleFavoriteClick() {
+  _handlePopupFavoriteClick() {
     this._changeData(
       Object.assign(
         {},
@@ -143,7 +184,7 @@ export default class Movie {
     this._commentsListInit();
   }
 
-  _handleHistoryClick() {
+  _handlePopupHistoryClick() {
     this._changeData(
       Object.assign(
         {},

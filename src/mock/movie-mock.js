@@ -1,5 +1,5 @@
-import {getRandomPositiveInteger, getRandomPositiveFloat, getRandomArray, getRandomElement, getRandomDate} from '../utils/common.js';
-import {arrayMovieInfo, workingGroup, ageRestrictionsArray, countryArray, releaseArray, descriptionTextArray} from './../data.js';
+import {getRandomPositiveInteger, getRandomPositiveFloat, getRandomArray, getRandomElement, getRandomDate} from '../utils/common';
+import {arrayMovieInfo, workingGroup, ageRestrictionsArray, countryArray, releaseArray, descriptionTextArray} from './../data';
 import {comments} from '../main.js';
 import {nanoid} from 'nanoid';
 import dayjs from 'dayjs';

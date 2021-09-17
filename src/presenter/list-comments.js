@@ -47,7 +47,7 @@ export default class CommentsList {
     this._commentsListChange(updated);
   }
 
-  __handlerEmojiChange() {
+  _handlerEmojiChange() {
     console.log('EmojiChange');
   }
 }

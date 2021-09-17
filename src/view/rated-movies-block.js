@@ -1,5 +1,5 @@
 
-import AbstractView from './abstract.js';
+import AbstractView from './abstract';
 
 const createTopRatedSection = () => (
   `<section class="films-list films-list--extra films-list--rated">
