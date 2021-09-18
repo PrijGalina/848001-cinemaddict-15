@@ -38,6 +38,15 @@ const MoviesListType = {
   },
 };
 
+const TEMPLATE_NEW_COMMENT = {
+  id: '',
+  autor: '',
+  comment: '',
+  date: '',
+  emotion: '',
+  aboutFilm: '',
+};
+
 const arrayMovieInfo = {
   1: {
     title: 'Popeye the Sailor Meets Sindbad the Sailor',
@@ -91,4 +100,4 @@ let descriptionTextArray = descriptionText.split('. ');
 descriptionTextArray.pop();
 descriptionTextArray = descriptionTextArray.map((string) => `${string}. `);
 
-export { RenderPosition, MoviesListType, arrayMovieInfo, MOVIE_COUNT, workingGroup, ageRestrictionsArray, countryArray, releaseArray, descriptionTextArray, emojiArray, SortType, COMMENTS_COUNT};
+export { RenderPosition, MoviesListType, arrayMovieInfo, MOVIE_COUNT, workingGroup, ageRestrictionsArray, countryArray, releaseArray, descriptionTextArray, emojiArray, SortType, COMMENTS_COUNT, TEMPLATE_NEW_COMMENT};

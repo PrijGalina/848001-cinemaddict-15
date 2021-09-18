@@ -9,7 +9,6 @@ export default class Comments {
     this._container = document.querySelector('.film-details__comments-list');
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._commentChange = commentChange;
-
   }
 
   init(comments){
