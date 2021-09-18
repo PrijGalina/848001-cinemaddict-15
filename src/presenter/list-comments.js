@@ -1,25 +1,26 @@
 import {render, remove, replace} from '../utils/render';
 import CommentsListView from '../view/list-comment';
 import СommentsPresenter from './comment';
-import { RenderPosition, TEMPLATE_NEW_COMMENT} from './../data';
+import {RenderPosition, TEMPLATE_NEW_COMMENT} from './../const';
+import LocalCommentPresenter from './local-comment';
 
 export default class CommentsList {
-  constructor(commentsListChange) {
+  constructor(commentsListChange, commentAddList) {
     this._comments = null;
-    this._newComment = null;
     this._commentsListComponent = null;
+    this._localCommentTemplate = TEMPLATE_NEW_COMMENT;
     this._commentsListChange = commentsListChange;
+    this._commentAddList = commentAddList;
     this._mainContainer = document.querySelector('.film-details__inner');
     this._handlerCommentChange = this._handlerCommentChange.bind(this);
-    this._handlerEmojiChange = this._handlerEmojiChange.bind(this);
+    this._handleFormSubmit = this._handleFormSubmit.bind(this);
   }
 
   init(comments) {
     this._comments = comments;
-    this._newComment = TEMPLATE_NEW_COMMENT;
     const prevCommentsList = this._commentsListComponent;
-    this._commentsListComponent = new CommentsListView(this._comments, this._newComment);
-    this._commentsListComponent.setEmojiClickHandler(this._handlerEmojiChange);
+    this._commentsListComponent = new CommentsListView(this._comments);
+
     if(prevCommentsList === null) {
       this._renderCommentsView();
       return;
@@ -32,6 +33,7 @@ export default class CommentsList {
 
   _renderCommentsView() {
     render(this._mainContainer, this._commentsListComponent, RenderPosition.BEFOREEND);
+    this._localCommentInit();
     (this._comments.length > 0) ? this._commentsRender(this._comments) : '';
   }
 
@@ -46,11 +48,17 @@ export default class CommentsList {
     });
   }
 
+  _localCommentInit() {
+    this._localCommentPresenter = new LocalCommentPresenter(this._handleFormSubmit);
+    this._localCommentPresenter.init(this._localCommentTemplate);
+  }
+
   _handlerCommentChange(updated) {
     this._commentsListChange(updated);
   }
 
-  _handlerEmojiChange(){
-
+  _handleFormSubmit(comment) {
+    console.log('dfghjk');
+    //this._commentAddList(comment);
   }
 }

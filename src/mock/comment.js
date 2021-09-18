@@ -1,5 +1,6 @@
 import {getRandomArray, getRandomElement, getRandomPositiveInteger, getRandomDate} from '../utils/common';
-import {workingGroup, descriptionTextArray, emojiArray} from './../data';
+import {workingGroup, descriptionTextArray} from './../data';
+import {emojiArray} from './../const';
 import dayjs from 'dayjs';
 import calendar from 'dayjs/plugin/calendar';
 

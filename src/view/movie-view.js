@@ -29,7 +29,6 @@ export default class MovieCard extends SmartView {
   constructor(movie) {
     super();
     this._movie = movie;
-
     this._openClickHandler = this._openClickHandler.bind(this);
     this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);

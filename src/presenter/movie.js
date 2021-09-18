@@ -4,7 +4,7 @@ import MovieCardView from '../view/movie-view';
 import {render, remove, replace} from '../utils/render';
 import СommentsListPresenter from './list-comments';
 import {deleteItem} from '../utils/common';
-import {RenderPosition} from './../data';
+import {RenderPosition} from './../const';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -38,6 +38,7 @@ export default class Movie {
     this._commentsPlace = null;
     this._container = document.querySelector('.film-details__inner');
     this._handlerCommentListChange = this._handlerCommentListChange.bind(this);
+    this._handlerCommentAddList = this._handlerCommentAddList.bind(this);
   }
 
   init(movie) {
@@ -79,7 +80,7 @@ export default class Movie {
   }
 
   _commentsListInit() {
-    this._commentsListPresenter = new СommentsListPresenter(this._handlerCommentListChange);
+    this._commentsListPresenter = new СommentsListPresenter(this._handlerCommentListChange, this._handlerCommentAddList);
     this._commentsListPresenter.init(this._commentsAbout);
   }
 
@@ -210,5 +211,10 @@ export default class Movie {
       ),
     );
     this._commentsListInit();
+  }
+
+  _handlerCommentAddList() {
+    //добавить коммент к списку и отобразить перерисовать список
+    console.log('hyi');
   }
 }

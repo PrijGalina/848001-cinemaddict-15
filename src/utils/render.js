@@ -1,5 +1,5 @@
 import Abstract from './../view/abstract';
-import {RenderPosition} from './../data';
+import {RenderPosition} from './../const';
 
 export const render = (container, element, place) => {
   if(container instanceof Abstract) {

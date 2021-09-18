@@ -1,52 +1,3 @@
-import AllMoviesView from './view/all-movies-block';
-import TopRatedView from './view/rated-movies-block';
-import MostCommentedView from './view/commented-movies-block';
-
-const emojiArray = ['smile', 'sleeping', 'puke', 'angry'];
-const MOVIE_COUNT = 12;
-const COMMENTS_COUNT = 10;
-
-const SortType = {
-  DEFAULT: 'default',
-  BY_DATE: 'date',
-  BY_RATING: 'rating',
-};
-
-const RenderPosition = {
-  AFTERBEGIN: 'afterbegin',
-  BEFOREEND: 'beforeend',
-};
-
-const MoviesListType = {
-  ALL: {
-    view: new AllMoviesView(),
-    presenter: '',
-    container: 0,
-    movieCount: 5,
-  },
-  COMMENTED: {
-    view: new MostCommentedView(),
-    presenter: '',
-    container: 1,
-    movieCount: 2,
-  },
-  RATED: {
-    view: new TopRatedView(),
-    presenter: '',
-    container: 2,
-    movieCount: 2,
-  },
-};
-
-const TEMPLATE_NEW_COMMENT = {
-  id: '',
-  autor: '',
-  comment: '',
-  date: '',
-  emotion: '',
-  aboutFilm: '',
-};
-
 const arrayMovieInfo = {
   1: {
     title: 'Popeye the Sailor Meets Sindbad the Sailor',
@@ -100,4 +51,4 @@ let descriptionTextArray = descriptionText.split('. ');
 descriptionTextArray.pop();
 descriptionTextArray = descriptionTextArray.map((string) => `${string}. `);
 
-export { RenderPosition, MoviesListType, arrayMovieInfo, MOVIE_COUNT, workingGroup, ageRestrictionsArray, countryArray, releaseArray, descriptionTextArray, emojiArray, SortType, COMMENTS_COUNT, TEMPLATE_NEW_COMMENT};
+export {arrayMovieInfo, workingGroup, ageRestrictionsArray, countryArray, releaseArray, descriptionTextArray};

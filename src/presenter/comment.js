@@ -1,5 +1,5 @@
 import {render, remove} from '../utils/render';
-import {RenderPosition} from './../data';
+import {RenderPosition} from './../const';
 import CommentsView from '../view/comment';
 
 export default class Comments {
