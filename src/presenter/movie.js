@@ -1,8 +1,8 @@
 
+import СommentsListPresenter from './list-comments';
 import MoviePopupView from '../view/popup-movie-info';
 import MovieCardView from '../view/movie-view';
 import {render, remove, replace} from '../utils/render';
-import СommentsListPresenter from './list-comments';
 import {deleteItem} from '../utils/common';
 import {RenderPosition} from './../const';
 
@@ -12,9 +12,9 @@ const Mode = {
 };
 
 export default class Movie {
-  constructor(moviesContainer, commentsAbout, changeData, changeMode, changeCommentsList) {
+  constructor(moviesContainer, commentsModel, changeData, changeMode, changeCommentsList) {
     this._moviesContainer = moviesContainer;
-    this._commentsAbout = commentsAbout;
+    this._commentsModel = commentsModel;
     this._changeData = changeData;
     this._changeMode = changeMode;
     this._changeCommentsList = changeCommentsList;
@@ -81,7 +81,7 @@ export default class Movie {
 
   _commentsListInit() {
     this._commentsListPresenter = new СommentsListPresenter(this._handlerCommentListChange, this._handlerCommentAddList);
-    this._commentsListPresenter.init(this._commentsAbout);
+    this._commentsListPresenter.init();
   }
 
   _replacePopupToCard() {
@@ -182,7 +182,6 @@ export default class Movie {
         },
       ),
     );
-    this._commentsListInit();
   }
 
   _handlePopupHistoryClick() {
@@ -215,6 +214,5 @@ export default class Movie {
 
   _handlerCommentAddList() {
     //добавить коммент к списку и отобразить перерисовать список
-    console.log('hyi');
   }
 }

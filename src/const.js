@@ -1,6 +1,4 @@
-import AllMoviesView from './view/all-movies-block';
-import TopRatedView from './view/rated-movies-block';
-import MostCommentedView from './view/commented-movies-block';
+
 
 export const emojiArray = ['smile', 'sleeping', 'puke', 'angry'];
 
@@ -22,20 +20,14 @@ export const RenderPosition = {
 
 export const MoviesListType = {
   ALL: {
-    view: new AllMoviesView(),
-    presenter: '',
     container: 0,
     movieCount: 5,
   },
   COMMENTED: {
-    view: new MostCommentedView(),
-    presenter: '',
     container: 1,
     movieCount: 2,
   },
   RATED: {
-    view: new TopRatedView(),
-    presenter: '',
     container: 2,
     movieCount: 2,
   },

@@ -1,12 +1,12 @@
+import MoviesModel from './model/movies';
+import CommentsModel from './model/comments';
+import MoviesListPresenter from './presenter/list-movies';
 import ProfileView from './view/profile';
 import MovieCounterView from './view/movie-counter';
 import {generateMovie} from './mock/movie-mock';
+import { generateComment } from './mock/comment';
 import {render} from './utils/render';
-import { MOVIE_COUNT, COMMENTS_COUNT, RenderPosition} from './const';
-import MoviesListPresenter from './presenter/list-movies';
-import {generateComment} from './mock/comment';
-import MoviesModel from './model/movies';
-import CommentsModel from './model/comments';
+import {MOVIE_COUNT, COMMENTS_COUNT, RenderPosition} from './const';
 
 const siteHeaderElement = document.querySelector('.header');
 const siteMainElement = document.querySelector('.main');

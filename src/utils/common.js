@@ -65,13 +65,13 @@ export const sortMovieRating = (movieA, movieB) => {
   else {return 0;}
 };
 
-/*export const sortMovieComments = (movieA, movieB) => {
+export const sortMovieComments = (movieA, movieB) => {
   if (movieA.comments < movieB.comments) {return 1;}
   else if(movieA.comments > movieB.comments) {return -1;}
   else {return 0;}
-};*/
+};
 
-export const sortMovieComments = (movieA, movieB) => parseFloat(movieA.comments) - parseFloat(movieB.comments);
+//export const sortMovieComments = (movieA, movieB) => parseFloat(movieA.comments) - parseFloat(movieB.comments);
 
 export const getRandomDate = (from, to) => {
   const fromTime = from.getTime();
