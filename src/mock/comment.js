@@ -22,6 +22,12 @@ const getCommentDate = () => {
   return randomCommentDate;
 };
 
+const getCurrentDate = () => {
+  const currentDate = dayjs().toISOString();
+  const randomCommentDate = dayjs(currentDate).calendar();
+  return randomCommentDate;
+};
+
 const generateComment = () => {
   const emojiIndex = getRandomElement(emojiArray);
   const comment = {
@@ -35,5 +41,5 @@ const generateComment = () => {
   return comment;
 };
 
-export {generateComment};
+export { generateComment, getCurrentDate};
 

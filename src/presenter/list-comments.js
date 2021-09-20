@@ -1,6 +1,6 @@
 import СommentPresenter from './comment';
-import LocalCommentPresenter from './local-comment';
-import {TEMPLATE_NEW_COMMENT, UserAction, UpdateType} from './../const';
+import NewCommentPresenter from './comment-new';
+import {UserAction, UpdateType} from './../const';
 
 export default class CommentsList {
   constructor(container, commentsModel, needMovieUpdate, filmId) {
@@ -8,7 +8,6 @@ export default class CommentsList {
     this._commentsModel = commentsModel;
     this._needMovieUpdate = needMovieUpdate;
     this._filmId = filmId;
-    this._localCommentTemplate = TEMPLATE_NEW_COMMENT;
 
     this._comments = null;
     this._commentsPresenter = new Map();
@@ -22,7 +21,7 @@ export default class CommentsList {
   init() {
     this._comments = this._getComments(this._filmId);
     (this._comments.length > 0) ? this._commentsRender(this._comments) : '';
-    this._localCommentInit();
+    this._newCommentInit();
   }
 
   _getComments(filmId) {
@@ -38,9 +37,10 @@ export default class CommentsList {
     });
   }
 
-  _localCommentInit() {
-    this._localCommentPresenter = new LocalCommentPresenter(this._handleCommentViewAction);
-    this._localCommentPresenter.init(this._localCommentTemplate);
+  _newCommentInit() {
+    const newCommentContainer = document.querySelector('.film-details__comments-wrap');
+    this._NewCommentPresenter = new NewCommentPresenter(newCommentContainer, this._handleCommentViewAction, this._filmId);
+    this._NewCommentPresenter.init();
   }
 
   _handleCommentViewAction(actionType, updateType, update) {
@@ -61,8 +61,8 @@ export default class CommentsList {
     const commentsListUpdate = this._getComments(this._filmId);
     switch (updateType) {
       case UpdateType.PATCH:
-        // - обновить элемент создания нового комментария
-
+        console.log('getting data', data);
+        this._needMovieUpdate(commentsListUpdate);
         break;
       case UpdateType.MINOR:
         this._needMovieUpdate(commentsListUpdate);

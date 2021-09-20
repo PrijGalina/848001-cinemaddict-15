@@ -30,11 +30,6 @@ export const MoviesListType = {
   },
 };
 
-export const TEMPLATE_NEW_COMMENT = {
-  comment: '',
-  emotion: null,
-};
-
 export const UserAction = {
   WRITE_COMMENT: 'WRITE_COMMENT',
   ADD_COMMENT: 'ADD_COMMENT',
