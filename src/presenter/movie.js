@@ -72,7 +72,7 @@ export default class Movie {
   }
 
   _commentsBlockInit() {
-    this._commentsBlockContainer = this._popupComponent.getElement().querySelector('.film-details__comments-wrap');
+    this._commentsBlockContainer = this._popupComponent.getElement().querySelector('.film-details__comments-list');
     this._commentsListPresenter = new СommentsListPresenter(this._commentsBlockContainer, this._commentsModel, this._handlerMovieUpdate, this._movie.filmId);
     this._commentsListPresenter.init();
   }
@@ -117,55 +117,100 @@ export default class Movie {
   }
 
   _handleWatchlistClick() {
-    this._changeData(
-      UserAction.UPDATE_MOVIE_DATA,
-      UpdateType.MINOR,
-      Object.assign(
-        {},
-        this._movie,
-        {
-          isWatchlist: !this._movie.isWatchlist,
-        },
-      ),
-    );
-    (this._mode !== Mode.DEFAULT) ? this._commentsBlockInit() : '';
+    if (this._mode === Mode.DEFAULT) {
+      this._changeData(
+        UserAction.UPDATE_MOVIE_DATA,
+        UpdateType.MINOR,
+        Object.assign(
+          {},
+          this._movie,
+          {
+            isWatchlist: !this._movie.isWatchlist,
+          },
+        ),
+      );
+    }
+    else {
+      this._changeData(
+        UserAction.UPDATE_MOVIE_DATA,
+        UpdateType.PATCH,
+        Object.assign(
+          {},
+          this._movie,
+          {
+            isWatchlist: !this._movie.isWatchlist,
+          },
+        ),
+      );
+      this._commentsBlockInit();
+    }
   }
 
   _handleFavoriteClick() {
-    this._changeData(
-      UserAction.UPDATE_MOVIE_DATA,
-      UpdateType.MINOR,
-      Object.assign(
-        {},
-        this._movie,
-        {
-          isFavorite: !this._movie.isFavorite,
-        },
-      ),
-    );
-    (this._mode !== Mode.DEFAULT) ? this._commentsBlockInit() : '';
+    if (this._mode === Mode.DEFAULT) {
+      this._changeData(
+        UserAction.UPDATE_MOVIE_DATA,
+        UpdateType.MINOR,
+        Object.assign(
+          {},
+          this._movie,
+          {
+            isFavorite: !this._movie.isFavorite,
+          },
+        ),
+      );
+    }
+    else {
+      this._changeData(
+        UserAction.UPDATE_MOVIE_DATA,
+        UpdateType.PATCH,
+        Object.assign(
+          {},
+          this._movie,
+          {
+            isFavorite: !this._movie.isFavorite,
+          },
+        ),
+      );
+      this._commentsBlockInit();
+    }
   }
 
   _handleHistoryClick() {
-    this._changeData(
-      UserAction.UPDATE_MOVIE_DATA,
-      UpdateType.MINOR,
-      Object.assign(
-        {},
-        this._movie,
-        {
-          isHistory: !this._movie.isHistory,
-        },
-      ),
-    );
-    (this._mode !== Mode.DEFAULT) ? this._commentsBlockInit() : '';
+    if (this._mode === Mode.DEFAULT) {
+      this._changeData(
+        UserAction.UPDATE_MOVIE_DATA,
+        UpdateType.MINOR,
+        Object.assign(
+          {},
+          this._movie,
+          {
+            isHistory: !this._movie.isHistory,
+          },
+        ),
+      );
+    }
+    else {
+      this._changeData(
+        UserAction.UPDATE_MOVIE_DATA,
+        UpdateType.PATCH,
+        Object.assign(
+          {},
+          this._movie,
+          {
+            isHistory: !this._movie.isHistory,
+          },
+        ),
+      );
+      this._commentsBlockInit();
+    }
   }
 
   _handlerMovieUpdate(commentsListUpdate) {
     this._commentsAboutMovie = this._getComments(this._movie.filmId);
     this._changeData(
       UserAction.UPDATE_MOVIE_DATA,
-      UpdateType.PATCH,
+      UpdateType. PATCH,
       Object.assign(
         {},
         this._movie,
@@ -174,6 +219,5 @@ export default class Movie {
         },
       ),
     );
-    this._commentsListPresenter.init();
   }
 }

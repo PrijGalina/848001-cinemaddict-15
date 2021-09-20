@@ -1,16 +1,6 @@
 import he from 'he';
 import SmartView from './smart';
 import {emojiArray} from '../const';
-import {getRandomElement} from '../utils/common';
-import {workingGroup} from './../data';
-import {getCurrentDate} from '../mock/comment';
-
-const NEW_COMMENT_TEMPLATE = {
-  comment: '',
-  emotion: null,
-  autor: getRandomElement(workingGroup),
-  date: getCurrentDate(),
-};
 
 const createNewCommentTemplate = (NewCommentData) => {
   const {comment, emotion} = NewCommentData;
@@ -19,7 +9,7 @@ const createNewCommentTemplate = (NewCommentData) => {
   return (`<div class="film-details__new-comment">
     <div class="film-details__add-emoji-label" ${emojiSrc}></div>
     <label class="film-details__comment-label">
-      <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${he.encode(comment)}</textarea>
+      <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${comment}</textarea>
     </label>
     <div class="film-details__emoji-list">
       ${emojiArray.map((emojiItem) => `
@@ -33,25 +23,19 @@ const createNewCommentTemplate = (NewCommentData) => {
 };
 
 export default class NewComment extends SmartView {
-  constructor(newComment = NEW_COMMENT_TEMPLATE) {
+  constructor(newCommentTemplate, formSubmitCallback) {
     super();
-    this._data = NewComment.parseCommentToData(newComment);
+    this._data = NewComment.parseCommentToData(newCommentTemplate);
+    this._formSubmitCallback = formSubmitCallback;
     this._emojiClickHandler = this._emojiClickHandler.bind(this);
     this._commentTextareaHandler = this._commentTextareaHandler.bind(this);
-    this._formSubmitHandler = this._formSubmitHandler.bind(this);
-    this._handler = null;
+    this._handlerEnterCtrl = this._handlerEnterCtrl.bind(this);
 
     this._setInnerHandlers();
   }
 
   getTemplate() {
     return createNewCommentTemplate(this._data);
-  }
-
-  reset(newComment) {
-    this.updateData(
-      NewComment.parseCommentToData(newComment),
-    );
   }
 
   _setInnerHandlers() {
@@ -84,20 +68,21 @@ export default class NewComment extends SmartView {
     this.updateData({
       comment: e.target.value,
     }, true);
+    if (this._data.comment !== ''){
+      document.addEventListener('keydown', this._handlerEnterCtrl);
+    }
+    else {
+      document.removeEventListener('keydown', this._handlerEnterCtrl);
+    }
   }
 
-  _formSubmitHandler() {
-    this._callback.formSubmit(NewComment.parseDataToComment(this._data));
-  }
 
-  setFormSubmitHandler(callback) {
-    this._callback.formSubmit = callback;
-    document.addEventListener('keydown', this._handler = (e) => {
-      if ((e.code === 'Enter') && e.ctrlKey) {
-        this._formSubmitHandler();
-        document.removeEventListener('keydown', this._handler);
-      }
-    });
+  _handlerEnterCtrl(e) {
+    if ((e.code === 'Enter') && e.ctrlKey) {
+      console.log('yt');
+      this._formSubmitCallback(NewComment.parseDataToComment(this._data));
+      document.removeEventListener('keydown', this._handlerEnterCtrl);
+    }
   }
 
   static parseCommentToData(comment) {

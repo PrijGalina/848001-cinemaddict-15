@@ -3,10 +3,10 @@ import {render, remove} from '../utils/render';
 import {RenderPosition, UserAction, UpdateType} from './../const';
 
 export default class Comment {
-  constructor(commentChange){
+  constructor(container, commentChange){
     this._comment = null;
     this._commentComponent = null;
-    this._container = document.querySelector('.film-details__comments-list');
+    this._container = container;
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._commentChange = commentChange;
   }

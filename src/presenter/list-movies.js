@@ -40,7 +40,6 @@ export default class MoviesList {
 
     this._handlerLoadMoreButtonClick = this._handlerLoadMoreButtonClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
-    this._handleFilterChange = this._handleFilterChange.bind(this);
 
     this._moviesModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
@@ -105,22 +104,13 @@ export default class MoviesList {
   }
 
   _handleSortTypeChange(sortType) {
-    //sorting
     if(this._currentSortType === sortType) {
       return;
     }
 
     this._currentSortType = sortType;
-
-    //clean
     this._clearMovieList();
-
-    //render
     this._renderMovieList();
-  }
-
-  _handleFilterChange(){
-    //console.log('FilterChange');
   }
 
   _renderMovieListByType(array, type) {
@@ -161,7 +151,7 @@ export default class MoviesList {
       case UserAction.UPDATE_MOVIE_DATA:
         this._moviesModel.updateMovie(updateType, update);
         break;
-      case UserAction.UPDATE_MOVIE_VIEW:
+      case UserAction.UPDATE_MOVIE_COMMENT:
         this._moviesModel.updateMovie(updateType, update);
         break;
     }
@@ -170,18 +160,16 @@ export default class MoviesList {
   _handleModelEvent(updateType, data) {
     switch(updateType) {
       case UpdateType.PATCH:
-        // - обновить элемент
         (this._moviePresenter.get(data.id)) ? this._moviePresenter.get(data.id).init(data) : '';
         (this._ratingMoviePresenter.get(data.id)) ? this._ratingMoviePresenter.get(data.id).init(data) : '';
         (this._commentedMoviePresenter.get(data.id)) ? this._commentedMoviePresenter.get(data.id).init(data) : '';
+
         break;
       case UpdateType.MINOR:
-        // - обновить список
         this._clearMovieList();
         this._renderMovieList();
         break;
       case UpdateType.MAJOR:
-        // - обновить все (меню, список)
         this._clearMovieList({resetRenderedMovieCount: true, resetSortType: true});
         this._renderMovieList();
         break;

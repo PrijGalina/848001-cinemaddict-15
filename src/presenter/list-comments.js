@@ -1,6 +1,7 @@
 import СommentPresenter from './comment';
 import NewCommentPresenter from './comment-new';
-import {UserAction, UpdateType} from './../const';
+import {UserAction, UpdateType, RenderPosition} from './../const';
+import { render, remove } from '../utils/render';
 
 export default class CommentsList {
   constructor(container, commentsModel, needMovieUpdate, filmId) {
@@ -24,6 +25,15 @@ export default class CommentsList {
     this._newCommentInit();
   }
 
+  destroy() {
+    if (this._commentsPresenter) {
+      this._commentsPresenter.forEach((presenter) => presenter.destroy());
+    }
+    if (this._NewCommentPresenter) {
+      this._NewCommentPresenter.destroy();
+    }
+  }
+
   _getComments(filmId) {
     return this._commentsModel.getComments().filter((comment) => comment.aboutFilm === filmId);
   }
@@ -31,23 +41,19 @@ export default class CommentsList {
   _commentsRender(commentsArray) {
     let itemPresenter = '';
     commentsArray.forEach((commentItem) => {
-      itemPresenter = new СommentPresenter(this._handleCommentViewAction);
+      itemPresenter = new СommentPresenter(this._container, this._handleCommentViewAction);
       itemPresenter.init(commentItem);
       this._commentsPresenter.set(commentItem.id, itemPresenter);
     });
   }
 
   _newCommentInit() {
-    const newCommentContainer = document.querySelector('.film-details__comments-wrap');
-    this._NewCommentPresenter = new NewCommentPresenter(newCommentContainer, this._handleCommentViewAction, this._filmId);
+    this._NewCommentPresenter = new NewCommentPresenter(this._container, this._handleCommentViewAction, this._filmId);
     this._NewCommentPresenter.init();
   }
 
   _handleCommentViewAction(actionType, updateType, update) {
     switch (actionType) {
-      case UserAction.WRITE_COMMENT:
-        //this._commentsModel.addComments(updateType, update);
-        break;
       case UserAction.ADD_COMMENT:
         this._commentsModel.addComments(updateType, update);
         break;
@@ -61,13 +67,32 @@ export default class CommentsList {
     const commentsListUpdate = this._getComments(this._filmId);
     switch (updateType) {
       case UpdateType.PATCH:
+        this._data = data;
         this._needMovieUpdate(commentsListUpdate);
+        this.updateCommentsList();
         break;
       case UpdateType.MINOR:
         this._needMovieUpdate(commentsListUpdate);
+        this.updateCommentsList();
         break;
       case UpdateType.MAJOR:
         break;
     }
   }
+
+  updateCommentsList() {
+    this._commentsBlockContainer = document.querySelector('.film-details__comments-list');
+    this._commentsPresenter.forEach((el) => {
+      remove(el._commentComponent);
+    });
+    this.destroy();
+    this._commentsPresenter.clear();
+    this.init();
+    this._commentsPresenter.forEach((el) => {
+      render(this._commentsBlockContainer, el._commentComponent, RenderPosition.BEFOREEND);
+    });
+    this._newCommentsBlockContainer = document.querySelector('.film-details__comments-wrap');
+    render(this._newCommentsBlockContainer, this._NewCommentPresenter._newCommentComponent, RenderPosition.BEFOREEND);
+  }
 }
+

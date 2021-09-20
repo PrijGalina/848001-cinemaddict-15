@@ -31,7 +31,6 @@ export const MoviesListType = {
 };
 
 export const UserAction = {
-  WRITE_COMMENT: 'WRITE_COMMENT',
   ADD_COMMENT: 'ADD_COMMENT',
   DELETE_COMMENT: 'DELETE_COMMENT',
   UPDATE_MOVIE_DATA: 'UPDATE_MOVIE_DATA',

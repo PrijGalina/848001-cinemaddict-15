@@ -1,4 +1,5 @@
 import he from 'he';
+import { remove } from '../utils/render';
 import SmartView from './smart';
 
 const createCommentsTemplate = (commentData) => {

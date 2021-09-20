@@ -86,7 +86,7 @@ const createPopupMovieInfo = (movieData) => {
         <div class="film-details__bottom-container">
           <section class="film-details__comments-wrap">
             <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
-            ${(comments.length > 0) ? '<ul class="film-details__comments-list"></ul>' : ''}
+            <ul class="film-details__comments-list"></ul>
           </section>
         </div>
       </form>
