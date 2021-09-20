@@ -1,64 +1,74 @@
-import {render, remove, replace} from '../utils/render';
-import CommentsListView from '../view/list-comment';
-import СommentsPresenter from './comment';
-import {RenderPosition, TEMPLATE_NEW_COMMENT} from './../const';
+import СommentPresenter from './comment';
 import LocalCommentPresenter from './local-comment';
+import {TEMPLATE_NEW_COMMENT, UserAction, UpdateType} from './../const';
 
 export default class CommentsList {
-  constructor(commentsListChange, commentAddList) {
-    this._comments = null;
-    this._commentsListComponent = null;
+  constructor(container, commentsModel, needMovieUpdate, filmId) {
+    this._container = container;
+    this._commentsModel = commentsModel;
+    this._needMovieUpdate = needMovieUpdate;
+    this._filmId = filmId;
     this._localCommentTemplate = TEMPLATE_NEW_COMMENT;
-    this._commentsListChange = commentsListChange;
-    this._commentAddList = commentAddList;
-    this._mainContainer = document.querySelector('.film-details__inner');
-    this._handlerCommentChange = this._handlerCommentChange.bind(this);
-    this._handleFormSubmit = this._handleFormSubmit.bind(this);
+
+    this._comments = null;
+    this._commentsPresenter = new Map();
+
+    this._handleCommentViewAction = this._handleCommentViewAction.bind(this);
+    this._handleCommentModelEvent = this._handleCommentModelEvent.bind(this);
+
+    this._commentsModel.addObserver(this._handleCommentModelEvent);
   }
 
-  init(comments) {
-    this._comments = comments;
-    const prevCommentsList = this._commentsListComponent;
-    this._commentsListComponent = new CommentsListView(this._comments);
-
-    if(prevCommentsList === null) {
-      this._renderCommentsView();
-      return;
-    }
-
-    replace(this._commentsListComponent, prevCommentsList);
-    this._renderCommentsView();
-    remove(prevCommentsList);
-  }
-
-  _renderCommentsView() {
-    render(this._mainContainer, this._commentsListComponent, RenderPosition.BEFOREEND);
-    this._localCommentInit();
+  init() {
+    this._comments = this._getComments(this._filmId);
     (this._comments.length > 0) ? this._commentsRender(this._comments) : '';
+    this._localCommentInit();
   }
 
-  destroy() {
-    remove(this._commentsListComponent);
+  _getComments(filmId) {
+    return this._commentsModel.getComments().filter((comment) => comment.aboutFilm === filmId);
   }
 
   _commentsRender(commentsArray) {
+    let itemPresenter = '';
     commentsArray.forEach((commentItem) => {
-      this._commentItemPresenter = new СommentsPresenter(this._handlerCommentChange);
-      this._commentItemPresenter.init(commentItem);
+      itemPresenter = new СommentPresenter(this._handleCommentViewAction);
+      itemPresenter.init(commentItem);
+      this._commentsPresenter.set(commentItem.id, itemPresenter);
     });
   }
 
   _localCommentInit() {
-    this._localCommentPresenter = new LocalCommentPresenter(this._handleFormSubmit);
+    this._localCommentPresenter = new LocalCommentPresenter(this._handleCommentViewAction);
     this._localCommentPresenter.init(this._localCommentTemplate);
   }
 
-  _handlerCommentChange(updated) {
-    this._commentsListChange(updated);
+  _handleCommentViewAction(actionType, updateType, update) {
+    switch (actionType) {
+      case UserAction.WRITE_COMMENT:
+        //this._commentsModel.addComments(updateType, update);
+        break;
+      case UserAction.ADD_COMMENT:
+        this._commentsModel.addComments(updateType, update);
+        break;
+      case UserAction.DELETE_COMMENT:
+        this._commentsModel.deleteComments(updateType, update);
+        break;
+    }
   }
 
-  _handleFormSubmit(comment) {
-    console.log('dfghjk');
-    //this._commentAddList(comment);
+  _handleCommentModelEvent(updateType, data) {
+    const commentsListUpdate = this._getComments(this._filmId);
+    switch (updateType) {
+      case UpdateType.PATCH:
+        // - обновить элемент создания нового комментария
+
+        break;
+      case UpdateType.MINOR:
+        this._needMovieUpdate(commentsListUpdate);
+        break;
+      case UpdateType.MAJOR:
+        break;
+    }
   }
 }

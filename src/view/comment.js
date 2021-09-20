@@ -17,7 +17,7 @@ const createCommentsTemplate = (commentData) => {
   </li>`;
 };
 
-export default class Comments extends SmartView {
+export default class Comment extends SmartView {
   constructor(comment) {
     super();
     this._comment = comment;

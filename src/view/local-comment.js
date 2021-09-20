@@ -22,12 +22,13 @@ const createLocalCommentTemplate = (localCommentData) => {
 };
 
 export default class LocalComment extends SmartView {
-  constructor(comment) {
+  constructor(comment, newCommentAdd) {
     super();
     this._data = comment;
-    this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._newCommentAdd = newCommentAdd;
     this._emojiClickHandler = this._emojiClickHandler.bind(this);
     this._commentTextareaHandler = this._commentTextareaHandler.bind(this);
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._setInnerHandlers();
   }
 
@@ -57,20 +58,17 @@ export default class LocalComment extends SmartView {
     this._callback.emojiClick(this._data);
   }
 
+  _formSubmitHandler(e) {
+    e.preventDefault();
+    this._callback.formSubmit();
+  }
+
   _commentTextareaHandler(e) {
     e.preventDefault();
     this.updateData({
       comment: e.target.value,
     }, true);
-    if (e.target.value !== '') {
-      this.setFormSubmitHandler(this._callback.formSubmit)
-    }
     this._callback.textareaChange(this._data);
-  }
-
-  _formSubmitHandler(e) {
-    e.preventDefault();
-    this._callback.formSubmit();
   }
 
   setEmojiClickHandler(callback) {
@@ -82,13 +80,11 @@ export default class LocalComment extends SmartView {
   }
 
   setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
     document.addEventListener('keydown', (e) => { //навесить обработчик отправки формы добавления нового комментария
       if ((e.code === 'Enter') && e.ctrlKey) {
-        //отправка данных в модель
-        this._callback.formSubmit = callback;
-
+        callback(this._data);
       }
     });
-
   }
 }

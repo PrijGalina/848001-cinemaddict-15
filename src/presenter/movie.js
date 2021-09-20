@@ -3,58 +3,46 @@ import СommentsListPresenter from './list-comments';
 import MoviePopupView from '../view/popup-movie-info';
 import MovieCardView from '../view/movie-view';
 import {render, remove, replace} from '../utils/render';
-import {deleteItem} from '../utils/common';
-import {RenderPosition} from './../const';
-
-const Mode = {
-  DEFAULT: 'DEFAULT',
-  CHANGED: 'CHANGED',
-};
+import {RenderPosition, Mode, UserAction, UpdateType} from './../const';
 
 export default class Movie {
-  constructor(moviesContainer, commentsModel, changeData, changeMode, changeCommentsList) {
+  constructor(moviesContainer, commentsModel, changeData, changeMode) {
     this._moviesContainer = moviesContainer;
     this._commentsModel = commentsModel;
     this._changeData = changeData;
     this._changeMode = changeMode;
-    this._changeCommentsList = changeCommentsList;
+
     this._movieComponent = null;
-    this._movie = null;
     this._popupComponent = null;
+
     this._commentsListPresenter = null;
     this._mode = Mode.DEFAULT;
+
     this._handleOpenPopupClick = this._handleOpenPopupClick.bind(this);
     this._handleClosePopupClick = this._handleClosePopupClick.bind(this);
     this._handleEscKeydown = this._handleEscKeydown.bind(this);
-
-    this._handleCardWatchlistClick = this._handleCardWatchlistClick.bind(this);
-    this._handleCardFavoriteClick = this._handleCardFavoriteClick.bind(this);
-    this._handleCardHistoryClick = this._handleCardHistoryClick.bind(this);
-
-    this._handlePopupWatchlistClick = this._handlePopupWatchlistClick.bind(this);
-    this._handlePopupFavoriteClick = this._handlePopupFavoriteClick.bind(this);
-    this._handlePopupHistoryClick = this._handlePopupHistoryClick.bind(this);
-
-    this._commentsPlace = null;
-    this._container = document.querySelector('.film-details__inner');
-    this._handlerCommentListChange = this._handlerCommentListChange.bind(this);
-    this._handlerCommentAddList = this._handlerCommentAddList.bind(this);
+    this._handleWatchlistClick = this._handleWatchlistClick.bind(this);
+    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
+    this._handleHistoryClick = this._handleHistoryClick.bind(this);
+    this._handlerMovieUpdate = this._handlerMovieUpdate.bind(this);
   }
 
   init(movie) {
     this._movie = movie;
     const prevMovieComponent = this._movieComponent;
     const prevPopupComponent = this._popupComponent;
+
     this._movieComponent = new MovieCardView(this._movie);
     this._movieComponent.setOpenClickHandler(this._handleOpenPopupClick);
-    this._movieComponent.setFavoriteClickHandler(this._handleCardFavoriteClick);
-    this._movieComponent.setWatchlistClickHandler(this._handleCardWatchlistClick);
-    this._movieComponent.setHistoryClickHandler(this._handleCardHistoryClick);
+    this._movieComponent.setFavoriteClickHandler(this._handleFavoriteClick);
+    this._movieComponent.setWatchlistClickHandler(this._handleWatchlistClick);
+    this._movieComponent.setHistoryClickHandler(this._handleHistoryClick);
+
     this._popupComponent = new MoviePopupView(this._movie);
     this._popupComponent.setCloseClickHandler(this._handleClosePopupClick);
-    this._popupComponent.setFavoriteClickPopupHandler(this._handlePopupFavoriteClick);
-    this._popupComponent.setWatchlistClickPopupHandler(this._handlePopupWatchlistClick);
-    this._popupComponent.setHistoryClickPopupHandler(this._handlePopupHistoryClick);
+    this._popupComponent.setFavoriteClickHandler(this._handleFavoriteClick);
+    this._popupComponent.setWatchlistClickHandler(this._handleWatchlistClick);
+    this._popupComponent.setHistoryClickHandler(this._handleHistoryClick);
 
     if(prevMovieComponent === null){
       this._place = this._moviesContainer.getElement().querySelector('.films-list__container');
@@ -68,6 +56,10 @@ export default class Movie {
     remove(prevPopupComponent);
   }
 
+  _getComments(filmId) {
+    return this._commentsModel.getComments().filter((comment) => comment.aboutFilm === filmId);
+  }
+
   destroy() {
     remove(this._popupComponent);
     remove(this._movieComponent);
@@ -79,8 +71,9 @@ export default class Movie {
     }
   }
 
-  _commentsListInit() {
-    this._commentsListPresenter = new СommentsListPresenter(this._handlerCommentListChange, this._handlerCommentAddList);
+  _commentsBlockInit() {
+    this._commentsBlockContainer = this._popupComponent.getElement().querySelector('.film-details__comments-wrap');
+    this._commentsListPresenter = new СommentsListPresenter(this._commentsBlockContainer, this._commentsModel, this._handlerMovieUpdate, this._movie.filmId);
     this._commentsListPresenter.init();
   }
 
@@ -114,7 +107,7 @@ export default class Movie {
     this._replaceCardToPopup();
     document.addEventListener('keydown', this._handleEscKeydown);
     document.querySelector('body').classList.add('hidden-scroll');
-    this._commentsListInit();
+    this._commentsBlockInit();
   }
 
   _handleClosePopupClick() {
@@ -123,8 +116,10 @@ export default class Movie {
     document.querySelector('body').classList.remove('hidden-scroll');
   }
 
-  _handleCardWatchlistClick() {
+  _handleWatchlistClick() {
     this._changeData(
+      UserAction.UPDATE_MOVIE_DATA,
+      UpdateType.MINOR,
       Object.assign(
         {},
         this._movie,
@@ -133,10 +128,13 @@ export default class Movie {
         },
       ),
     );
+    (this._mode !== Mode.DEFAULT) ? this._commentsBlockInit() : '';
   }
 
-  _handleCardFavoriteClick() {
+  _handleFavoriteClick() {
     this._changeData(
+      UserAction.UPDATE_MOVIE_DATA,
+      UpdateType.MINOR,
       Object.assign(
         {},
         this._movie,
@@ -145,10 +143,13 @@ export default class Movie {
         },
       ),
     );
+    (this._mode !== Mode.DEFAULT) ? this._commentsBlockInit() : '';
   }
 
-  _handleCardHistoryClick() {
+  _handleHistoryClick() {
     this._changeData(
+      UserAction.UPDATE_MOVIE_DATA,
+      UpdateType.MINOR,
       Object.assign(
         {},
         this._movie,
@@ -157,62 +158,22 @@ export default class Movie {
         },
       ),
     );
+    (this._mode !== Mode.DEFAULT) ? this._commentsBlockInit() : '';
   }
 
-  _handlePopupWatchlistClick() {
+  _handlerMovieUpdate(commentsListUpdate) {
+    this._commentsAboutMovie = this._getComments(this._movie.filmId);
     this._changeData(
+      UserAction.UPDATE_MOVIE_DATA,
+      UpdateType.PATCH,
       Object.assign(
         {},
         this._movie,
         {
-          isWatchlist: !this._movie.isWatchlist,
+          comments: commentsListUpdate,
         },
       ),
     );
-    this._commentsListInit();
-  }
-
-  _handlePopupFavoriteClick() {
-    this._changeData(
-      Object.assign(
-        {},
-        this._movie,
-        {
-          isFavorite: !this._movie.isFavorite,
-        },
-      ),
-    );
-  }
-
-  _handlePopupHistoryClick() {
-    this._changeData(
-      Object.assign(
-        {},
-        this._movie,
-        {
-          isHistory: !this._movie.isHistory,
-        },
-      ),
-    );
-    this._commentsListInit();
-  }
-
-  _handlerCommentListChange(updatedComment) {
-    this._commentsAbout = deleteItem(this._commentsAbout, updatedComment);
-    this._commentsListPresenter.init(this._commentsAbout);
-    this._changeData(
-      Object.assign(
-        {},
-        this._movie,
-        {
-          comments: this._commentsAbout,
-        },
-      ),
-    );
-    this._commentsListInit();
-  }
-
-  _handlerCommentAddList() {
-    //добавить коммент к списку и отобразить перерисовать список
+    this._commentsListPresenter.init();
   }
 }

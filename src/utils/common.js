@@ -71,8 +71,6 @@ export const sortMovieComments = (movieA, movieB) => {
   else {return 0;}
 };
 
-//export const sortMovieComments = (movieA, movieB) => parseFloat(movieA.comments) - parseFloat(movieB.comments);
-
 export const getRandomDate = (from, to) => {
   const fromTime = from.getTime();
   const toTime = to.getTime();

@@ -20,15 +20,12 @@ export const RenderPosition = {
 
 export const MoviesListType = {
   ALL: {
-    container: 0,
     movieCount: 5,
   },
   COMMENTED: {
-    container: 1,
     movieCount: 2,
   },
   RATED: {
-    container: 2,
     movieCount: 2,
   },
 };
@@ -39,14 +36,30 @@ export const TEMPLATE_NEW_COMMENT = {
 };
 
 export const UserAction = {
+  WRITE_COMMENT: 'WRITE_COMMENT',
   ADD_COMMENT: 'ADD_COMMENT',
   DELETE_COMMENT: 'DELETE_COMMENT',
   UPDATE_MOVIE_DATA: 'UPDATE_MOVIE_DATA',
-  UPDATE_MOVIE_VIEW: 'UPDATE_MOVIE_VIEW',
 };
 
 export const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+};
+
+export const Mode = {
+  DEFAULT: 'DEFAULT',
+  CHANGED: 'CHANGED',
+};
+
+export const MOVIE_COUNT_PER_STEP = 5;
+
+export const NUMBER_OF_FIRST = 0;
+
+export const FilterType = {
+  ALL: 'all',
+  WATCHLIST: 'watchlist',
+  HISTORY : 'history',
+  FAVORITES: 'favorites',
 };

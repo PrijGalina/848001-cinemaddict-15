@@ -12,7 +12,7 @@ const createGenresList = (array) => {
 };
 
 const createPopupMovieInfo = (movieData) => {
-  const {originalName, title, rating, release, duration, genres, poster, description, isFavorite, isHistory, isWatchlist, directors, writers, actors, country, ageRestrictions} = movieData;
+  const {originalName, title, rating, release, duration, genres, poster, description, isFavorite, isHistory, isWatchlist, directors, writers, actors, country, ageRestrictions, comments} = movieData;
   const releaseWithFormat = dayjs(release).format('D MMMM YYYY');
   const genresList = createGenresList(genres);
 
@@ -83,6 +83,12 @@ const createPopupMovieInfo = (movieData) => {
             <button type="button" class="film-details__control-button--favorite ${(isFavorite) ? 'film-details__control-button film-details__control-button--active' : 'film-details__control-button'}" id="favorite" name="favorite">Add to favorites</button>
           </section>
         </div>
+        <div class="film-details__bottom-container">
+          <section class="film-details__comments-wrap">
+            <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
+            ${(comments.length > 0) ? '<ul class="film-details__comments-list"></ul>' : ''}
+          </section>
+        </div>
       </form>
     </section>`
   );
@@ -94,9 +100,9 @@ export default class MoviePopup extends SmartView {
     this._movie = movie;
 
     this._closeClickHandler = this._closeClickHandler.bind(this);
-    this._watchlistClickPopupHandler = this._watchlistClickPopupHandler.bind(this);
-    this._favoriteClickPopupHandler = this._favoriteClickPopupHandler.bind(this);
-    this._historyClickPopupHandler = this._historyClickPopupHandler.bind(this);
+    this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
+    this._historyClickHandler = this._historyClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -108,17 +114,17 @@ export default class MoviePopup extends SmartView {
     this._callback.closeClick();
   }
 
-  _watchlistClickPopupHandler(e) {
+  _watchlistClickHandler(e) {
     e.preventDefault();
     this._callback.watchlistClick();
   }
 
-  _favoriteClickPopupHandler(e) {
+  _favoriteClickHandler(e) {
     e.preventDefault();
     this._callback.favoriteClick();
   }
 
-  _historyClickPopupHandler(e) {
+  _historyClickHandler(e) {
     e.preventDefault();
     this._callback.historyClick();
   }
@@ -128,18 +134,18 @@ export default class MoviePopup extends SmartView {
     this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._closeClickHandler);
   }
 
-  setWatchlistClickPopupHandler(callback) {
+  setWatchlistClickHandler(callback) {
     this._callback.watchlistClick = callback;
-    this.getElement().querySelector('.film-details__control-button--watchlist').addEventListener('click', this._watchlistClickPopupHandler);
+    this.getElement().querySelector('.film-details__control-button--watchlist').addEventListener('click', this._watchlistClickHandler);
   }
 
-  setFavoriteClickPopupHandler(callback) {
+  setFavoriteClickHandler(callback) {
     this._callback.favoriteClick = callback;
-    this.getElement().querySelector('.film-details__control-button--favorite').addEventListener('click', this._favoriteClickPopupHandler);
+    this.getElement().querySelector('.film-details__control-button--favorite').addEventListener('click', this._favoriteClickHandler);
   }
 
-  setHistoryClickPopupHandler(callback) {
+  setHistoryClickHandler(callback) {
     this._callback.historyClick = callback;
-    this.getElement().querySelector('.film-details__control-button--watched').addEventListener('click', this._historyClickPopupHandler);
+    this.getElement().querySelector('.film-details__control-button--watched').addEventListener('click', this._historyClickHandler);
   }
 }

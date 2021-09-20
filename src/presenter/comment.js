@@ -1,11 +1,11 @@
+import CommentView from '../view/comment';
 import {render, remove} from '../utils/render';
-import {RenderPosition} from './../const';
-import CommentsView from '../view/comment';
+import {RenderPosition, UserAction, UpdateType} from './../const';
 
-export default class Comments {
+export default class Comment {
   constructor(commentChange){
     this._comment = null;
-    this._commentsComponent = null;
+    this._commentComponent = null;
     this._container = document.querySelector('.film-details__comments-list');
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._commentChange = commentChange;
@@ -13,8 +13,8 @@ export default class Comments {
 
   init(comments){
     this._comments = comments;
-    this._commentsComponent = new CommentsView(this._comments, this._handlerListChange);
-    this._commentsComponent.setDeleteClickHandler(this._handleDeleteClick);
+    this._commentComponent = new CommentView(this._comments);
+    this._commentComponent.setDeleteClickHandler(this._handleDeleteClick);
     this._renderComments();
   }
 
@@ -23,11 +23,14 @@ export default class Comments {
   }
 
   _renderComments() {
-    render(this._container, this._commentsComponent, RenderPosition.BEFOREEND);
+    render(this._container, this._commentComponent, RenderPosition.BEFOREEND);
   }
 
   _handleDeleteClick() {
-    this._commentChange(this);
-    remove(this._commentsComponent);
+    this._commentChange(
+      UserAction.DELETE_COMMENT,
+      UpdateType.MINOR,
+      this._comments,
+    );
   }
 }
