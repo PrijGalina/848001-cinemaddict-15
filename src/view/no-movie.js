@@ -9,7 +9,6 @@ const NoMoviesTextType = {
 };
 
 const createNoMovieTemplate = (filterType) => {
-  console.log(filterType);
   const message = NoMoviesTextType[filterType];
 
   return (`<section class="films-list"><h2 class="films-list__title">${message}</h2></section>`);

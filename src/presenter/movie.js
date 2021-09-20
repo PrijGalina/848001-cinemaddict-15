@@ -1,5 +1,5 @@
 
-import СommentsListPresenter from './list-comments';
+import СommentsListPresenter from './comments-list';
 import MoviePopupView from '../view/popup-movie-info';
 import MovieCardView from '../view/movie-view';
 import {render, remove, replace} from '../utils/render';

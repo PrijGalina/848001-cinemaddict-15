@@ -1,4 +1,4 @@
-import MoviePresenter from '../presenter/movie';
+import MoviePresenter from './movie';
 import MoviesContainerView from '../view/movies-container';
 import NoMovieView from '../view/no-movie';
 import AllMoviesView from '../view/all-movies-block';

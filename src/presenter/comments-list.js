@@ -1,6 +1,6 @@
 import СommentPresenter from './comment';
 import NewCommentPresenter from './comment-new';
-import {UserAction, UpdateType, RenderPosition} from './../const';
+import {UserAction, UpdateType, RenderPosition} from '../const';
 import { render, remove } from '../utils/render';
 
 export default class CommentsList {
