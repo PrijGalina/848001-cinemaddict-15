@@ -2,6 +2,7 @@ import FilterView from '../view/filter';
 import {filter} from '../utils/filter';
 import {remove, render, replace} from '../utils/render';
 import {RenderPosition, FilterType, UpdateType} from '../const';
+import {MenuItem} from '../const.js';
 
 export default class Filter {
   constructor(filterContainer, filterModel, moviesModel) {
@@ -13,6 +14,7 @@ export default class Filter {
 
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
+    this.__handleSiteMenuClick = this._handleSiteMenuClick.bind(this);
 
     this._moviesModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
@@ -24,6 +26,7 @@ export default class Filter {
 
     this._filterComponent = new FilterView(filters, this._filterModel.getFilter());
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
+    this._filterComponent.setMenuClickHandler(this._handleSiteMenuClick);
 
     if (prevFilterComponent === null) {
       render(this._filterContainer, this._filterComponent, RenderPosition.AFTERBEGIN);
@@ -70,6 +73,20 @@ export default class Filter {
         count: filter[FilterType.HISTORY](movies).length,
       },
     ];
+  }
+
+  _handleSiteMenuClick(menuItem) {
+    console.log(menuItem);
+    switch (menuItem) {
+      case MenuItem.MOVIES:
+        // Показать доску
+        // Скрыть статистику
+        break;
+      case MenuItem.STATISTICS:
+        // Скрыть доску
+        // Показать статистику
+        break;
+    }
   }
 }
 
