@@ -1,9 +1,9 @@
-import {getRandomArray, getRandomElement, getRandomPositiveInteger, getRandomDate} from '../utils/common.js';
-import {workingGroup, descriptionTextArray, emojiArray, arrayMovieInfo} from './../data.js';
+import {getRandomArray, getRandomElement, getRandomPositiveInteger, getRandomDate} from '../utils/common';
+import {workingGroup, descriptionTextArray} from './../data';
+import {emojiArray} from './../const';
 import dayjs from 'dayjs';
 import calendar from 'dayjs/plugin/calendar';
-import relativeTime from 'dayjs/plugin/relativeTime';
-dayjs.extend(relativeTime);
+
 dayjs.extend(calendar);
 import updateLocale from 'dayjs/plugin/updateLocale';
 dayjs.extend(updateLocale);
@@ -22,18 +22,24 @@ const getCommentDate = () => {
   return randomCommentDate;
 };
 
+const getCurrentDate = () => {
+  const currentDate = dayjs().toISOString();
+  const randomCommentDate = dayjs(currentDate).calendar();
+  return randomCommentDate;
+};
+
 const generateComment = () => {
   const emojiIndex = getRandomElement(emojiArray);
-  const filmId = getRandomPositiveInteger(0, Object.keys(arrayMovieInfo).length);
   const comment = {
-    emoji: emojiIndex,
-    text: getRandomArray(descriptionTextArray, 2).join('').trim(),
-    date: getCommentDate(),
+    id: getRandomPositiveInteger(1,100),
     autor: getRandomElement(workingGroup),
-    aboutFilm: filmId,
+    comment: getRandomArray(descriptionTextArray, 2).join('').trim(),
+    date: getCommentDate(),
+    emotion: emojiIndex,
+    aboutFilm: getRandomPositiveInteger(0,6),
   };
   return comment;
 };
 
-export {generateComment};
+export { generateComment, getCurrentDate};
 

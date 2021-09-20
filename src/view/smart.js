@@ -1,4 +1,4 @@
-import Abstract from './abstract.js';
+import Abstract from './abstract';
 
 export default class Smart extends Abstract{
   constructor() {
@@ -22,6 +22,29 @@ export default class Smart extends Abstract{
     }
     const position = this.getElement().scrollTop;
     this.updateElement(position);
+  }
+
+  updateDataElement(update, justDataUpdating) {
+    if (!update) {
+      return;
+    }
+
+    this._data = Object.assign(
+      {},
+      this._data,
+      update,
+    );
+
+    if (justDataUpdating) {
+      return;
+    }
+    const prevElement = this.getElement();
+    const parent = prevElement.parentElement;
+    this.removeElement();
+
+    const newElement = this.getElement();
+    parent.replaceChild(newElement, prevElement);
+    this.restoreEmojiHandlers();
   }
 
   updateElement(scrollPosition) {

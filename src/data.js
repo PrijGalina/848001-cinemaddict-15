@@ -1,4 +1,3 @@
-
 const arrayMovieInfo = {
   1: {
     title: 'Popeye the Sailor Meets Sindbad the Sailor',
@@ -52,14 +51,4 @@ let descriptionTextArray = descriptionText.split('. ');
 descriptionTextArray.pop();
 descriptionTextArray = descriptionTextArray.map((string) => `${string}. `);
 
-const emojiArray = ['smile', 'sleeping', 'puke', 'angry'];
-
-const MOVIE_COUNT = 12;
-
-const SortType = {
-  DEFAULT: 'default',
-  BY_DATE: 'date',
-  BY_RATING: 'rating',
-};
-
-export {arrayMovieInfo, MOVIE_COUNT, workingGroup, ageRestrictionsArray, countryArray, releaseArray, descriptionTextArray, emojiArray, SortType};
+export {arrayMovieInfo, workingGroup, ageRestrictionsArray, countryArray, releaseArray, descriptionTextArray};

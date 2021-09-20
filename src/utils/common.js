@@ -1,8 +1,6 @@
 import dayjs from 'dayjs';
 
 export const getRandomPositiveInteger = (numValue, otherNumValue) => {
-  // Функция взята из интернета и доработана,
-  //Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_random
   const lower = Math.ceil(Math.min(Math.abs(numValue), Math.abs(otherNumValue)));
   const upper = Math.floor(Math.max(Math.abs(numValue), Math.abs(otherNumValue)));
   const result = Math.random() * (upper - lower + 1) + lower;
@@ -44,6 +42,19 @@ export const updateItem = (items, update) => {
   ];
 };
 
+export const deleteItem = (items, deleteElement) => {
+  const index = items.findIndex((item) => item.id === deleteElement._comments.id);
+
+  if (index === -1) {
+    return items;
+  }
+
+  return [
+    ...items.slice(0, index),
+    ...items.slice(index + 1),
+  ];
+};
+
 export const sortMovieDate = (movieA, movieB) => dayjs(movieB.release).diff(dayjs(movieA.release));
 
 export const sortMovieRating = (movieA, movieB) => {
@@ -53,8 +64,8 @@ export const sortMovieRating = (movieA, movieB) => {
 };
 
 export const sortMovieComments = (movieA, movieB) => {
-  if (movieA.countComments < movieB.countComments) {return 1;}
-  else if(movieA.countComments > movieB.countComments) {return -1;}
+  if (movieA.comments < movieB.comments) {return 1;}
+  else if(movieA.comments > movieB.comments) {return -1;}
   else {return 0;}
 };
 
@@ -62,4 +73,11 @@ export const getRandomDate = (from, to) => {
   const fromTime = from.getTime();
   const toTime = to.getTime();
   return new Date(fromTime + Math.random() * (toTime - fromTime));
+};
+
+export const createElement = (template) => {
+  const newElement = document.createElement('div');
+  newElement.innerHTML = template;
+
+  return newElement.firstChild;
 };

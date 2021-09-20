@@ -1,22 +1,21 @@
-import AbstractView from './abstract.js';
-import {SortType} from '../data.js';
+import AbstractView from './abstract';
+import {SortType} from '../const';
 
-const createSortingTemplate = () => (
-  `<ul class="sort">
-    <li><a href="#" class="sort__button sort__button--active" data-sort-type="${SortType.DEFAULT}">Sort by default</a></li>
-    <li><a href="#" class="sort__button" data-sort-type="${SortType.BY_DATE}">Sort by date</a></li>
-    <li><a href="#" class="sort__button" data-sort-type="${SortType.BY_RATING}">Sort by rating</a></li>
-  </ul>`
-);
+const createSortingTemplate = (currentSortType) => `<ul class="sort">
+      <li><a href="#" class="sort__button ${(currentSortType === SortType.DEFAULT) ? 'sort__button--active' : ''}" data-sort-type="${SortType.DEFAULT}">Sort by default</a></li>
+      <li><a href="#" class="sort__button ${(currentSortType === SortType.BY_DATE) ? 'sort__button--active' : ''}" data-sort-type="${SortType.BY_DATE}">Sort by date</a></li>
+      <li><a href="#" class="sort__button ${(currentSortType === SortType.BY_RATING) ? 'sort__button--active' : ''}" data-sort-type="${SortType.BY_RATING}">Sort by rating</a></li>
+    </ul>`;
 
 export default class Sorting extends AbstractView {
-  constructor() {
+  constructor(currentSortType) {
     super();
+    this._currentSortType = currentSortType;
     this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
   }
 
   getTemplate() {
-    return createSortingTemplate();
+    return createSortingTemplate(this._currentSortType);
   }
 
   _sortTypeChangeHandler(e) {
@@ -25,6 +24,12 @@ export default class Sorting extends AbstractView {
     }
 
     e.preventDefault();
+
+    const prevActiveSortValue = this.getElement().querySelector('.sort__button--active');
+    prevActiveSortValue.classList.remove('sort__button--active');
+    const activeSortValue = this.getElement().querySelector(`a[data-sort-type=${e.target.dataset.sortType}`);
+    activeSortValue.classList.add('sort__button--active');
+
     this._callback.sortTypeChange(e.target.dataset.sortType);
   }
 

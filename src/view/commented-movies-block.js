@@ -1,4 +1,4 @@
-import AbstractView from './abstract.js';
+import AbstractView from './abstract';
 
 const createMostCommentedSection = () => (
   `<section class="films-list films-list--extra films-list--commented">
