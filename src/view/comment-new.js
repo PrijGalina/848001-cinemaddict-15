@@ -1,4 +1,3 @@
-import he from 'he';
 import SmartView from './smart';
 import {emojiArray} from '../const';
 
@@ -79,7 +78,6 @@ export default class NewComment extends SmartView {
 
   _handlerEnterCtrl(e) {
     if ((e.code === 'Enter') && e.ctrlKey) {
-      console.log('yt');
       this._formSubmitCallback(NewComment.parseDataToComment(this._data));
       document.removeEventListener('keydown', this._handlerEnterCtrl);
     }

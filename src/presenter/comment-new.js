@@ -1,6 +1,6 @@
 import NewCommentView from '../view/comment-new';
 import {nanoid} from 'nanoid';
-import {render, remove, replace} from '../utils/render.js';
+import {render, remove} from '../utils/render.js';
 import {UserAction, UpdateType, RenderPosition} from '../const.js';
 import { getRandomElement } from '../utils/common';
 import { workingGroup } from './../data';
