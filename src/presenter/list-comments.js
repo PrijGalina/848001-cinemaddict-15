@@ -61,7 +61,6 @@ export default class CommentsList {
     const commentsListUpdate = this._getComments(this._filmId);
     switch (updateType) {
       case UpdateType.PATCH:
-        console.log('getting data', data);
         this._needMovieUpdate(commentsListUpdate);
         break;
       case UpdateType.MINOR:

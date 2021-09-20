@@ -1,3 +1,4 @@
+import he from 'he';
 import SmartView from './smart';
 
 const createCommentsTemplate = (commentData) => {
@@ -7,7 +8,7 @@ const createCommentsTemplate = (commentData) => {
       ${(emotion !== null) ? `<img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-smile">` : '<div class="film-details__add-emoji-label" style="background-color:rgba(255,255,255,0.1);width: 55px; height: 55px"></div>'}
     </span>
     <div>
-      <p class="film-details__comment-text">${comment}</p>
+      <p class="film-details__comment-text">${he.encode(comment)}</p>
       <p class="film-details__comment-info">
         <span class="film-details__comment-author">${autor}</span>
         <span class="film-details__comment-day">${date}</span>

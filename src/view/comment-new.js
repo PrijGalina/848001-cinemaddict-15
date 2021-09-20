@@ -1,3 +1,4 @@
+import he from 'he';
 import SmartView from './smart';
 import {emojiArray} from '../const';
 import {getRandomElement} from '../utils/common';
@@ -18,7 +19,7 @@ const createNewCommentTemplate = (NewCommentData) => {
   return (`<div class="film-details__new-comment">
     <div class="film-details__add-emoji-label" ${emojiSrc}></div>
     <label class="film-details__comment-label">
-      <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${comment}</textarea>
+      <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${he.encode(comment)}</textarea>
     </label>
     <div class="film-details__emoji-list">
       ${emojiArray.map((emojiItem) => `
@@ -86,7 +87,6 @@ export default class NewComment extends SmartView {
   }
 
   _formSubmitHandler() {
-    console.log('other data', this._data);
     this._callback.formSubmit(NewComment.parseDataToComment(this._data));
   }
 
