@@ -1,9 +1,9 @@
 import {moviesPresenter, siteMainElement} from '../main';
 import FilterView from '../view/filter';
 import StatisticsView from '../view/statistics';
-import {filter, filterStatistic} from '../utils/filter';
+import {filter, filterStats, filterStatsDuration} from '../utils/filter';
 import {remove, render, replace} from '../utils/render';
-import {RenderPosition, FilterType, UpdateType, MenuItem, SortType, FilterStatisticType} from '../const';
+import {RenderPosition, FilterType, UpdateType, MenuItem, SortType, filterStatsType} from '../const';
 
 
 export default class Filter {
@@ -84,31 +84,42 @@ export default class Filter {
 
   _getStatisticFilters() {
     const movies = filter[FilterType.WATCHLIST](this._moviesModel.getMovies());
+    const allTimeArray = filterStats[filterStatsType.ALL_TIME](movies);
+    const todayArray = filterStats[filterStatsType.TODAY](movies);
+    const weekArray = filterStats[filterStatsType.WEEK](movies);
+    const monthArray = filterStats[filterStatsType.MONTH](movies);
+    const yearArray = filterStats[filterStatsType.YEAR](movies);
+
     return [
       {
-        type: FilterStatisticType.ALL_TIME,
+        type: filterStatsType.ALL_TIME,
         name: 'All time',
-        count: filterStatistic[FilterStatisticType.ALL_TIME](movies).length,
+        count: allTimeArray.length,
+        duration: filterStatsDuration(allTimeArray),
       },
       {
-        type: FilterStatisticType.TODAY,
+        type: filterStatsType.TODAY,
         name: 'Today',
-        count: filterStatistic[FilterStatisticType.TODAY](movies).length,
+        count: todayArray.length,
+        duration: filterStatsDuration(todayArray),
       },
       {
-        type: FilterStatisticType.WEEK,
+        type: filterStatsType.WEEK,
         name: 'Week',
-        count: filterStatistic[FilterStatisticType.WEEK](movies).length,
+        count: weekArray.length,
+        duration: filterStatsDuration(weekArray),
       },
       {
-        type: FilterStatisticType.MONTH,
+        type: filterStatsType.MONTH,
         name: 'Month',
-        count: filterStatistic[FilterStatisticType.MONTH](movies).length,
+        count: monthArray.length,
+        duration: filterStatsDuration(monthArray),
       },
       {
-        type: FilterStatisticType.YEAR,
+        type: filterStatsType.YEAR,
         name: 'Year',
-        count: filterStatistic[FilterStatisticType.YEAR](movies).length,
+        count: yearArray.length,
+        duration: filterStatsDuration(yearArray),
       },
     ];
   }
@@ -144,11 +155,10 @@ export default class Filter {
         this._linkActiveToogle('movie');
         break;
       case MenuItem.STATISTICS:
-        this._filterModel.setStatFilter(UpdateType.STAT, FilterStatisticType.ALL_TIME);
+        this._filterModel.setStatFilter(UpdateType.STAT, filterStatsType.ALL_TIME);
         this._filterModel.setFilter(UpdateType.MAJOR, FilterType.ALL);
-        this._moviesForStat = this._getMoviesForStat();
         moviesPresenter.destroy();
-        this._statisticComponent = new StatisticsView(this._moviesForStat, this._statsFilter, this._filterModel.getStatFilter());
+        this._statisticComponent = new StatisticsView(this._moviesModel, this._statsFilter, this._filterModel.getStatFilter());
         this._statisticComponent.setFilterChangeStatistic(this._handlerFilterTypeStatistic);
         render(siteMainElement, this._statisticComponent, RenderPosition.BEFOREEND);
         this._linkActiveToogle('stat');
@@ -157,15 +167,14 @@ export default class Filter {
   }
 
   _handlerFilterTypeStatistic(filterType) {
-    this._filterModel.setFilter(UpdateType.STAT, filterType);
-
-  }
-
-  _getMoviesForStat() {
-    const filterType = this._filterModel.getStatFilter();
-    const movies = this._moviesModel.getMovies();
-    const watchedMovie = filter[FilterType.WATCHLIST](movies);
-    return watchedMovie;
+    if (this._filterModel.getStatFilter() === filterType) {
+      return;
+    }
+    this._filterModel.setStatFilter(UpdateType.MAJOR, filterType);
+    remove(this._statisticComponent);
+    this._statisticComponent = new StatisticsView(this._moviesModel, this._statsFilter, this._filterModel.getStatFilter());
+    this._statisticComponent.setFilterChangeStatistic(this._handlerFilterTypeStatistic);
+    render(siteMainElement, this._statisticComponent, RenderPosition.BEFOREEND);
   }
 }
 

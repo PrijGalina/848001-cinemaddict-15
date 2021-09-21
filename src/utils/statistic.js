@@ -1,4 +1,3 @@
-
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
@@ -9,10 +8,9 @@ dayjs.extend(duration);
 dayjs.extend(isBetween);
 dayjs.extend(isSameOrBefore);
 
-export const durationWatchedMovies = (movies) =>  {
-  const durationInMinute = movies.reduce((total, movie) => total + movie.film_info.runtime, 0);
-  const totalHours = Math.floor(durationInMinute / 60);
-  const totalMinuts = durationInMinute - (totalHours * 60);
+export const durationWatchedMovies = (minutes) =>  {
+  const totalHours = Math.floor(minutes / 60);
+  const totalMinuts = minutes - (totalHours * 60);
   return [totalHours, totalMinuts];
 };
 

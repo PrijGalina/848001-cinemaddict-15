@@ -13,7 +13,7 @@ export const SortType = {
   BY_COMMENTS_COUNT: 'comments',
 };
 
-export const FilterStatisticType = {
+export const filterStatsType = {
   ALL_TIME: 'statistic-all-time',
   TODAY: 'statistic-today',
   WEEK: 'statistic-week',
