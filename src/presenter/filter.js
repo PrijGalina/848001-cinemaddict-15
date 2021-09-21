@@ -1,8 +1,10 @@
+import {moviesPresenter, siteMainElement} from '../main';
 import FilterView from '../view/filter';
+import StatisticsView from '../view/statistics';
 import {filter} from '../utils/filter';
 import {remove, render, replace} from '../utils/render';
-import {RenderPosition, FilterType, UpdateType} from '../const';
-import {MenuItem} from '../const.js';
+import {RenderPosition, FilterType, UpdateType, MenuItem, SortType} from '../const';
+
 
 export default class Filter {
   constructor(filterContainer, filterModel, moviesModel) {
@@ -11,10 +13,9 @@ export default class Filter {
     this._moviesModel = moviesModel;
 
     this._filterComponent = null;
-
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
-    this.__handleSiteMenuClick = this._handleSiteMenuClick.bind(this);
+    this._handleSiteMenuClick = this._handleSiteMenuClick.bind(this);
 
     this._moviesModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
@@ -75,16 +76,25 @@ export default class Filter {
     ];
   }
 
-  _handleSiteMenuClick(menuItem) {
-    console.log(menuItem);
+  _handleSiteMenuClick(element) {
+    if (element.classList.contains('main-navigation__item--active')) {
+      return;
+    }
+    const menuItem = element.dataset.menu;
+    moviesPresenter._currentSortType = SortType.DEFAULT;
+    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.ALL);
     switch (menuItem) {
       case MenuItem.MOVIES:
-        // Показать доску
-        // Скрыть статистику
+        document.querySelector('[data-menu="MOVIES"]').classList.add('main-navigation__item--active');
+        document.querySelector('[data-menu="STATISTICS"]').classList.remove('main-navigation__item--active');
+        moviesPresenter.init();
+        document.querySelector('.statistic').remove();
         break;
       case MenuItem.STATISTICS:
-        // Скрыть доску
-        // Показать статистику
+        document.querySelector('[data-menu="MOVIES"]').classList.remove('main-navigation__item--active');
+        document.querySelector('[data-menu="STATISTICS"]').classList.add('main-navigation__item--active');
+        moviesPresenter.destroy();
+        render(siteMainElement, new StatisticsView(this._moviesModel), RenderPosition.BEFOREEND);
         break;
     }
   }
