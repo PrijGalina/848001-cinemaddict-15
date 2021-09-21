@@ -9,7 +9,7 @@ import ShowMoreButtonView from '../view/show-more-button';
 import {filter} from '../utils/filter';
 import {remove, render} from '../utils/render';
 import {sortMovieDate, sortMovieRating, sortMovieComments} from '../utils/common';
-import {SortType, MoviesListType, RenderPosition, UserAction, UpdateType, MOVIE_COUNT_PER_STEP, NUMBER_OF_FIRST} from '../const';
+import {SortType, MoviesListType, RenderPosition, UserAction, UpdateType, MOVIE_COUNT_PER_STEP, NUMBER_OF_FIRST, FilterType} from '../const';
 
 export default class MoviesList {
   constructor(mainContainer, moviesModel, commentsModel, filterModel) {
@@ -178,6 +178,9 @@ export default class MoviesList {
       case UpdateType.MAJOR:
         this._clearMovieList({resetRenderedMovieCount: true, resetSortType: true});
         this._renderMovieList();
+        break;
+      case UpdateType.STAT:
+        //перерисовать статистику
         break;
     }
   }

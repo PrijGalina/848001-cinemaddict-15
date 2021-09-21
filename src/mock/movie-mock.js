@@ -1,42 +1,39 @@
 import {getRandomPositiveInteger, getRandomPositiveFloat, getRandomArray, getRandomElement, getRandomDate} from '../utils/common';
-import {arrayMovieInfo, workingGroup, ageRestrictionsArray, countryArray, releaseArray, descriptionTextArray} from './../data';
+import {arrayMovieInfo, workingGroup, ageRestrictionsArray, countryArray, genreArray, descriptionTextArray} from './../data';
 import {comments} from '../main.js';
 import {nanoid} from 'nanoid';
 import dayjs from 'dayjs';
-import duration from 'dayjs/plugin/duration';
-dayjs.extend(duration);
-
-const getRandomDuration = () => (
-  dayjs.duration({
-    minutes: `${getRandomPositiveInteger(1, 59) }m`,
-    hours: `${getRandomPositiveInteger(1, 3)  }h`,
-  }).format('H m')
-);
 
 const generateMovie = () => {
   const indexMovieTitle = getRandomPositiveInteger(1, Object.keys(arrayMovieInfo).length);
   const commentsIdArray = comments.filter((commentElement) => commentElement.aboutFilm === arrayMovieInfo[indexMovieTitle].filmId);
   const movie = {
     id: nanoid(),
-    comments: commentsIdArray,
-
     filmId: arrayMovieInfo[indexMovieTitle].filmId,
-    originalName: arrayMovieInfo[indexMovieTitle].original,
-    title: arrayMovieInfo[indexMovieTitle].title,
-    description: getRandomArray(descriptionTextArray, 5).join('').trim(),
-    poster: arrayMovieInfo[indexMovieTitle].poster,
-    release: getRandomDate(new Date('1960-02-12T01:57:45.271Z'), new Date('2020-02-12T01:57:45.271Z')).toISOString(),
-    rating: getRandomPositiveFloat(1, 10, 1),
-    duration: getRandomDuration(),
-    genres: getRandomArray(releaseArray, 4),
-    directors: getRandomArray(workingGroup, 2),
-    writers: getRandomArray(workingGroup, 3),
-    actors: getRandomArray(workingGroup, 4),
-    country: getRandomElement(countryArray),
-    ageRestrictions: getRandomElement(ageRestrictionsArray),
-    isFavorite: Boolean(getRandomPositiveInteger(0, 1)),
-    isHistory: Boolean(getRandomPositiveInteger(0, 1)),
-    isWatchlist: Boolean(getRandomPositiveInteger(0, 1)),
+    comments: commentsIdArray,
+    film_info: {
+      title: arrayMovieInfo[indexMovieTitle].title,
+      alternative_title: arrayMovieInfo[indexMovieTitle].original,
+      total_rating: getRandomPositiveFloat(1, 10, 1),
+      poster: arrayMovieInfo[indexMovieTitle].poster,
+      age_rating: getRandomElement(ageRestrictionsArray),
+      director: getRandomArray(workingGroup, 2),
+      writers: getRandomArray(workingGroup, 3),
+      actors: getRandomArray(workingGroup, 4),
+      release: {
+        date: getRandomDate(new Date('1960-02-12T01:57:45.271Z'), new Date('2020-02-12T01:57:45.271Z')).toISOString(),
+        release_country: getRandomElement(countryArray),
+      },
+      runtime: getRandomPositiveInteger(55, 210),
+      genre: getRandomArray(genreArray, 4),
+      description: getRandomArray(descriptionTextArray, 5).join('').trim(),
+    },
+    user_details: {
+      watchlist: Boolean(getRandomPositiveInteger(0, 1)),
+      already_watched: Boolean(getRandomPositiveInteger(0, 1)),
+      watching_date: getRandomDate(new Date('2020-02-12T01:57:45.271Z'), dayjs().toDate()).toISOString(),
+      favorite: Boolean(getRandomPositiveInteger(0, 1)),
+    }
   };
   return movie;
 };

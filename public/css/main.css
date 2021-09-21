@@ -1109,3 +1109,8 @@ button {
   overflow-y: hidden;
 }
 
+.disabled,
+.main-navigation__item--active {
+  pointer-events: none;
+  cursor: default;
+}

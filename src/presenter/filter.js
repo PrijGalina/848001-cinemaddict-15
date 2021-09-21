@@ -1,9 +1,9 @@
 import {moviesPresenter, siteMainElement} from '../main';
 import FilterView from '../view/filter';
 import StatisticsView from '../view/statistics';
-import {filter} from '../utils/filter';
+import {filter, filterStatistic} from '../utils/filter';
 import {remove, render, replace} from '../utils/render';
-import {RenderPosition, FilterType, UpdateType, MenuItem, SortType} from '../const';
+import {RenderPosition, FilterType, UpdateType, MenuItem, SortType, FilterStatisticType} from '../const';
 
 
 export default class Filter {
@@ -11,11 +11,15 @@ export default class Filter {
     this._filterContainer = filterContainer;
     this._filterModel = filterModel;
     this._moviesModel = moviesModel;
-
+    this._watchedMovies = [];
     this._filterComponent = null;
+    this._statisticComponent = null;
+    this._statsFilter = null;
+
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
     this._handleSiteMenuClick = this._handleSiteMenuClick.bind(this);
+    this._handlerFilterTypeStatistic = this._handlerFilterTypeStatistic.bind(this);
 
     this._moviesModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
@@ -23,6 +27,8 @@ export default class Filter {
 
   init() {
     const filters = this._getFilters();
+    this._statsFilter = this._getStatisticFilters();
+
     const prevFilterComponent = this._filterComponent;
 
     this._filterComponent = new FilterView(filters, this._filterModel.getFilter());
@@ -76,27 +82,90 @@ export default class Filter {
     ];
   }
 
+  _getStatisticFilters() {
+    const movies = filter[FilterType.WATCHLIST](this._moviesModel.getMovies());
+    return [
+      {
+        type: FilterStatisticType.ALL_TIME,
+        name: 'All time',
+        count: filterStatistic[FilterStatisticType.ALL_TIME](movies).length,
+      },
+      {
+        type: FilterStatisticType.TODAY,
+        name: 'Today',
+        count: filterStatistic[FilterStatisticType.TODAY](movies).length,
+      },
+      {
+        type: FilterStatisticType.WEEK,
+        name: 'Week',
+        count: filterStatistic[FilterStatisticType.WEEK](movies).length,
+      },
+      {
+        type: FilterStatisticType.MONTH,
+        name: 'Month',
+        count: filterStatistic[FilterStatisticType.MONTH](movies).length,
+      },
+      {
+        type: FilterStatisticType.YEAR,
+        name: 'Year',
+        count: filterStatistic[FilterStatisticType.YEAR](movies).length,
+      },
+    ];
+  }
+
+  _linkActiveToogle(page) {
+    if(page === 'stat') {
+      document.querySelectorAll('a[data-menu = "false"]').forEach((link) => {
+        link.classList.add('disabled');
+      });
+      document.querySelector('[data-menu="MOVIES"]').classList.remove('main-navigation__item--active');
+      document.querySelector('[data-menu="STATISTICS"]').classList.add('main-navigation__item--active');
+    }
+    else {
+      document.querySelector('[data-menu="MOVIES"]').classList.add('main-navigation__item--active');
+      document.querySelector('[data-menu="STATISTICS"]').classList.remove('main-navigation__item--active');
+      document.querySelectorAll('a[data-menu = "false"]').forEach((link) => {
+        link.classList.remove('disabled');
+      });
+    }
+  }
+
   _handleSiteMenuClick(element) {
     if (element.classList.contains('main-navigation__item--active')) {
       return;
     }
     const menuItem = element.dataset.menu;
     moviesPresenter._currentSortType = SortType.DEFAULT;
-    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.ALL);
+
     switch (menuItem) {
       case MenuItem.MOVIES:
-        document.querySelector('[data-menu="MOVIES"]').classList.add('main-navigation__item--active');
-        document.querySelector('[data-menu="STATISTICS"]').classList.remove('main-navigation__item--active');
         moviesPresenter.init();
-        document.querySelector('.statistic').remove();
+        (document.querySelector('.statistic')) ? document.querySelector('.statistic').remove() : '';
+        this._linkActiveToogle('movie');
         break;
       case MenuItem.STATISTICS:
-        document.querySelector('[data-menu="MOVIES"]').classList.remove('main-navigation__item--active');
-        document.querySelector('[data-menu="STATISTICS"]').classList.add('main-navigation__item--active');
+        this._filterModel.setStatFilter(UpdateType.STAT, FilterStatisticType.ALL_TIME);
+        this._filterModel.setFilter(UpdateType.MAJOR, FilterType.ALL);
+        this._moviesForStat = this._getMoviesForStat();
         moviesPresenter.destroy();
-        render(siteMainElement, new StatisticsView(this._moviesModel), RenderPosition.BEFOREEND);
+        this._statisticComponent = new StatisticsView(this._moviesForStat, this._statsFilter, this._filterModel.getStatFilter());
+        this._statisticComponent.setFilterChangeStatistic(this._handlerFilterTypeStatistic);
+        render(siteMainElement, this._statisticComponent, RenderPosition.BEFOREEND);
+        this._linkActiveToogle('stat');
         break;
     }
+  }
+
+  _handlerFilterTypeStatistic(filterType) {
+    this._filterModel.setFilter(UpdateType.STAT, filterType);
+
+  }
+
+  _getMoviesForStat() {
+    const filterType = this._filterModel.getStatFilter();
+    const movies = this._moviesModel.getMovies();
+    const watchedMovie = filter[FilterType.WATCHLIST](movies);
+    return watchedMovie;
   }
 }
 

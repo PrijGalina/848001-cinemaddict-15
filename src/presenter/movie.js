@@ -125,7 +125,11 @@ export default class Movie {
           {},
           this._movie,
           {
-            isWatchlist: !this._movie.isWatchlist,
+            user_details: {
+              watchlist: !this._movie.user_details.watchlist,
+              already_watched: this._movie.user_details.already_watched,
+              favorite: this._movie.user_details.favorite,
+            },
           },
         ),
       );
@@ -138,7 +142,11 @@ export default class Movie {
           {},
           this._movie,
           {
-            isWatchlist: !this._movie.isWatchlist,
+            user_details: {
+              watchlist: !this._movie.user_details.watchlist,
+              already_watched: this._movie.user_details.already_watched,
+              favorite: this._movie.user_details.favorite,
+            },
           },
         ),
       );
@@ -155,7 +163,11 @@ export default class Movie {
           {},
           this._movie,
           {
-            isFavorite: !this._movie.isFavorite,
+            user_details: {
+              watchlist: this._movie.user_details.watchlist,
+              already_watched: this._movie.user_details.already_watched,
+              favorite: !this._movie.user_details.favorite,
+            },
           },
         ),
       );
@@ -168,7 +180,11 @@ export default class Movie {
           {},
           this._movie,
           {
-            isFavorite: !this._movie.isFavorite,
+            user_details: {
+              watchlist: this._movie.user_details.watchlist,
+              already_watched: this._movie.user_details.already_watched,
+              favorite: !this._movie.user_details.favorite,
+            },
           },
         ),
       );
@@ -185,7 +201,11 @@ export default class Movie {
           {},
           this._movie,
           {
-            isHistory: !this._movie.isHistory,
+            user_details: {
+              watchlist: this._movie.user_details.watchlist,
+              already_watched: !this._movie.user_details.already_watched,
+              favorite: this._movie.user_details.favorite,
+            },
           },
         ),
       );
@@ -198,7 +218,11 @@ export default class Movie {
           {},
           this._movie,
           {
-            isHistory: !this._movie.isHistory,
+            user_details: {
+              watchlist: this._movie.user_details.watchlist,
+              already_watched: !this._movie.user_details.already_watched,
+              favorite: this._movie.user_details.favorite,
+            },
           },
         ),
       );
