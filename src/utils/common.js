@@ -55,11 +55,11 @@ export const deleteItem = (items, deleteElement) => {
   ];
 };
 
-export const sortMovieDate = (movieA, movieB) => dayjs(movieB.release).diff(dayjs(movieA.release));
+export const sortMovieDate = (movieA, movieB) => dayjs(movieB.film_info.release.date).diff(dayjs(movieA.film_info.release.date));
 
 export const sortMovieRating = (movieA, movieB) => {
-  if (movieA.rating < movieB.rating) {return 1;}
-  else if(movieA.rating > movieB.rating) {return -1;}
+  if (movieA.film_info.total_rating < movieB.film_info.total_rating) {return 1;}
+  else if (movieA.film_info.total_rating > movieB.film_info.total_rating) {return -1;}
   else {return 0;}
 };
 

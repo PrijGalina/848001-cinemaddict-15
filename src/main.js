@@ -33,4 +33,4 @@ filterPresenter.init();
 const movieCounterElement = document.querySelector('.footer__statistics');
 render(movieCounterElement, new MovieCounterView(), RenderPosition.BEFOREEND);
 
-export {comments, siteMainElement};
+export {comments, siteMainElement, moviesPresenter, moviesModel};

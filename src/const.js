@@ -2,7 +2,7 @@
 
 export const emojiArray = ['smile', 'sleeping', 'puke', 'angry'];
 
-export const MOVIE_COUNT = 12;
+export const MOVIE_COUNT = 52;
 
 export const COMMENTS_COUNT = 10;
 
@@ -11,6 +11,14 @@ export const SortType = {
   BY_DATE: 'date',
   BY_RATING: 'rating',
   BY_COMMENTS_COUNT: 'comments',
+};
+
+export const filterStatsType = {
+  ALL_TIME: 'statistic-all-time',
+  TODAY: 'statistic-today',
+  WEEK: 'statistic-week',
+  MONTH: 'statistic-month',
+  YEAR: 'statistic-year',
 };
 
 export const RenderPosition = {
@@ -34,12 +42,14 @@ export const UserAction = {
   ADD_COMMENT: 'ADD_COMMENT',
   DELETE_COMMENT: 'DELETE_COMMENT',
   UPDATE_MOVIE_DATA: 'UPDATE_MOVIE_DATA',
+  STATISTICS_CHANGE: 'STATISTICS_CHANGE',
 };
 
 export const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  STAT: 'STAT',
 };
 
 export const Mode = {
@@ -56,4 +66,9 @@ export const FilterType = {
   WATCHLIST: 'watchlist',
   HISTORY : 'history',
   FAVORITES: 'favorites',
+};
+
+export const MenuItem = {
+  MOVIES: 'MOVIES',
+  STATISTICS: 'STATISTICS',
 };

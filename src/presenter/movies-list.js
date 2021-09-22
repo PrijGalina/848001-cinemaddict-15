@@ -9,7 +9,7 @@ import ShowMoreButtonView from '../view/show-more-button';
 import {filter} from '../utils/filter';
 import {remove, render} from '../utils/render';
 import {sortMovieDate, sortMovieRating, sortMovieComments} from '../utils/common';
-import {SortType, MoviesListType, RenderPosition, UserAction, UpdateType, MOVIE_COUNT_PER_STEP, NUMBER_OF_FIRST} from '../const';
+import {SortType, MoviesListType, RenderPosition, UserAction, UpdateType, MOVIE_COUNT_PER_STEP, NUMBER_OF_FIRST, FilterType} from '../const';
 
 export default class MoviesList {
   constructor(mainContainer, moviesModel, commentsModel, filterModel) {
@@ -40,14 +40,20 @@ export default class MoviesList {
 
     this._handlerLoadMoreButtonClick = this._handlerLoadMoreButtonClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
-
-    this._moviesModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
   }
 
   init() {
     render(this._mainContainer, this._moviesComponent, RenderPosition.BEFOREEND);
     this._renderMovieList();
+
+    this._moviesModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
+  }
+
+  destroy() {
+    this._clearMovieList();
+    this._moviesModel.removeObserver(this._handleModelEvent);
+    this._filterModel.removeObserver(this._handleModelEvent);
   }
 
   _getMovies() {
@@ -172,6 +178,9 @@ export default class MoviesList {
       case UpdateType.MAJOR:
         this._clearMovieList({resetRenderedMovieCount: true, resetSortType: true});
         this._renderMovieList();
+        break;
+      case UpdateType.STAT:
+        //перерисовать статистику
         break;
     }
   }
