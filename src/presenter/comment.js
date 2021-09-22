@@ -1,21 +1,32 @@
 import CommentView from '../view/comment';
-import {render, remove} from '../utils/render';
+import {render, remove, replace} from '../utils/render';
 import {RenderPosition, UserAction, UpdateType} from './../const';
+import { api} from '../main';
 
 export default class Comment {
-  constructor(container, commentChange){
+  constructor(container, commentChange, commentsModel){
     this._comment = null;
     this._commentComponent = null;
     this._container = container;
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._commentChange = commentChange;
+    this._commentsModel = commentsModel;
+    this._api = api;
   }
 
   init(comments){
+    const prevCommentComponent = this._commentComponent;
+
     this._comments = comments;
     this._commentComponent = new CommentView(this._comments);
     this._commentComponent.setDeleteClickHandler(this._handleDeleteClick);
-    this._renderComments();
+
+    if (prevCommentComponent === null) {
+      this._renderComments();
+      return;
+    }
+    replace(this._commentComponent, prevCommentComponent);
+    remove(prevCommentComponent);
   }
 
   destroy() {
@@ -23,14 +34,16 @@ export default class Comment {
   }
 
   _renderComments() {
-    render(this._container, this._commentComponent, RenderPosition.BEFOREEND);
+    render(this._container, this._commentComponent, RenderPosition.AFTERBEGIN);
   }
 
-  _handleDeleteClick() {
-    this._commentChange(
-      UserAction.DELETE_COMMENT,
-      UpdateType.MINOR,
-      this._comments,
-    );
+  _handleDeleteClick(update) {
+    this._api.deleteComment(update).then(() => {
+      this._commentChange(
+        UserAction.DELETE_COMMENT,
+        UpdateType.PATCH,
+        update,
+      );
+    });
   }
 }

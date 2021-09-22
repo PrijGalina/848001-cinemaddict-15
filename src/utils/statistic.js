@@ -2,7 +2,6 @@ import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import duration from 'dayjs/plugin/duration';
-import {genreArray} from '../data';
 
 dayjs.extend(duration);
 dayjs.extend(isBetween);
@@ -15,9 +14,17 @@ export const durationWatchedMovies = (minutes) =>  {
 };
 
 export const getGenreStat = (movies) => {
+  const genreArray = movies.map((movie) => movie.genres);
+  const genres = [];
+  genreArray.forEach((movie) => {
+    movie.forEach((genre)=>{
+      genres.push(genre);
+    })
+  });
+
   const genreStats = new Object();
-  genreArray.forEach((genre) => {
-    const value = movies.filter((movie) => movie.film_info.genre.includes(genre));
+  genres.forEach((genre) => {
+    const value = movies.filter((movie) => movie.genres.includes(genre));
     const genreItem = { [genre] : value.length};
     Object.assign(genreStats, genreItem);
   });

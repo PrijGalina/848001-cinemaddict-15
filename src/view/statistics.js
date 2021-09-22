@@ -79,7 +79,6 @@ const renderGenreChart = (container, movies) =>  {
 };
 
 const createStatisticsTemplate = (data, filters, current) => {
-  const completedTaskCount = 1;
   const movies = data;
   const currentFilter = current;
   const currentFilterInfo = filters.filter((filter) => {
@@ -88,6 +87,7 @@ const createStatisticsTemplate = (data, filters, current) => {
     }
   });
   const durationArray = durationWatchedMovies(currentFilterInfo[0].duration);
+
   const genreStat = getGenreStat(movies);
   const favoriteGenre = getFavoriteGenre(genreStat);
 

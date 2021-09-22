@@ -9,9 +9,9 @@ dayjs.extend(isSameOrBefore);
 
 export const filter = {
   [FilterType.ALL]: (movies) => movies.filter((movie) => movie),
-  [FilterType.WATCHLIST]: (movies) => movies.filter((movie) => movie.user_details.watchlist),
-  [FilterType.HISTORY]: (movies) => movies.filter((movie) => movie.user_details.already_watched),
-  [FilterType.FAVORITES]: (movies) => movies.filter((movie) => movie.user_details.favorite),
+  [FilterType.WATCHLIST]: (movies) => movies.filter((movie) => movie.isWatchlist),
+  [FilterType.HISTORY]: (movies) => movies.filter((movie) => movie.isHistory),
+  [FilterType.FAVORITES]: (movies) => movies.filter((movie) => movie.isFavorite),
 };
 
 const daysToToday = 0;
@@ -23,9 +23,9 @@ const isIncluded = (movie, from, type) => {
   const dateTo = dayjs().toDate();
   const dateFrom = dayjs().subtract(from, type).toDate();
   if (
-    dayjs(movie.user_details.watching_date).isSame(dateFrom) ||
-    dayjs(movie.user_details.watching_date).isBetween(dateFrom, dateTo) ||
-    dayjs(movie.user_details.watching_date).isSame(dateTo)
+    dayjs(movie.watchingDate).isSame(dateFrom) ||
+    dayjs(movie.watchingDate).isBetween(dateFrom, dateTo) ||
+    dayjs(movie.watchingDate).isSame(dateTo)
   ){
     return movie;
   }
@@ -39,4 +39,4 @@ export const filterStats = {
   [filterStatsType.YEAR]: (movies) => movies.filter((movie) => isIncluded(movie, yearsToDate, 'year')),
 };
 
-export const filterStatsDuration = (movies) => movies.reduce((total, movie) => total + movie.film_info.runtime, 0);
+export const filterStatsDuration = (movies) => movies.reduce((total, movie) => total + movie.duration, 0);

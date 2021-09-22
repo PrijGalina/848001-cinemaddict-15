@@ -50,6 +50,8 @@ export const UpdateType = {
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
   STAT: 'STAT',
+  INIT: 'INIT',
+  COMMENT: 'COMMENT',
 };
 
 export const Mode = {
@@ -72,3 +74,4 @@ export const MenuItem = {
   MOVIES: 'MOVIES',
   STATISTICS: 'STATISTICS',
 };
+
