@@ -12,9 +12,9 @@ const createGenresList = (array) => {
 };
 
 const createPopupMovieInfo = (movieData) => {
-  const {id, filmId, comments, film_info, user_details} = movieData;
-  const releaseWithFormat = dayjs(film_info.release.date).format('D MMMM YYYY');
-  const genresList = createGenresList(film_info.genre);
+  const { comments, release, title, rating, duration, genres, poster, description, isWatchlist, isHistory, isFavorite, ageRestrictions, originalName, director, writers, actors, country} = movieData;
+  const releaseWithFormat = dayjs(release).format('D MMMM YYYY');
+  const genresList = createGenresList(genres);
 
   return (
     `<section class="film-details">
@@ -25,35 +25,35 @@ const createPopupMovieInfo = (movieData) => {
           </div>
           <div class="film-details__info-wrap">
             <div class="film-details__poster">
-              <img class="film-details__poster-img" src="${film_info.poster}" alt="">
+              <img class="film-details__poster-img" src="${poster}" alt="">
 
-              <p class="film-details__age">${film_info.age_rating}</p>
+              <p class="film-details__age">${ageRestrictions}</p>
             </div>
 
             <div class="film-details__info">
               <div class="film-details__info-head">
                 <div class="film-details__title-wrap">
-                  <h3 class="film-details__title">${film_info.alternative_title}</h3>
-                  <p class="film-details__title-original">${film_info.title}</p>
+                  <h3 class="film-details__title">${originalName}</h3>
+                  <p class="film-details__title-original">${title}</p>
                 </div>
 
                 <div class="film-details__rating">
-                  <p class="film-details__total-rating">${film_info.total_rating}</p>
+                  <p class="film-details__total-rating">${rating}</p>
                 </div>
               </div>
 
               <table class="film-details__table">
                 <tr class="film-details__row">
                   <td class="film-details__term">Director</td>
-                  <td class="film-details__cell">${film_info.director}</td>
+                  <td class="film-details__cell">${director}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Writers</td>
-                  <td class="film-details__cell">${film_info.writers}</td>
+                  <td class="film-details__cell">${writers}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Actors</td>
-                  <td class="film-details__cell">${film_info.actors}</td>
+                  <td class="film-details__cell">${actors}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Release Date</td>
@@ -61,11 +61,11 @@ const createPopupMovieInfo = (movieData) => {
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Runtime</td>
-                  <td class="film-details__cell">${film_info.runtime}</td>
+                  <td class="film-details__cell">${duration}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Country</td>
-                  <td class="film-details__cell">${film_info.release.release_country}</td>
+                  <td class="film-details__cell">${country}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Genres</td>
@@ -73,14 +73,14 @@ const createPopupMovieInfo = (movieData) => {
                 </tr>
               </table>
 
-              <p class="film-details__film-description">${film_info.description}</p>
+              <p class="film-details__film-description">${description}</p>
             </div>
           </div>
 
           <section class="film-details__controls">
-            <button type="button" class="film-details__control-button--watchlist ${(user_details.watchlist) ? 'film-details__control-button film-details__control-button--active' : 'film-details__control-button'}" id="watchlist" name="watchlist">Add to watchlist</button>
-            <button type="button" class="film-details__control-button--watched ${(user_details.already_watched) ? 'film-details__control-button film-details__control-button--active' : 'film-details__control-button'}" id="watched" name="watched">Already watched</button>
-            <button type="button" class="film-details__control-button--favorite ${(user_details.favorite) ? 'film-details__control-button film-details__control-button--active' : 'film-details__control-button'}" id="favorite" name="favorite">Add to favorites</button>
+            <button type="button" class="film-details__control-button--watchlist ${(isWatchlist) ? 'film-details__control-button film-details__control-button--active' : 'film-details__control-button'}" id="watchlist" name="watchlist">Add to watchlist</button>
+            <button type="button" class="film-details__control-button--watched ${(isHistory) ? 'film-details__control-button film-details__control-button--active' : 'film-details__control-button'}" id="watched" name="watched">Already watched</button>
+            <button type="button" class="film-details__control-button--favorite ${(isFavorite) ? 'film-details__control-button film-details__control-button--active' : 'film-details__control-button'}" id="favorite" name="favorite">Add to favorites</button>
           </section>
         </div>
         <div class="film-details__bottom-container">

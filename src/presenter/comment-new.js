@@ -1,16 +1,11 @@
 import NewCommentView from '../view/comment-new';
 import {nanoid} from 'nanoid';
-import {render, remove} from '../utils/render.js';
+import {render, remove, replace} from '../utils/render.js';
 import {UserAction, UpdateType, RenderPosition} from '../const.js';
-import { getRandomElement } from '../utils/common';
-import { workingGroup } from './../data';
-import { getCurrentDate } from '../mock/comment';
 
 const NEW_COMMENT_TEMPLATE = {
   comment: '',
   emotion: null,
-  autor: getRandomElement(workingGroup),
-  date: getCurrentDate(),
 };
 
 export default class NewComment {
@@ -24,8 +19,17 @@ export default class NewComment {
   }
 
   init() {
+    const prevnewCommentComponent = this._newCommentComponent;
     this._newCommentComponent = new NewCommentView(NEW_COMMENT_TEMPLATE, this._handleFormSubmit);
-    render(this._commentListContainer, this._newCommentComponent, RenderPosition.BEFOREEND);
+
+    if (prevnewCommentComponent === null) {
+      render(this._commentListContainer, this._newCommentComponent, RenderPosition.BEFOREEND);
+      return;
+    }
+
+    replace(this._newCommentComponent, prevnewCommentComponent);
+    remove(prevnewCommentComponent);
+
   }
 
   destroy() {
@@ -33,6 +37,7 @@ export default class NewComment {
   }
 
   _handleFormSubmit(comment) {
+    //на сервер add
     this._changeData(
       UserAction.ADD_COMMENT,
       UpdateType.PATCH,

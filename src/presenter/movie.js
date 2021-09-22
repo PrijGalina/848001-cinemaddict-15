@@ -6,7 +6,8 @@ import {render, remove, replace} from '../utils/render';
 import {RenderPosition, Mode, UserAction, UpdateType} from './../const';
 
 export default class Movie {
-  constructor(moviesContainer, commentsModel, changeData, changeMode) {
+  constructor(moviesContainer, commentsModel, changeData, changeMode, api) {
+    this._api = api;
     this._moviesContainer = moviesContainer;
     this._commentsModel = commentsModel;
     this._changeData = changeData;
@@ -31,6 +32,7 @@ export default class Movie {
     this._movie = movie;
     const prevMovieComponent = this._movieComponent;
     const prevPopupComponent = this._popupComponent;
+    this._containerForMovie = this._moviesContainer.getElement().querySelector('.films-list__container');
 
     this._movieComponent = new MovieCardView(this._movie);
     this._movieComponent.setOpenClickHandler(this._handleOpenPopupClick);
@@ -44,20 +46,20 @@ export default class Movie {
     this._popupComponent.setWatchlistClickHandler(this._handleWatchlistClick);
     this._popupComponent.setHistoryClickHandler(this._handleHistoryClick);
 
-    if(prevMovieComponent === null){
-      this._place = this._moviesContainer.getElement().querySelector('.films-list__container');
-      render(this._place, this._movieComponent, RenderPosition.BEFOREEND);
+    if (prevMovieComponent === null || prevPopupComponent === null){
+      render(this._containerForMovie, this._movieComponent, RenderPosition.BEFOREEND);
       return;
     }
 
     replace(this._movieComponent, prevMovieComponent);
     replace(this._popupComponent, prevPopupComponent);
+
     remove(prevMovieComponent);
     remove(prevPopupComponent);
   }
 
-  _getComments(filmId) {
-    return this._commentsModel.getComments().filter((comment) => comment.aboutFilm === filmId);
+  _getComments() {
+    return this._commentsModel.getComments();
   }
 
   destroy() {
@@ -73,7 +75,7 @@ export default class Movie {
 
   _commentsBlockInit() {
     this._commentsBlockContainer = this._popupComponent.getElement().querySelector('.film-details__comments-list');
-    this._commentsListPresenter = new СommentsListPresenter(this._commentsBlockContainer, this._commentsModel, this._handlerMovieUpdate, this._movie.filmId);
+    this._commentsListPresenter = new СommentsListPresenter(this._commentsBlockContainer, this._commentsModel, this._handlerMovieUpdate);
     this._commentsListPresenter.init();
   }
 
@@ -87,7 +89,7 @@ export default class Movie {
     render(siteMainElement, this._popupComponent, RenderPosition.BEFOREEND);
     this._changeMode();
     this._mode = Mode.CHANGED;
-    this._changeData(Object.assign({},this._movie));
+    //this._changeData(Object.assign({},this._movie));
   }
 
   _handleEscKeydown(e) {
@@ -107,6 +109,14 @@ export default class Movie {
     this._replaceCardToPopup();
     document.addEventListener('keydown', this._handleEscKeydown);
     document.querySelector('body').classList.add('hidden-scroll');
+
+    this._api.getComments(this._movie)
+      .then((comments) => {
+        this._commentsModel.setComments(UpdateType.INIT, comments);
+      })
+      .catch(() => {
+        this._commentsModel.setComments(UpdateType.INIT, []);
+      });
     this._commentsBlockInit();
   }
 
@@ -125,11 +135,7 @@ export default class Movie {
           {},
           this._movie,
           {
-            user_details: {
-              watchlist: !this._movie.user_details.watchlist,
-              already_watched: this._movie.user_details.already_watched,
-              favorite: this._movie.user_details.favorite,
-            },
+            isWatchlist: !this._movie.isWatchlist,
           },
         ),
       );
@@ -142,15 +148,10 @@ export default class Movie {
           {},
           this._movie,
           {
-            user_details: {
-              watchlist: !this._movie.user_details.watchlist,
-              already_watched: this._movie.user_details.already_watched,
-              favorite: this._movie.user_details.favorite,
-            },
+            isWatchlist: !this._movie.isWatchlist,
           },
         ),
       );
-      this._commentsBlockInit();
     }
   }
 
@@ -163,16 +164,11 @@ export default class Movie {
           {},
           this._movie,
           {
-            user_details: {
-              watchlist: this._movie.user_details.watchlist,
-              already_watched: this._movie.user_details.already_watched,
-              favorite: !this._movie.user_details.favorite,
-            },
+            isFavorite: !this._movie.isFavorite,
           },
         ),
       );
-    }
-    else {
+    } else {
       this._changeData(
         UserAction.UPDATE_MOVIE_DATA,
         UpdateType.PATCH,
@@ -180,15 +176,10 @@ export default class Movie {
           {},
           this._movie,
           {
-            user_details: {
-              watchlist: this._movie.user_details.watchlist,
-              already_watched: this._movie.user_details.already_watched,
-              favorite: !this._movie.user_details.favorite,
-            },
+            isFavorite: !this._movie.isFavorite,
           },
         ),
       );
-      this._commentsBlockInit();
     }
   }
 
@@ -201,11 +192,7 @@ export default class Movie {
           {},
           this._movie,
           {
-            user_details: {
-              watchlist: this._movie.user_details.watchlist,
-              already_watched: !this._movie.user_details.already_watched,
-              favorite: this._movie.user_details.favorite,
-            },
+            isHistory: !this._movie.isHistory,
           },
         ),
       );
@@ -218,28 +205,23 @@ export default class Movie {
           {},
           this._movie,
           {
-            user_details: {
-              watchlist: this._movie.user_details.watchlist,
-              already_watched: !this._movie.user_details.already_watched,
-              favorite: this._movie.user_details.favorite,
-            },
+            isHistory: !this._movie.isHistory,
           },
         ),
       );
-      this._commentsBlockInit();
     }
   }
 
   _handlerMovieUpdate(commentsListUpdate) {
-    this._commentsAboutMovie = this._getComments(this._movie.filmId);
+    const comments = [commentsListUpdate][0].map((comment) => comment.id);
     this._changeData(
       UserAction.UPDATE_MOVIE_DATA,
-      UpdateType. PATCH,
+      UpdateType.PATCH,
       Object.assign(
         {},
         this._movie,
         {
-          comments: commentsListUpdate,
+          comments: comments,
         },
       ),
     );

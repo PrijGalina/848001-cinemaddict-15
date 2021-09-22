@@ -2,25 +2,25 @@ import SmartView from './smart';
 import dayjs from 'dayjs';
 
 const createMovieCardTemplate = (movieData) => {
-  const {id, filmId, comments, film_info, user_details} = movieData;
+  const {comments, release, title, rating, duration, genres, poster, description, isWatchlist, isHistory, isFavorite} = movieData;
   const isActive = (boolean) => (boolean) ? 'film-card__controls-item film-card__controls-item--active' : 'film-card__controls-item';
   const isHidden = (value) => ((value === 0) || (value === 'NULL') || (value === undefined)) ? 'visually-hidden' : '';
-  const releaseYear = dayjs(film_info.release.date).year();
+  const releaseYear = dayjs(release).year();
   return `<article class="film-card">
-    <h3 class="film-card__title">${film_info.title}</h3>
-    <p class="film-card__rating">${film_info.total_rating}</p>
+    <h3 class="film-card__title">${title}</h3>
+    <p class="film-card__rating">${rating}</p>
     <p class="film-card__info">
       <span class="film-card__year">${releaseYear}</span>
-      <span class="film-card__duration">${film_info.runtime}</span>
-      <span class="film-card__genre">${film_info.genre[0]}</span>
+      <span class="film-card__duration">${duration}</span>
+      <span class="film-card__genre">${genres[0]}</span>
     </p>
-    <img src="${film_info.poster}" alt="" class="film-card__poster">
-    <p class="film-card__description">${film_info.description}</p>
+    <img src="${poster}" alt="" class="film-card__poster">
+    <p class="film-card__description">${description}</p>
     <a class="film-card__comments ${isHidden(comments.length)}">${comments.length} comments</a>
     <div class="film-card__controls">
-      <button class="film-card__controls-item--add-to-watchlist ${isActive(user_details.watchlist)}" type="button">Add to watchlist</button>
-      <button class="film-card__controls-item--mark-as-watched ${isActive(user_details.already_watched)}" type="button">Mark as watched</button>
-      <button class="film-card__controls-item--favorite ${isActive(user_details.favorite)}" type="button">Mark as favorite</button>
+      <button class="film-card__controls-item--add-to-watchlist ${isActive(isWatchlist)}" type="button">Add to watchlist</button>
+      <button class="film-card__controls-item--mark-as-watched ${isActive(isHistory)}" type="button">Mark as watched</button>
+      <button class="film-card__controls-item--favorite ${isActive(isFavorite)}" type="button">Mark as favorite</button>
     </div>
   </article>`;
 };
