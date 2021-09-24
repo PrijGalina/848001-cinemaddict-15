@@ -1,5 +1,6 @@
 import MoviesModel from '../model/movies';
 import CommentsModel from '../model/comments';
+import {nanoid} from 'nanoid';
 
 const Method = {
   GET: 'GET',
@@ -105,3 +106,10 @@ export default class Api {
     throw err;
   }
 }
+
+
+const AUTHORIZATION = nanoid(15);
+
+const END_POINT = 'https://15.ecmascript.pages.academy/cinemaddict';
+
+export const api = new Api(END_POINT, AUTHORIZATION);

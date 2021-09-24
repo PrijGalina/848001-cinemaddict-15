@@ -4,11 +4,11 @@ import MoviePopupView from '../view/movie-popup';
 import MovieCardView from '../view/movie-card';
 import {render, remove, replace} from '../utils/render';
 import {RenderPosition, Mode, UserAction, UpdateType} from './../const';
+import '../api/api';
 
 export default class Movie {
-  constructor(container, moviesModel, commentsModel, api, changeData, changeMode) {
+  constructor(container, moviesModel, commentsModel, changeData, changeMode) {
     this._container = container;
-    this._api = api;
     this._moviesModel = moviesModel;
     this._commentsModel = commentsModel;
     this._changeData = changeData;
@@ -57,7 +57,7 @@ export default class Movie {
   }
 
   _getAndRenderComments() {
-    this._api.getComments(this._movie)
+    api.getComments(this._movie)
       .then((comments) => {
         this._commentsModel.setComments(UpdateType.INIT, comments);
       })
@@ -207,12 +207,12 @@ export default class Movie {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.DELETE_COMMENT:
-        this._api.deleteComment(update)
+        api.deleteComment(update)
           .then((response) => {
             this._commentsModel.deleteComments(updateType, update);
           })
           .then(() => {
-            this._api.updateMovie(this._movie)
+            api.updateMovie(this._movie)
               .then((response) => {
                 this._moviesModel.updateMovie(updateType, response);
                 this._changeData(UserAction.UPDATE_MOVIE_DATA, UpdateType.PATCH, response);

@@ -12,11 +12,11 @@ import {filter} from '../utils/filter';
 import {remove, render, replace} from '../utils/render';
 import {sortMovieDate, sortMovieRating, sortMovieComments} from '../utils/common';
 import {SortType, MoviesListType, RenderPosition, UserAction, UpdateType, MOVIE_COUNT_PER_STEP, NUMBER_OF_FIRST} from '../const';
+import {api} from '../api/api';
 
 export default class MoviesList {
-  constructor(mainContainer, moviesModel, commentsModel, filterModel, api) {
+  constructor(mainContainer, moviesModel, commentsModel, filterModel) {
     this._isLoading = true;
-    this._api = api;
     this._mainContainer = mainContainer;
     this._moviesModel = moviesModel;
     this._commentsModel = commentsModel;
@@ -145,7 +145,7 @@ export default class MoviesList {
       case MoviesListType.ALL:
         array.forEach((movie) => {
           const container = this._allMoviesSectionComponent;
-          moviePresenter = new MoviePresenter(container, this._moviesModel, this._commentsModel, this._api,  this._handleViewAction, this._handlerModeChange);
+          moviePresenter = new MoviePresenter(container, this._moviesModel, this._commentsModel, this._handleViewAction, this._handlerModeChange);
           moviePresenter.init(movie);
           this._moviePresenter.set(movie.id, moviePresenter);
         });
@@ -154,7 +154,7 @@ export default class MoviesList {
       case MoviesListType.RATED:
         array.forEach((movie) => {
           const container = this._ratedMoviesSectionComponent;
-          moviePresenter = new MoviePresenter(container, this._moviesModel, this._commentsModel, this._api,  this._handleViewAction, this._handlerModeChange);
+          moviePresenter = new MoviePresenter(container, this._moviesModel, this._commentsModel, this._handleViewAction, this._handlerModeChange);
           moviePresenter.init(movie);
           this._ratingMoviePresenter.set(movie.id, moviePresenter);
         });
@@ -162,7 +162,7 @@ export default class MoviesList {
       case MoviesListType.COMMENTED:
         array.forEach((movie) => {
           const container = this._commentedMoviesSectionComponent;
-          moviePresenter = new MoviePresenter(container, this._moviesModel, this._commentsModel, this._api,  this._handleViewAction, this._handlerModeChange);
+          moviePresenter = new MoviePresenter(container, this._moviesModel, this._commentsModel, this._handleViewAction, this._handlerModeChange);
           moviePresenter.init(movie);
           this._commentedMoviePresenter.set(movie.id, moviePresenter);
         });
@@ -222,14 +222,14 @@ export default class MoviesList {
         this._instanceAllMovie = (this._moviePresenter.get(update.id)) ? this._moviePresenter.get(update.id) : null;
         this._instanceRatingMovie = (this._ratingMoviePresenter.get(update.id)) ? this._ratingMoviePresenter.get(update.id) : null;
         this._instanceCommentedMovie = (this._commentedMoviePresenter.get(update.id)) ? this._commentedMoviePresenter.get(update.id) : null;
-        this._api.updateMovie(update)
+        api.updateMovie(update)
           .then((response) => {
             this._moviesModel.updateMovie(updateType, response);
           })
           .catch(() => {});
         break;
       case UserAction.DELETE_COMMENT:
-        this._api.updateMovie(update)
+        api.updateMovie(update)
           .then((response) => {
             this._moviesModel.updateMovie(updateType, response);
           })

@@ -7,14 +7,7 @@ import ProfileView from './view/profile';
 import MovieCounterView from './view/movie-counter';
 import {render} from './utils/render';
 import {RenderPosition, UpdateType} from './const';
-import Api from './api/api';
-import {nanoid} from 'nanoid';
-
-const AUTHORIZATION = nanoid(15);
-
-const END_POINT = 'https://15.ecmascript.pages.academy/cinemaddict';
-
-const api = new Api(END_POINT, AUTHORIZATION);
+import {api} from './api/api';
 
 const moviesModel = new MoviesModel();
 const commentsModel = new CommentsModel();
@@ -25,7 +18,7 @@ const siteHeaderElement = document.querySelector('.header');
 const siteMainElement = document.querySelector('.main');
 render(siteHeaderElement, new ProfileView(), RenderPosition.BEFOREEND);
 
-const moviesPresenter = new MoviesListPresenter(siteMainElement, moviesModel, commentsModel, filterModel, api);
+const moviesPresenter = new MoviesListPresenter(siteMainElement, moviesModel, commentsModel, filterModel);
 moviesPresenter.init();
 
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, moviesModel);
