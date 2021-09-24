@@ -43,4 +43,4 @@ api.getMovies()
     moviesModel.setMovies(UpdateType.INIT, []);
   });
 
-export {moviesPresenter};
+export {moviesPresenter, siteMainElement};

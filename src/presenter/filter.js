@@ -15,6 +15,7 @@ export default class Filter {
     this._filterComponent = null;
     this._statisticComponent = null;
     this._statsFilter = null;
+    this._container =
 
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);

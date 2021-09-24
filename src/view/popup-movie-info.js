@@ -103,10 +103,27 @@ export default class MoviePopup extends SmartView {
     this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._historyClickHandler = this._historyClickHandler.bind(this);
+
+    this._setInnerHandlers();
   }
 
   getTemplate() {
     return createPopupMovieInfo(this._movie);
+  }
+
+  _setInnerHandlers() {
+    this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._closeClickHandler);
+    this.getElement().querySelector('.film-details__control-button--watchlist').addEventListener('click', this._watchlistClickHandler);
+    this.getElement().querySelector('.film-details__control-button--favorite').addEventListener('click', this._favoriteClickHandler);
+    this.getElement().querySelector('.film-details__control-button--watched').addEventListener('click', this._historyClickHandler);
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this.setCloseClickHandler(this._callback.closeClick);
+    this.setWatchlistClickHandler(this._callback.watchlistClick);
+    this.setFavoriteClickHandler(this._callback.favoriteClick);
+    this.setHistoryClickHandler(this._callback.historyClick);
   }
 
   _closeClickHandler(e) {
@@ -131,21 +148,17 @@ export default class MoviePopup extends SmartView {
 
   setCloseClickHandler(callback) {
     this._callback.closeClick = callback;
-    this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._closeClickHandler);
   }
 
   setWatchlistClickHandler(callback) {
     this._callback.watchlistClick = callback;
-    this.getElement().querySelector('.film-details__control-button--watchlist').addEventListener('click', this._watchlistClickHandler);
   }
 
   setFavoriteClickHandler(callback) {
     this._callback.favoriteClick = callback;
-    this.getElement().querySelector('.film-details__control-button--favorite').addEventListener('click', this._favoriteClickHandler);
   }
 
   setHistoryClickHandler(callback) {
     this._callback.historyClick = callback;
-    this.getElement().querySelector('.film-details__control-button--watched').addEventListener('click', this._historyClickHandler);
   }
 }

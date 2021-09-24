@@ -75,3 +75,7 @@ export const MenuItem = {
   STATISTICS: 'STATISTICS',
 };
 
+export const movieDisplayType = {
+  CARD: 'CARD',
+  POPUP: 'POPUP',
+};
