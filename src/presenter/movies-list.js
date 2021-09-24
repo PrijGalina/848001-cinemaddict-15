@@ -139,7 +139,7 @@ export default class MoviesList {
       case MoviesListType.ALL:
         array.forEach((movie) => {
           const container = this._allMoviesSectionComponent;
-          moviePresenter = new MoviePresenter(container, this._commentsModel, this._handleViewAction, this._handlerModeChange, this._api);
+          moviePresenter = new MoviePresenter(container, this._moviesModel, this._commentsModel, this._api,  this._handleViewAction, this._handlerModeChange);
           moviePresenter.init(movie);
           this._moviePresenter.set(movie.id, moviePresenter);
         });
@@ -148,7 +148,7 @@ export default class MoviesList {
       case MoviesListType.RATED:
         array.forEach((movie) => {
           const container = this._ratedMoviesSectionComponent;
-          moviePresenter = new MoviePresenter(container, this._commentsModel, this._handleViewAction, this._handlerModeChange, this._api);
+          moviePresenter = new MoviePresenter(container, this._moviesModel, this._commentsModel, this._api,  this._handleViewAction, this._handlerModeChange);
           moviePresenter.init(movie);
           this._ratingMoviePresenter.set(movie.id, moviePresenter);
         });
@@ -156,7 +156,7 @@ export default class MoviesList {
       case MoviesListType.COMMENTED:
         array.forEach((movie) => {
           const container = this._commentedMoviesSectionComponent;
-          moviePresenter = new MoviePresenter(container, this._commentsModel, this._handleViewAction, this._handlerModeChange, this._api);
+          moviePresenter = new MoviePresenter(container, this._moviesModel, this._commentsModel, this._api,  this._handleViewAction, this._handlerModeChange);
           moviePresenter.init(movie);
           this._commentedMoviePresenter.set(movie.id, moviePresenter);
         });
@@ -232,7 +232,6 @@ export default class MoviesList {
   _handleModelEvent(updateType, data) {
     switch(updateType) {
       case UpdateType.PATCH:
-        console.log('hmodeev');
         (this._moviePresenter.get(data.id)) ? this._moviePresenter.get(data.id).init(data) : '';
         (this._ratingMoviePresenter.get(data.id)) ? this._ratingMoviePresenter.get(data.id).init(data) : '';
         (this._commentedMoviePresenter.get(data.id)) ? this._commentedMoviePresenter.get(data.id).init(data) : '';

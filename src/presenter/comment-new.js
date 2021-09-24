@@ -1,47 +1,41 @@
 import NewCommentView from '../view/comment-new';
 import {nanoid} from 'nanoid';
-import {render, remove, replace} from '../utils/render.js';
+import {render, remove} from '../utils/render.js';
 import {UserAction, UpdateType, RenderPosition} from '../const.js';
 
-const NEW_COMMENT_TEMPLATE = {
-  comment: '',
-  emotion: null,
-};
-
 export default class NewComment {
-  constructor(commentListContainer, changeData, filmId) {
+  constructor(commentListContainer, changeData) {
     this._commentListContainer = commentListContainer;
     this._changeData = changeData;
-    this._filmId = filmId;
 
     this._newCommentComponent = null;
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
   }
 
   init() {
-    const prevnewCommentComponent = this._newCommentComponent;
-    this._newCommentComponent = new NewCommentView(NEW_COMMENT_TEMPLATE, this._handleFormSubmit);
-
-    if (prevnewCommentComponent === null) {
-      render(this._commentListContainer, this._newCommentComponent, RenderPosition.BEFOREEND);
+    if (this._newCommentComponent !== null) {
       return;
     }
 
-    replace(this._newCommentComponent, prevnewCommentComponent);
-    remove(prevnewCommentComponent);
-
+    this._newCommentComponent = new NewCommentView();
+    this._newCommentComponent.setFormSubmitHandler(this._handleFormSubmit);
+    render(this._commentListContainer, this._newCommentComponent, RenderPosition.BEFOREEND);
   }
 
   destroy() {
+    if (this._newCommentComponent === null) {
+      return;
+    }
     remove(this._newCommentComponent);
+    this._newCommentComponent = null;
+    document.removeEventListener('keydown', this._handleFormSubmit);
   }
 
   _handleFormSubmit(comment) {
-    //на сервер add
     this._changeData(
       UserAction.ADD_COMMENT,
       UpdateType.PATCH,
-      Object.assign({ id: nanoid(), aboutFilm: this._filmId }, comment),
+      Object.assign({ id: nanoid()}, comment),
     );
   }
 }

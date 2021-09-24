@@ -16,10 +16,8 @@ const END_POINT = 'https://15.ecmascript.pages.academy/cinemaddict';
 
 const api = new Api(END_POINT, AUTHORIZATION);
 
-const commentsModel = new CommentsModel();
-
 const moviesModel = new MoviesModel();
-
+const commentsModel = new CommentsModel();
 const filterModel = new FilterModel();
 
 
@@ -45,4 +43,4 @@ api.getMovies()
     moviesModel.setMovies(UpdateType.INIT, []);
   });
 
-export { siteMainElement, moviesPresenter, moviesModel, api};
+export {moviesPresenter};

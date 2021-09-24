@@ -22,11 +22,23 @@ export default class Comment extends SmartView {
   constructor(comment) {
     super();
     this._comment = comment;
+
     this._deleteClickHandler = this._deleteClickHandler.bind(this);
+
+    this._setInnerHandlers();
   }
 
   getTemplate() {
     return createCommentsTemplate(this._comment);
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this.setDeleteClickHandler(this._callback.deleteClick);
+  }
+
+  _setInnerHandlers() {
+    this.getElement().querySelector('.film-details__comment-delete').addEventListener('click', this._deleteClickHandler);
   }
 
   _deleteClickHandler(e) {
@@ -36,6 +48,5 @@ export default class Comment extends SmartView {
 
   setDeleteClickHandler(callback) {
     this._callback.deleteClick = callback;
-    this.getElement().querySelector('.film-details__comment-delete').addEventListener('click', this._deleteClickHandler);
   }
 }

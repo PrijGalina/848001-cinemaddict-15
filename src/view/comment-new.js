@@ -21,14 +21,19 @@ const createNewCommentTemplate = (NewCommentData) => {
   </div>`);
 };
 
+const TEMPLATE = {
+  comment: '',
+  emotion: null,
+};
+
 export default class NewComment extends SmartView {
-  constructor(newCommentTemplate, formSubmitCallback) {
+  constructor(newComment = TEMPLATE) {
     super();
-    this._data = NewComment.parseCommentToData(newCommentTemplate);
-    this._formSubmitCallback = formSubmitCallback;
+    this._data = newComment;
+
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._emojiClickHandler = this._emojiClickHandler.bind(this);
     this._commentTextareaHandler = this._commentTextareaHandler.bind(this);
-    this._handlerEnterCtrl = this._handlerEnterCtrl.bind(this);
 
     this._setInnerHandlers();
   }
@@ -50,10 +55,6 @@ export default class NewComment extends SmartView {
     this.setFormSubmitHandler(this._callback.formSubmit);
   }
 
-  restoreEmojiHandlers() {
-    this._setInnerHandlers();
-  }
-
   _emojiClickHandler(e) {
     e.preventDefault();
     const value = e.target.parentElement.dataset.value;
@@ -67,36 +68,21 @@ export default class NewComment extends SmartView {
     this.updateData({
       comment: e.target.value,
     }, true);
-    if (this._data.comment !== ''){
-      document.addEventListener('keydown', this._handlerEnterCtrl);
+  }
+
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    if (this._data.comment !== '') {
+      document.addEventListener('keydown', this._formSubmitHandler);
     }
     else {
-      document.removeEventListener('keydown', this._handlerEnterCtrl);
+      document.removeEventListener('keydown', this._formSubmitHandler);
     }
   }
 
-
-  _handlerEnterCtrl(e) {
+  _formSubmitHandler(e) {
     if ((e.code === 'Enter') && e.ctrlKey) {
-      this._formSubmitCallback(NewComment.parseDataToComment(this._data));
-      document.removeEventListener('keydown', this._handlerEnterCtrl);
+      this._callback.formSubmit(this._data);
     }
-  }
-
-  static parseCommentToData(comment) {
-    return Object.assign(
-      {},
-      comment,
-      {
-        comment: comment.comment,
-        emotion: comment.emotion,
-      },
-    );
-  }
-
-  static parseDataToComment(data) {
-    data = Object.assign({}, data);
-
-    return data;
   }
 }
