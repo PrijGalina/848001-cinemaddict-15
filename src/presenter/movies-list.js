@@ -2,16 +2,16 @@ import MoviePresenter from './movie';
 import MoviesContainerView from '../view/movies-container';
 import NoMovieView from '../view/no-movie';
 import AllMoviesBlock from '../view/all-movies-block';
-import TopRatedView from '../view/rated-movies-block';
+import TopRatedView from '../view/top-rated';
 import MostCommentedView from '../view/most-commented';
 import SortingView from '../view/sorting';
 import ShowMoreButtonView from '../view/show-more-button';
 import LoadingView from '../view/loading';
-import MoviePopupView from '../view/popup-movie-info';
+import MoviePopupView from '../view/movie-popup';
 import {filter} from '../utils/filter';
 import {remove, render, replace} from '../utils/render';
 import {sortMovieDate, sortMovieRating, sortMovieComments} from '../utils/common';
-import {SortType, MoviesListType, RenderPosition, UserAction, UpdateType, MOVIE_COUNT_PER_STEP, NUMBER_OF_FIRST, movieDisplayType, Mode} from '../const';
+import {SortType, MoviesListType, RenderPosition, UserAction, UpdateType, MOVIE_COUNT_PER_STEP, NUMBER_OF_FIRST} from '../const';
 
 export default class MoviesList {
   constructor(mainContainer, moviesModel, commentsModel, filterModel, api) {
@@ -241,13 +241,11 @@ export default class MoviesList {
   _handleModelEvent(updateType, data) {
     switch(updateType) {
       case UpdateType.PATCH:
-        console.log('i am here - 0');
         (this._moviePresenter.get(data.id)) ? this._moviePresenter.get(data.id).init(data) : '';
         (this._ratingMoviePresenter.get(data.id)) ? this._ratingMoviePresenter.get(data.id).init(data) : '';
         (this._commentedMoviePresenter.get(data.id)) ? this._commentedMoviePresenter.get(data.id).init(data) : '';
         break;
       case UpdateType.MINOR:
-        console.log('i am here - 0900000');
         if(this._instanceAllMovie !== null) {
 
           this._moviePresenter.get(data.id).init(data);
@@ -260,7 +258,6 @@ export default class MoviesList {
             this._currentPopupComponent.setFavoriteClickHandler(this._instanceAllMovie._handleFavoriteClick);
             this._currentPopupComponent.setWatchlistClickHandler(this._instanceAllMovie._handleWatchlistClick);
             this._currentPopupComponent.setHistoryClickHandler(this._instanceAllMovie._handleHistoryClick);
-            console.log('!== null');
             replace(this._currentPopupComponent, prevPopup);
             remove(prevPopup);
           }

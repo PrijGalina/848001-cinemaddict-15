@@ -1,7 +1,7 @@
-import CommentPresenter from './comment';
-import NewCommentPresenter from './comment-new';
-import MoviePopupView from '../view/popup-movie-info';
-import MovieCardView from '../view/movie-view';
+import СommentPresenter from './comment';
+import NewCommentPresenter from './new-comment';
+import MoviePopupView from '../view/movie-popup';
+import MovieCardView from '../view/movie-card';
 import {render, remove, replace} from '../utils/render';
 import {RenderPosition, Mode, UserAction, UpdateType} from './../const';
 

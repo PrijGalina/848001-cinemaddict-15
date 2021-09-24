@@ -1,6 +1,6 @@
 import MoviesModel from './model/movies';
 import CommentsModel from './model/comments';
-import FilterModel from './model/filter.js';
+import FilterModel from './model/filter';
 import MoviesListPresenter from './presenter/movies-list';
 import FilterPresenter from './presenter/filter';
 import ProfileView from './view/profile';
