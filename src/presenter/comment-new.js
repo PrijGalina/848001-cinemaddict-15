@@ -1,4 +1,4 @@
-import NewCommentView from '../view/comment-new';
+import NewCommentView from '../view/new-comment';
 import {nanoid} from 'nanoid';
 import {render, remove} from '../utils/render.js';
 import {UserAction, UpdateType, RenderPosition} from '../const.js';

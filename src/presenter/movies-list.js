@@ -1,9 +1,9 @@
 import MoviePresenter from './movie';
 import MoviesContainerView from '../view/movies-container';
 import NoMovieView from '../view/no-movie';
-import AllMoviesView from '../view/all-movies-block';
+import AllMoviesBlock from '../view/all-movies-block';
 import TopRatedView from '../view/rated-movies-block';
-import MostCommentedView from '../view/commented-movies-block';
+import MostCommentedView from '../view/most-commented';
 import SortingView from '../view/sorting';
 import ShowMoreButtonView from '../view/show-more-button';
 import LoadingView from '../view/loading';
@@ -31,7 +31,7 @@ export default class MoviesList {
     this._currentPopupComponent = null;
 
     this._moviesComponent = new MoviesContainerView();
-    this._allMoviesSectionComponent = new AllMoviesView();
+    this._allMoviesSectionComponent = new AllMoviesBlock();
     this._ratedMoviesSectionComponent = new TopRatedView();
     this._commentedMoviesSectionComponent = new MostCommentedView();
     this._loadingComponent = new LoadingView();

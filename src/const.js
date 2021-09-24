@@ -2,10 +2,6 @@
 
 export const emojiArray = ['smile', 'sleeping', 'puke', 'angry'];
 
-export const MOVIE_COUNT = 52;
-
-export const COMMENTS_COUNT = 10;
-
 export const SortType = {
   DEFAULT: 'default',
   BY_DATE: 'date',

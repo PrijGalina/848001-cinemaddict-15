@@ -1,4 +1,4 @@
-import СommentPresenter from './comment';
+import CommentPresenter from './comment';
 import NewCommentPresenter from './comment-new';
 import MoviePopupView from '../view/popup-movie-info';
 import MovieCardView from '../view/movie-view';

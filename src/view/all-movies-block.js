@@ -7,7 +7,7 @@ const createAllMoviesSection = () => (
   </section>`
 );
 
-export default class AllMovies extends AbstractView {
+export default class AllMoviesBlock extends AbstractView {
   getTemplate() {
     return createAllMoviesSection();
   }

@@ -9,8 +9,8 @@ dayjs.extend(isSameOrBefore);
 
 export const durationWatchedMovies = (minutes) =>  {
   const totalHours = Math.floor(minutes / 60);
-  const totalMinuts = minutes - (totalHours * 60);
-  return [totalHours, totalMinuts];
+  const totalMinutes = minutes - (totalHours * 60);
+  return [totalHours, totalMinutes];
 };
 
 export const getGenreStat = (movies) => {
@@ -33,7 +33,7 @@ export const getGenreStat = (movies) => {
 
 export const getFavoriteGenre = (genreStatistic) => {
   let favoriteGenre;
-  for (let key in genreStatistic) {
+  for (const key in genreStatistic) {
     if (!favoriteGenre || genreStatistic[key] > favoriteGenre) {
       favoriteGenre = key;
     }
