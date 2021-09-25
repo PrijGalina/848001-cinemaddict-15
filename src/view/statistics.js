@@ -1,10 +1,9 @@
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import SmartView from './smart.js';
-import {durationWatchedMovies, getGenreStat, getFavoriteGenre} from '../utils/statistic';
-import { FilterType, SortStatisticType} from '../const';
+import {getGenreStat, getFavoriteGenre} from '../utils/statistic';
+import {FilterType, SortStatisticType} from '../const';
 import {filter} from '../utils/filter';
-import { duration } from 'dayjs';
 
 const minutesInHour = 60;
 
@@ -89,8 +88,9 @@ const createStatisticsTemplate = (data) => {
 
   const genreStat = getGenreStat(movies);
   const favoriteGenre = getFavoriteGenre(genreStat);
-  //const currentSort = document.querySelector('.statistic__filters-input').value
+
   const currentSort = 'all-time';
+
   return `<section class="statistic">
     <p class="statistic__rank">
       Your rank
@@ -142,6 +142,9 @@ export default class Statistics extends SmartView {
   constructor(movies) {
     super();
     this._movies = movies;
+    console.log('this._movies', this._movies);
+    this._radioCollection = document.querySelectorAll('.statistic__filters-input');
+    console.log('this._radioCollection',this._radioCollection);
     this._filtredMovie = this._getMovies();
     this._createStatisticBlock = null;
     this._setCharts();
@@ -166,13 +169,15 @@ export default class Statistics extends SmartView {
 
   setFilterChangeStatistic(callback) {
     this._callback.sortChange = callback;
-    this.getElement().querySelectorAll('.statistic__filters-input').forEach((sortItem) => {
+    this._radioCollection.forEach((sortItem) => {
       sortItem.addEventListener('change', this._filterTypeChangeHandler);
     });
   }
 
   _getMovies() {
     const watchedMovie = filter[FilterType.WATCHLIST](this._movies);
+
+    console.log('this._radioCollection', this._radioCollection);
     return watchedMovie;
   }
 
@@ -180,7 +185,7 @@ export default class Statistics extends SmartView {
     if (this._createStatisticBlock !== null) {
       this._createStatisticBlock = null;
     }
-
+    console.log('this._filtredMovie', this._filtredMovie);
     const BAR_HEIGHT = 50;
     const statisticCtx = this.getElement().querySelector('.statistic__chart');
     statisticCtx.height = BAR_HEIGHT * this._filtredMovie.length;

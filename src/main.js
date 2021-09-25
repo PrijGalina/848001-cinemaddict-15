@@ -33,7 +33,6 @@ moviesPresenter.init();
 const filterPresenter = new FilterPresenter(menuContainer, filterModel, moviesModel);
 
 const handleSiteMenuClick = (item) => {
-  console.log(item);
   switch (item) {
     case MenuItem.MOVIES:
       activeScreen = MenuItem.MOVIES;

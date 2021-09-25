@@ -21,25 +21,37 @@ export default class Filter {
   init(activeScreen) {
     const filters = this._getFilters();
     this._activeScreen = activeScreen;
-    this._filterComponent = new FilterView(filters, this._filterModel.getFilter(), this._activeScreen);
-    this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
+    this._filterComponent = new FilterView(
+      filters,
+      this._filterModel.getFilter(),
+      this._activeScreen,
+    );
+    this._filterComponent.setFilterTypeChangeHandler(
+      this._handleFilterTypeChange,
+    );
     this._filterComponent.setMenuClickHandler(this._menuClickItem);
-    render(this._filterContainer, this._filterComponent, RenderPosition.AFTERBEGIN);
+    render(
+      this._filterContainer,
+      this._filterComponent,
+      RenderPosition.AFTERBEGIN,
+    );
   }
 
   destroy() {
     remove(this._filterComponent);
   }
 
-  _handleModelEvent() {
-
-  }
+  _handleModelEvent() {}
 
   _handleFilterTypeChange(filterType) {
     if (this._filterModel.getFilter() === filterType) {
       return;
     }
     this._filterModel.setFilter(UpdateType.MAJOR, filterType);
+    this._filterComponent.updateFilter(filterType);
+    this._filterComponent.setFilterTypeChangeHandler(
+      this._handleFilterTypeChange,
+    );
   }
 
   _getFilters() {
@@ -65,7 +77,6 @@ export default class Filter {
   }
 
   setMenuClickHandler(callback) {
-    console.log(this);
     this._menuClickItem = callback;
   }
 }

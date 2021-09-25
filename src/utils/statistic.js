@@ -1,17 +1,9 @@
+import {SortStatisticType} from '../const';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
-import duration from 'dayjs/plugin/duration';
-
-dayjs.extend(duration);
 dayjs.extend(isBetween);
 dayjs.extend(isSameOrBefore);
-
-export const durationWatchedMovies = (minutes) =>  {
-  const totalHours = Math.floor(minutes / 60);
-  const totalMinutes = minutes - (totalHours * 60);
-  return [totalHours, totalMinutes];
-};
 
 export const getGenreStat = (movies) => {
   const genreArray = movies.map((movie) => movie.genres);
@@ -19,7 +11,7 @@ export const getGenreStat = (movies) => {
   genreArray.forEach((movie) => {
     movie.forEach((genre)=>{
       genres.push(genre);
-    })
+    });
   });
 
   const genreStats = new Object();
@@ -39,4 +31,30 @@ export const getFavoriteGenre = (genreStatistic) => {
     }
   }
   return favoriteGenre;
+};
+
+
+const daysToToday = 0;
+const daysToFullWeek = 6;
+const monthsToDate = 1;
+const yearsToDate = 1;
+
+const isIncluded = (movie, from, type) => {
+  const dateTo = dayjs().toDate();
+  const dateFrom = dayjs().subtract(from, type).toDate();
+  if (
+    dayjs(movie.watchingDate).isSame(dateFrom) ||
+    dayjs(movie.watchingDate).isBetween(dateFrom, dateTo) ||
+    dayjs(movie.watchingDate).isSame(dateTo)
+  ) {
+    return movie;
+  }
+};
+
+export const filterStatistics = {
+  [SortStatisticType.ALL_TIME]: (movies) => movies.filter((movie) => movie),
+  [SortStatisticType.TODAY]: (movies) => movies.filter((movie) => isIncluded(movie, daysToToday, 'day')),
+  [SortStatisticType.WEEK]: (movies) => movies.filter((movie) => isIncluded(movie, daysToFullWeek, 'day')),
+  [SortStatisticType.MONTH]: (movies) => movies.filter((movie) => isIncluded(movie, monthsToDate, 'month')),
+  [SortStatisticType.YEAR]: (movies) => movies.filter((movie) => isIncluded(movie, yearsToDate, 'year')),
 };
