@@ -2,7 +2,7 @@ import AbstractView from './abstract';
 import {MenuItem} from '../const';
 
 const createMenuContainer = (active) => (
-  `<a href="#stats" class="main-navigation__additional ${(active === MenuItem.STATISTICS) ? 'main-navigation__item--active' : ''}" data-menu=${MenuItem.STATISTICS}>Stats</a>`
+  `<a href='#stats' class='main-navigation__additional ${(active === MenuItem.STATISTICS) ? 'main-navigation__item--active' : ''}' data-menu=${MenuItem.STATISTICS}>Stats</a>`
 );
 
 export default class Menu extends AbstractView {

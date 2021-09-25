@@ -11,11 +11,8 @@ export default class Filter {
     this._moviesModel = moviesModel;
     this._filterComponent = null;
 
-    this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
     this.setMenuClickHandler = this.setMenuClickHandler.bind(this);
-    this._moviesModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
   }
 
   init(activeScreen) {
@@ -40,8 +37,6 @@ export default class Filter {
   destroy() {
     remove(this._filterComponent);
   }
-
-  _handleModelEvent() {}
 
   _handleFilterTypeChange(filterType) {
     if (this._filterModel.getFilter() === filterType) {

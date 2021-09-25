@@ -1,7 +1,7 @@
 import AbstractView from './abstract';
 
 const createNavigationContainer = () => (
-  '<nav class="main-navigation"></nav>'
+  '<nav class=\'main-navigation\'></nav>'
 );
 
 export default class NavigationContainer extends AbstractView {

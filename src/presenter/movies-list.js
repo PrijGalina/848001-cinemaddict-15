@@ -12,6 +12,7 @@ import {remove, render} from '../utils/render';
 import {sortMovieDate, sortMovieRating, sortMovieComments} from '../utils/common';
 import {SortType, MoviesListType, RenderPosition, UserAction, UpdateType, MOVIE_COUNT_PER_STEP, NUMBER_OF_FIRST} from '../const';
 import {api} from '../api/api';
+import {filterPresenter} from '../main';
 
 export default class MoviesList {
   constructor(mainContainer, moviesModel, filterModel) {
@@ -49,10 +50,11 @@ export default class MoviesList {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
 
-  init() {
+  init(activeScreen) {
     render(this._mainContainer, this._moviesComponent, RenderPosition.BEFOREEND);
     this._moviesModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
+    this._activeScreen = activeScreen;
 
     this._renderMovieList();
   }
@@ -237,6 +239,12 @@ export default class MoviesList {
     }
   }
 
+  _filterUpdate() {
+    filterPresenter.destroy();
+    filterPresenter.init(this._activeScreen);
+    filterPresenter._filterComponent.restoreHandlers();
+  }
+
   _handleModelEvent(updateType, data) {
     switch(updateType) {
       case UpdateType.PATCH:
@@ -266,6 +274,13 @@ export default class MoviesList {
             prevPopup.updatePopup(data);
           }
         }
+        this._filterUpdate();
+        if(this._filterModel.getFilter() !== 'all') {
+          this._clearMovieList({ resetSortType: false });
+          this._renderMovieList();
+          const overlay = document.querySelector('.overlay');
+          (overlay.classList.contains('active')) ? overlay.classList.remove('active') : '';
+        }
         break;
       case UpdateType.MAJOR:
         this._clearMovieList({resetSortType: true});
@@ -275,9 +290,6 @@ export default class MoviesList {
         this._isLoading = false;
         remove(this._loadingComponent);
         this._renderMovieList();
-        break;
-      case UpdateType.STAT:
-        //перерисовать статистику
         break;
     }
   }

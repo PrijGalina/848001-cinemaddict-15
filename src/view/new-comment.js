@@ -4,18 +4,18 @@ import { createElement } from '../utils/common';
 
 const createNewCommentTemplate = (NewCommentData) => {
   const {comment, emotion} = NewCommentData;
-  const emojiSrc = (emotion !== null) ? `style="background-image: url('/images/emoji/${emotion}.png'); background-size: contain;"` : 'style="background-color: rgba(255, 255, 255, 0.1);"';
+  const emojiSrc = `style='background-image: url('/images/emoji/${emotion}.png'); background-size: contain;'`;
 
-  return (`<div class="film-details__new-comment">
-    <div class="film-details__add-emoji-label" ${emojiSrc}></div>
-    <label class="film-details__comment-label">
-      <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${comment}</textarea>
+  return (`<div class='film-details__new-comment'>
+    <div class='film-details__add-emoji-label' ${emojiSrc}></div>
+    <label class='film-details__comment-label'>
+      <textarea class='film-details__comment-input' placeholder='Select reaction below and write comment here' name='comment'>${comment}</textarea>
     </label>
-    <div class="film-details__emoji-list">
+    <div class='film-details__emoji-list'>
       ${emojiArray.map((emojiItem) => `
-        <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emojiItem}" value="${emojiItem}" ${emotion === emojiItem ? 'checked' : ''}>
-        <label class="film-details__emoji-label" for="emoji-${emojiItem}" data-value="${emojiItem}">
-          <img src="./images/emoji/${emojiItem}.png" width="30" height="30" alt="emoji">
+        <input class='film-details__emoji-item visually-hidden' name='comment-emoji' type='radio' id='emoji-${emojiItem}' value='${emojiItem}' ${emotion === emojiItem ? 'checked' : ''}>
+        <label class='film-details__emoji-label' for='emoji-${emojiItem}' data-value='${emojiItem}'>
+          <img src='./images/emoji/${emojiItem}.png' width='30' height='30' alt='emoji'>
         </label>
       `).join('')}
     </div>

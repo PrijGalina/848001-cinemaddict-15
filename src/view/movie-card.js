@@ -1,26 +1,31 @@
 import SmartView from './smart';
 import dayjs from 'dayjs';
+import {minutesInHour} from '../const';
 
 const createMovieCardTemplate = (movieData) => {
   const {comments, release, title, rating, duration, genres, poster, description, isWatchlist, isHistory, isFavorite} = movieData;
   const isActive = (boolean) => (boolean) ? 'film-card__controls-item film-card__controls-item--active' : 'film-card__controls-item';
   const isHidden = (value) => ((value === 0) || (value === 'NULL') || (value === undefined)) ? 'visually-hidden' : '';
   const releaseYear = dayjs(release).year();
-  return `<article class="film-card">
-    <h3 class="film-card__title">${title}</h3>
-    <p class="film-card__rating">${rating}</p>
-    <p class="film-card__info">
-      <span class="film-card__year">${releaseYear}</span>
-      <span class="film-card__duration">${duration}</span>
-      <span class="film-card__genre">${genres[0]}</span>
+  const durationInMinutes = duration;
+  const durationInHours = Math.floor(durationInMinutes / minutesInHour);
+  const remainderInMinutes = durationInMinutes - (durationInHours * minutesInHour);
+  const durationFormatted = (durationInHours > 0) ? `${durationInHours}h ${remainderInMinutes}m` : `${remainderInMinutes}m`;
+  return `<article class='film-card'>
+    <h3 class='film-card__title'>${title}</h3>
+    <p class='film-card__rating'>${rating}</p>
+    <p class='film-card__info'>
+      <span class='film-card__year'>${releaseYear}</span>
+      <span class='film-card__duration'>${durationFormatted}</span>
+      <span class='film-card__genre'>${genres[0]}</span>
     </p>
-    <img src="${poster}" alt="" class="film-card__poster">
-    <p class="film-card__description">${description}</p>
-    <a class="film-card__comments ${isHidden(comments.length)}">${comments.length} comments</a>
-    <div class="film-card__controls">
-      <button class="film-card__controls-item--add-to-watchlist ${isActive(isWatchlist)}" type="button">Add to watchlist</button>
-      <button class="film-card__controls-item--mark-as-watched ${isActive(isHistory)}" type="button">Mark as watched</button>
-      <button class="film-card__controls-item--favorite ${isActive(isFavorite)}" type="button">Mark as favorite</button>
+    <img src='${poster}' alt='' class='film-card__poster'>
+    <p class='film-card__description'>${description}</p>
+    <a class='film-card__comments ${isHidden(comments.length)}'>${comments.length} comments</a>
+    <div class='film-card__controls'>
+      <button class='film-card__controls-item--add-to-watchlist ${isActive(isWatchlist)}' type='button'>Add to watchlist</button>
+      <button class='film-card__controls-item--mark-as-watched ${isActive(isHistory)}' type='button'>Mark as watched</button>
+      <button class='film-card__controls-item--favorite ${isActive(isFavorite)}' type='button'>Mark as favorite</button>
     </div>
   </article>`;
 };
@@ -53,14 +58,6 @@ export default class MovieCard extends SmartView {
     this._movieCardElement.querySelector('.film-card__controls-item--favorite').addEventListener('click', this._favoriteClickHandler);
     this._movieCardElement.querySelector('.film-card__controls-item--mark-as-watched').addEventListener('click', this._historyClickHandler);
   }
-
-  // restoreHandlers() {
-  //   this._setInnerHandlers();
-  //   this.setOpenClickHandler(this._callback.openClick);
-  //   this.setWatchlistClickHandler(this._callback.watchlistClick);
-  //   this.setFavoriteClickHandler(this._callback.favoriteClick);
-  //   this.setHistoryClickHandler(this._callback.historyClick);
-  // }
 
   _openClickHandler(e) {
     e.preventDefault();

@@ -3,29 +3,28 @@ import { MenuItem, FilterType } from '../const.js';
 import { createElement } from '../utils/common';
 
 const createMenuItem = (activeScreen, currentFilterType) =>
-  `<a href="#all" class="main-navigation__item ${
+  `<a href='#all' class='main-navigation__item ${
     activeScreen === MenuItem.MOVIES && currentFilterType === FilterType.ALL
       ? 'main-navigation__item--active'
       : ''
-  }"  data-menu="${MenuItem.MOVIES}" data-value="${
+  } ${activeScreen === MenuItem.MOVIES ? 'main-navigation__item--disable' : ''}'  data-menu='${MenuItem.MOVIES}' data-value='${
     FilterType.ALL
-  }">All movies </a>`;
+  }'>All movies </a>`;
 
 const createFilterItemTemplate = (filter, currentFilterType) => {
   const { type, name, count } = filter;
-  return `<a href="#${type}" class="main-navigation__item ${
+  return `<a href='#${type}' class='main-navigation__item ${
     type === currentFilterType ? 'main-navigation__item--active' : ''
-  }" data-value="${type}">${name} <span class="main-navigation__item-count">${count}</span></a>`;
+  }' data-value='${type}'>${name} <span class='main-navigation__item-count'>${count}</span></a>`;
 };
 
 const createFilterTemplate = (filterItems, currentFilterType, activeScreen) => {
   const menuItemTemplate = createMenuItem(activeScreen, currentFilterType);
-  console.log('activeFilter', activeScreen);
   const filterItemsTemplate = filterItems
     .map((filter) => createFilterItemTemplate(filter, currentFilterType))
     .join('');
 
-  return `<div class="main-navigation__items">
+  return `<div class='main-navigation__items'>
       ${menuItemTemplate}
       ${filterItemsTemplate}
     </div>`;
@@ -58,6 +57,26 @@ export default class Filter extends AbstractView {
     );
   }
 
+  removeElement() {
+    super.removeElement();
+  }
+
+  restoreHandlers() {
+    this.getElement()
+      .querySelectorAll('.main-navigation__item')
+      .forEach((item) => {
+        if (item.dataset.menu) {
+          if (this._activeScreen === MenuItem.MOVIES) {
+            item.addEventListener('click', this._filterTypeChangeHandler);
+            return;
+          }
+          item.addEventListener('click', this._menuClickHandler);
+          return;
+        }
+        item.addEventListener('click', this._filterTypeChangeHandler);
+      });
+  }
+
   _filterTypeChangeHandler(e) {
     e.preventDefault();
     this._callback.filterTypeChange(e.target.dataset.value);
@@ -82,25 +101,11 @@ export default class Filter extends AbstractView {
 
   _menuClickHandler(e) {
     e.preventDefault();
-    console.log(this);
     this._callback.menuClick(e.target.dataset.menu);
-    console.log(e.target.dataset.menu);
     this._callback.filterTypeChange(e.target.dataset.value);
   }
 
   setMenuClickHandler(callback) {
     this._callback.menuClick = callback;
   }
-
-  /*
-  _menuClickHandler(e) {
-    e.preventDefault();
-    this._callback.menuClick();
-  }
-
-  setMenuClickHandler(callback) {
-    this._callback.menuClick = callback;
-    this.
-  }
-  */
 }

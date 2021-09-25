@@ -1,4 +1,17 @@
 import dayjs from 'dayjs';
+import calendar from 'dayjs/plugin/calendar';
+import updateLocale from 'dayjs/plugin/updateLocale';
+dayjs.extend(calendar);
+dayjs.extend(updateLocale);
+
+dayjs.updateLocale('en', {
+  calendar: {
+    lastDay: '[Yesterday]',
+    sameDay: '[Today]',
+    lastWeek: 'd [days ago]',
+    sameElse: 'DD/MM/YYYY h:m',
+  },
+});
 
 export const sortMovieDate = (movieA, movieB) => dayjs(movieB.release).diff(dayjs(movieA.release));
 
@@ -21,3 +34,5 @@ export const createElement = (template) => {
 
   return newElement.firstChild;
 };
+
+export const getFormattedDate = (value) => dayjs(value).calendar();

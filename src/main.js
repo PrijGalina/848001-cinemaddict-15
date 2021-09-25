@@ -28,7 +28,7 @@ const menuContainer = navigationContainerView.getElement();
 
 
 const moviesPresenter = new MoviesListPresenter(siteMainElement, moviesModel, filterModel);
-moviesPresenter.init();
+moviesPresenter.init(activeScreen);
 
 const filterPresenter = new FilterPresenter(menuContainer, filterModel, moviesModel);
 
@@ -57,7 +57,8 @@ const handleSiteMenuClick = (item) => {
       filterPresenter.init(activeScreen);
       filterModel.setFilter(UpdateType.MAJOR, FilterType.ALL);
       moviesPresenter.destroy();
-      statisticsComponent = new StatisticsView(moviesModel.getMovies());
+      statisticsComponent = new StatisticsView(siteMainElement, moviesModel.getMovies());
+      statisticsComponent.setFilterChangeStatistic();
       render(siteMainElement, statisticsComponent, RenderPosition.BEFOREEND);
       break;
   }
@@ -83,4 +84,4 @@ api.getMovies()
     siteMenuComponent.setMenuChangeHandler(handleSiteMenuClick);
   });
 
-export {moviesPresenter, siteMainElement};
+export { moviesPresenter, siteMainElement, filterPresenter, menuContainer};

@@ -10,11 +10,11 @@ export const SortType = {
 };
 
 export const SortStatisticType = {
-  ALL_TIME: 'all-time',
-  TODAY: 'today',
-  WEEK: 'week',
-  MONTH: 'month',
-  YEAR: 'year',
+  ALL_TIME: 'statistic-all-time',
+  TODAY: 'statistic-today',
+  WEEK: 'statistic-week',
+  MONTH: 'statistic-month',
+  YEAR: 'statistic-year',
 };
 
 export const RenderPosition = {
@@ -38,16 +38,13 @@ export const UserAction = {
   ADD_COMMENT: 'ADD_COMMENT',
   DELETE_COMMENT: 'DELETE_COMMENT',
   UPDATE_MOVIE_DATA: 'UPDATE_MOVIE_DATA',
-  STATISTICS_CHANGE: 'STATISTICS_CHANGE',
 };
 
 export const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
-  STAT: 'STAT',
   INIT: 'INIT',
-  COMMENT: 'COMMENT',
 };
 
 export const Mode = {
@@ -70,3 +67,5 @@ export const MenuItem = {
   MOVIES: 'movie',
   STATISTICS: 'statistics',
 };
+
+export const minutesInHour = 60;

@@ -1,4 +1,4 @@
-import СommentPresenter from './comment';
+import CommentPresenter from './comment';
 import NewCommentPresenter from './new-comment';
 import MoviePopupView from '../view/movie-popup';
 import MovieCardView from '../view/movie-card';
@@ -19,7 +19,7 @@ export default class Movie {
 
     this._movieComponent = null;
     this._popupComponent = null;
-    this._сollectionСommentsPresenter = new Map();
+    this._collectionCommentsPresenter = new Map();
     this._NewCommentPresenter = null;
     this._comments = null;
     this._mode = Mode.DEFAULT;
@@ -27,7 +27,6 @@ export default class Movie {
     this._body = document.querySelector('body');
 
     this._handleViewAction = this._handleViewAction.bind(this);
-    this._handleCommentModelEvent = this._handleModelEvent.bind(this);
     this._handleOpenPopupClick = this._handleOpenPopupClick.bind(this);
     this._handleClosePopupClick = this._handleClosePopupClick.bind(this);
     this._handleEscKeydown = this._handleEscKeydown.bind(this);
@@ -36,9 +35,6 @@ export default class Movie {
     this._handleHistoryClick = this._handleHistoryClick.bind(this);
 
     this._handleCommentViewAction = this._handleCommentViewAction.bind(this);
-
-    this._commentsModel.addObserver(this._handleModelEvent);
-    this._moviesModel.addObserver(this._handleModelEvent);
   }
 
   init(movie) {
@@ -53,9 +49,6 @@ export default class Movie {
     this._movieComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._movieComponent.setWatchlistClickHandler(this._handleWatchlistClick);
     this._movieComponent.setHistoryClickHandler(this._handleHistoryClick);
-
-    this._commentsModel.addObserver(this._handleModelEvent);
-    this._moviesModel.addObserver(this._handleModelEvent);
 
     if (prevMovieComponent === null) {
       render(
@@ -94,8 +87,8 @@ export default class Movie {
   }
 
   destroyCommenstBlock() {
-    if (this._сollectionСommentsPresenter) {
-      this._сollectionСommentsPresenter.forEach((presenter) =>
+    if (this._collectionCommentsPresenter) {
+      this._collectionCommentsPresenter.forEach((presenter) =>
         presenter.destroy(),
       );
     }
@@ -139,12 +132,12 @@ export default class Movie {
       .querySelector('.film-details__comments-count');
     commentCount.innerHTML = this._comment.length;
     this._comment.forEach((comment) => {
-      const itemPresenter = new СommentPresenter(
+      const itemPresenter = new CommentPresenter(
         this._containerCommentsListInPopup,
         this._handleViewAction,
       );
       itemPresenter.init(comment);
-      this._сollectionСommentsPresenter.set(comment.id, itemPresenter);
+      this._collectionCommentsPresenter.set(comment.id, itemPresenter);
     });
 
     this._containerNewCommentInPopup = this._popupComponent
@@ -160,11 +153,11 @@ export default class Movie {
   _clearComments() {
     this._comment = this._getComments();
     this._comment.forEach((element) => {
-      this._сollectionСommentsPresenter.get(element.id)
-        ? this._сollectionСommentsPresenter.get(element.id).destroy()
+      this._collectionCommentsPresenter.get(element.id)
+        ? this._collectionCommentsPresenter.get(element.id).destroy()
         : '';
     });
-    this._сollectionСommentsPresenter.clear();
+    this._collectionCommentsPresenter.clear();
     this._NewCommentPresenter.destroy();
   }
 
@@ -276,14 +269,6 @@ export default class Movie {
               .catch(() => {});
           })
           .catch(() => {});
-        break;
-    }
-  }
-
-  _handleModelEvent(updateType, data) {
-    switch (updateType) {
-      case UpdateType.MINOR:
-        //! мб нужен будет при изменении списка комментариев (перерисовать попап и комментарии)
         break;
     }
   }

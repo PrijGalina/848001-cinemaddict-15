@@ -1,4 +1,3 @@
-import {SortStatisticType} from '../const';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
@@ -52,9 +51,9 @@ const isIncluded = (movie, from, type) => {
 };
 
 export const filterStatistics = {
-  [SortStatisticType.ALL_TIME]: (movies) => movies.filter((movie) => movie),
-  [SortStatisticType.TODAY]: (movies) => movies.filter((movie) => isIncluded(movie, daysToToday, 'day')),
-  [SortStatisticType.WEEK]: (movies) => movies.filter((movie) => isIncluded(movie, daysToFullWeek, 'day')),
-  [SortStatisticType.MONTH]: (movies) => movies.filter((movie) => isIncluded(movie, monthsToDate, 'month')),
-  [SortStatisticType.YEAR]: (movies) => movies.filter((movie) => isIncluded(movie, yearsToDate, 'year')),
+  ['statistic-all-time']: (movies) => movies.filter((movie) => movie),
+  ['statistic-today']: (movies) => movies.filter((movie) => isIncluded(movie, daysToToday, 'day')),
+  ['statistic-week']: (movies) => movies.filter((movie) => isIncluded(movie, daysToFullWeek, 'day')),
+  ['statistic-month']: (movies) => movies.filter((movie) => isIncluded(movie, monthsToDate, 'month')),
+  ['statistic-year']: (movies) => movies.filter((movie) => isIncluded(movie, yearsToDate, 'year')),
 };
