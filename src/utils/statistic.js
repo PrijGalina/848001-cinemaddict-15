@@ -13,7 +13,7 @@ export const getGenreStat = (movies) => {
     });
   });
 
-  const genreStats = new Object();
+  const genreStats = {};
   genres.forEach((genre) => {
     const value = movies.filter((movie) => movie.genres.includes(genre));
     const genreItem = { [genre] : value.length};
