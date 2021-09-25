@@ -44,20 +44,9 @@ export default class Api {
       .then(MoviesModel.adaptOneMovieToClient);
   }
 
-  updateComments(comment) {
+  addComment(comment, movie) {
     return this._load({
-      url: `comments/${comment.id}`,
-      method: Method.PUT,
-      body: JSON.stringify(CommentsModel.adaptToServer(comment)),
-      headers: this._headers,
-    })
-      .then(Api.toJSON)
-      .then(CommentsModel.adaptToClient);
-  }
-
-  addComment(comment) {
-    return this._load({
-      url: 'comments',
+      url: `comments/${movie.id}`,
       method: Method.POST,
       body: JSON.stringify(CommentsModel.adaptToServer(comment)),
       headers: this._headers,

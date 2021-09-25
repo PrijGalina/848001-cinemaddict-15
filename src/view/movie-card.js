@@ -29,10 +29,14 @@ export default class MovieCard extends SmartView {
   constructor(movie) {
     super();
     this._movie = movie;
+
+
     this._openClickHandler = this._openClickHandler.bind(this);
     this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._historyClickHandler = this._historyClickHandler.bind(this);
+
+    this._movieCardElement = this.getElement();
 
     this._setInnerHandlers();
   }
@@ -42,25 +46,24 @@ export default class MovieCard extends SmartView {
   }
 
   _setInnerHandlers() {
-    this.getElement().querySelector('.film-card__poster').addEventListener('click', this._openClickHandler);
-    this.getElement().querySelector('.film-card__title').addEventListener('click', this._openClickHandler);
-    this.getElement().querySelector('.film-card__comments').addEventListener('click', this._openClickHandler);
-    this.getElement().querySelector('.film-card__controls-item--add-to-watchlist').addEventListener('click', this._watchlistClickHandler);
-    this.getElement().querySelector('.film-card__controls-item--favorite').addEventListener('click', this._favoriteClickHandler);
-    this.getElement().querySelector('.film-card__controls-item--mark-as-watched').addEventListener('click', this._historyClickHandler);
+    this._movieCardElement.querySelector('.film-card__poster').addEventListener('click', this._openClickHandler);
+    this._movieCardElement.querySelector('.film-card__title').addEventListener('click', this._openClickHandler);
+    this._movieCardElement.querySelector('.film-card__comments').addEventListener('click', this._openClickHandler);
+    this._movieCardElement.querySelector('.film-card__controls-item--add-to-watchlist').addEventListener('click', this._watchlistClickHandler);
+    this._movieCardElement.querySelector('.film-card__controls-item--favorite').addEventListener('click', this._favoriteClickHandler);
+    this._movieCardElement.querySelector('.film-card__controls-item--mark-as-watched').addEventListener('click', this._historyClickHandler);
   }
 
-  restoreHandlers() {
-    this._setInnerHandlers();
-    this.setOpenClickHandler(this._callback.openClick);
-    this.setWatchlistClickHandler(this._callback.watchlistClick);
-    this.setFavoriteClickHandler(this._callback.favoriteClick);
-    this.setHistoryClickHandler(this._callback.historyClick);
-  }
+  // restoreHandlers() {
+  //   this._setInnerHandlers();
+  //   this.setOpenClickHandler(this._callback.openClick);
+  //   this.setWatchlistClickHandler(this._callback.watchlistClick);
+  //   this.setFavoriteClickHandler(this._callback.favoriteClick);
+  //   this.setHistoryClickHandler(this._callback.historyClick);
+  // }
 
   _openClickHandler(e) {
     e.preventDefault();
-
     this._callback.openClick();
   }
 

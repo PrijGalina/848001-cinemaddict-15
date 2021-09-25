@@ -1,9 +1,10 @@
 import SmartView from './smart';
 import {emojiArray} from '../const';
+import { createElement } from '../utils/common';
 
 const createNewCommentTemplate = (NewCommentData) => {
   const {comment, emotion} = NewCommentData;
-  const emojiSrc = (emotion !== null) ? `style="background-image: url('/images/emoji/${emotion}.png'); background-size: contain;"` : 'background-color: rgba(255, 255, 255, 0.1);';
+  const emojiSrc = (emotion !== null) ? `style="background-image: url('/images/emoji/${emotion}.png'); background-size: contain;"` : 'style="background-color: rgba(255, 255, 255, 0.1);"';
 
   return (`<div class="film-details__new-comment">
     <div class="film-details__add-emoji-label" ${emojiSrc}></div>
@@ -43,11 +44,15 @@ export default class NewComment extends SmartView {
   }
 
   _setInnerHandlers() {
-    const emojis = this.getElement().querySelectorAll('.film-details__emoji-label');
+    const emojis = this.getElement().querySelectorAll(
+      '.film-details__emoji-label',
+    );
     emojis.forEach((emoji) => {
       emoji.addEventListener('click', this._emojiClickHandler);
     });
-    this.getElement().querySelector('.film-details__comment-input').addEventListener('input', this._commentTextareaHandler);
+    this.getElement()
+      .querySelector('.film-details__comment-input')
+      .addEventListener('input', this._commentTextareaHandler);
   }
 
   restoreHandlers() {
@@ -55,34 +60,43 @@ export default class NewComment extends SmartView {
     this.setFormSubmitHandler(this._callback.formSubmit);
   }
 
+  updateElement(data) {
+    this._data = data;
+    const newElement = createElement(this.getTemplate());
+    this._element.replaceChildren(...newElement.children);
+    this._setInnerHandlers();
+  }
+
   _emojiClickHandler(e) {
     e.preventDefault();
-    const value = e.target.parentElement.dataset.value;
-    this.updateDataElement({
-      emotion: value,
-    });
+    const emotion = e.target.parentElement.dataset.value;
+    this.updateElement({ ...this._data, emotion });
   }
 
   _commentTextareaHandler(e) {
     e.preventDefault();
-    this.updateData({
-      comment: e.target.value,
-    }, true);
+    this.updateData(
+      {
+        comment: e.target.value,
+      },
+      true,
+    );
   }
 
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
-    if (this._data.comment !== '') {
-      document.addEventListener('keydown', this._formSubmitHandler);
-    }
-    else {
-      document.removeEventListener('keydown', this._formSubmitHandler);
-    }
+    document.addEventListener('keydown', this._formSubmitHandler);
   }
 
   _formSubmitHandler(e) {
-    if ((e.code === 'Enter') && e.ctrlKey) {
+    if (
+      e.code === 'Enter' &&
+      (e.ctrlKey || e.metaKey) &&
+      this._data.comment &&
+      this._data.emotion
+    ) {
       this._callback.formSubmit(this._data);
+      this.updateData({ ...TEMPLATE }, true);
     }
   }
 }

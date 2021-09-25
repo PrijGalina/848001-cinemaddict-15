@@ -7,9 +7,8 @@ import MostCommentedView from '../view/most-commented';
 import SortingView from '../view/sorting';
 import ShowMoreButtonView from '../view/show-more-button';
 import LoadingView from '../view/loading';
-import MoviePopupView from '../view/movie-popup';
 import {filter} from '../utils/filter';
-import {remove, render, replace} from '../utils/render';
+import {remove, render} from '../utils/render';
 import {sortMovieDate, sortMovieRating, sortMovieComments} from '../utils/common';
 import {SortType, MoviesListType, RenderPosition, UserAction, UpdateType, MOVIE_COUNT_PER_STEP, NUMBER_OF_FIRST} from '../const';
 import {api} from '../api/api';
@@ -45,7 +44,6 @@ export default class MoviesList {
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handlerModeChange = this._handlerModeChange.bind(this);
-    this._handleViewAction = this._handleViewAction.bind(this);
 
     this._handlerLoadMoreButtonClick = this._handlerLoadMoreButtonClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
@@ -234,6 +232,8 @@ export default class MoviesList {
           })
           .catch(() => { });
         break;
+      case UserAction.ADD_COMMENT:
+        break;
     }
   }
 
@@ -246,40 +246,26 @@ export default class MoviesList {
         break;
       case UpdateType.MINOR:
         if(this._instanceAllMovie !== null) {
-
           this._moviePresenter.get(data.id).init(data);
-
           if (this._instanceAllMovie._popupComponent !== null) {
             const prevPopup = this._instanceAllMovie._popupComponent;
-            this._currentPopupComponent = this._instanceAllMovie._popupComponent;
-            this._currentPopupComponent = new MoviePopupView(data);
-            this._currentPopupComponent.setCloseClickHandler(this._instanceAllMovie._handleClosePopupClick);
-            this._currentPopupComponent.setFavoriteClickHandler(this._instanceAllMovie._handleFavoriteClick);
-            this._currentPopupComponent.setWatchlistClickHandler(this._instanceAllMovie._handleWatchlistClick);
-            this._currentPopupComponent.setHistoryClickHandler(this._instanceAllMovie._handleHistoryClick);
-            replace(this._currentPopupComponent, prevPopup);
-            remove(prevPopup);
+            prevPopup.updatePopup(data);
           }
         }
-        /*
-        if(this._instanceRatingMovie !== null) {
+        if (this._instanceRatingMovie !== null) {
           this._ratingMoviePresenter.get(data.id).init(data);
-          if(this._ratingMoviePresenter._popupComponent !== null) {
-
+          if (this._instanceRatingMovie._popupComponent !== null) {
+            const prevPopup = this._instanceRatingMovie._popupComponent;
+            prevPopup.updatePopup(data);
           }
-          //(this._instanceRatingMovie !== Mode.DEFAULT);
         }
         if (this._instanceCommentedMovie !== null) {
           this._commentedMoviePresenter.get(data.id).init(data);
-          if(this._commentedMoviePresenter._popupComponent !== null) {
-
+          if (this._instanceCommentedMovie._popupComponent !== null) {
+            const prevPopup = this._instanceCommentedMovie._popupComponent;
+            prevPopup.updatePopup(data);
           }
-          //(this._instanceCommentedMovie!== Mode.DEFAULT);
-        }*/
-
-        console.log('data.isWatchlist, data.isHistory, data.isFavorite', [data.isWatchlist, data.isHistory, data.isFavorite]);
-        //this._clearMovieList();
-        //this._renderMovieList();
+        }
         break;
       case UpdateType.MAJOR:
         this._clearMovieList({resetSortType: true});

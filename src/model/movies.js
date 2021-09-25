@@ -81,8 +81,8 @@ export default class Movies extends AbstractObserver {
     };
   }
 
-  static adaptToServer(movies = {}) {
-    return [movies].map((m = {}) => ({
+  static adaptToServer(m = {}) {
+    return {
       ['id']: m.id,
       ['comments']: m.comments,
       ['film_info']: {
@@ -108,6 +108,6 @@ export default class Movies extends AbstractObserver {
         ['watching_date']: m.watchingDate,
         ['favorite']: m.isFavorite,
       },
-    }))[0];
+    };
   }
 }

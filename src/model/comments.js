@@ -39,11 +39,11 @@ export default class Comments extends AbstractObserver {
     this._notify(updateType);
   }
 
-  static adaptToClient(comments = []) {
-    return comments.map((m = {}) => m);
+  static adaptToClient(comments) {
+    return comments;
   }
 
-  static adaptToServer(comments = {}) {
-    return [comments].map((m = {}) => m)[0];
+  static adaptToServer(comment = {}) {
+    return comment;
   }
 }

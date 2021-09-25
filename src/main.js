@@ -14,50 +14,48 @@ import {api} from './api/api';
 const moviesModel = new MoviesModel();
 const filterModel = new FilterModel();
 
+let statisticsComponent = null;
+let siteMenuComponent = null;
+let activeScreen = MenuItem.MOVIES;
+
 const siteHeaderElement = document.querySelector('.header');
 render(siteHeaderElement, new ProfileView(), RenderPosition.BEFOREEND);
 
 const siteMainElement = document.querySelector('.main');
 const navigationContainerView = new NavigationContainerView();
 render(siteMainElement, navigationContainerView, RenderPosition.BEFOREEND);
+const menuContainer = navigationContainerView.getElement();
+
 
 const moviesPresenter = new MoviesListPresenter(siteMainElement, moviesModel, filterModel);
 moviesPresenter.init();
 
-const menuContainer = navigationContainerView.getElement();
 const filterPresenter = new FilterPresenter(menuContainer, filterModel, moviesModel);
 
-const movieCounterElement = document.querySelector('.footer__statistics');
-render(movieCounterElement, new MovieCounterView(), RenderPosition.BEFOREEND);
-
-let statisticsComponent = null;
-let activeScreen = MenuItem.MOVIES;
-let siteMenuComponent = null;
-
-const updateMenu = (active) => {
-  (siteMenuComponent !== null) ? remove(siteMenuComponent) : '';
-  siteMenuComponent = null;
-  siteMenuComponent = new MenuView(active);
-  render(menuContainer, siteMenuComponent, RenderPosition.BEFOREEND);
-};
-
-const updateFilter = (active) => {
-  filterPresenter.destroy();
-  filterPresenter.init(active);
-};
-
 const handleSiteMenuClick = (item) => {
+  console.log(item);
   switch (item) {
     case MenuItem.MOVIES:
       activeScreen = MenuItem.MOVIES;
-      updateMenu(activeScreen);
-      updateFilter(activeScreen);
+      (siteMenuComponent !== null) ? remove(siteMenuComponent) : '';
+      siteMenuComponent = null;
+      siteMenuComponent = new MenuView(activeScreen);
+      render(menuContainer, siteMenuComponent, RenderPosition.BEFOREEND);
+      siteMenuComponent.setMenuChangeHandler(handleSiteMenuClick);
+      filterPresenter.destroy();
+      filterPresenter.init(activeScreen);
       moviesPresenter.init();
+      remove(statisticsComponent);
       break;
     case MenuItem.STATISTICS:
       activeScreen = MenuItem.STATISTICS;
-      updateMenu(activeScreen);
-      updateFilter(activeScreen);
+      (siteMenuComponent !== null) ? remove(siteMenuComponent) : '';
+      siteMenuComponent = null;
+      siteMenuComponent = new MenuView(activeScreen);
+      render(menuContainer, siteMenuComponent, RenderPosition.BEFOREEND);
+      siteMenuComponent.setMenuChangeHandler(handleSiteMenuClick);
+      filterPresenter.destroy();
+      filterPresenter.init(activeScreen);
       filterModel.setFilter(UpdateType.MAJOR, FilterType.ALL);
       moviesPresenter.destroy();
       statisticsComponent = new StatisticsView(moviesModel.getMovies());
@@ -65,6 +63,11 @@ const handleSiteMenuClick = (item) => {
       break;
   }
 };
+
+filterPresenter.setMenuClickHandler(handleSiteMenuClick);
+
+const movieCounterElement = document.querySelector('.footer__statistics');
+render(movieCounterElement, new MovieCounterView(), RenderPosition.BEFOREEND);
 
 api.getMovies()
   .then((movies) => {

@@ -4,7 +4,7 @@ import MoviePopupView from '../view/movie-popup';
 import MovieCardView from '../view/movie-card';
 import {render, remove, replace} from '../utils/render';
 import {RenderPosition, Mode, UserAction, UpdateType} from './../const';
-import {api} from '../api/api';
+import { api } from '../api/api';
 import CommentsModel from '../model/comments';
 
 const commentsModel = new CommentsModel();
@@ -35,14 +35,18 @@ export default class Movie {
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleHistoryClick = this._handleHistoryClick.bind(this);
 
+    this._handleCommentViewAction = this._handleCommentViewAction.bind(this);
+
     this._commentsModel.addObserver(this._handleModelEvent);
-    //this._moviesModel.addObserver(this._handleModelEvent);
+    this._moviesModel.addObserver(this._handleModelEvent);
   }
 
   init(movie) {
     this._movie = movie;
     const prevMovieComponent = this._movieComponent;
-    this._containerForMovie = this._container.getElement().querySelector('.films-list__container');
+    this._containerForMovie = this._container
+      .getElement()
+      .querySelector('.films-list__container');
 
     this._movieComponent = new MovieCardView(this._movie);
     this._movieComponent.setOpenClickHandler(this._handleOpenPopupClick);
@@ -50,10 +54,15 @@ export default class Movie {
     this._movieComponent.setWatchlistClickHandler(this._handleWatchlistClick);
     this._movieComponent.setHistoryClickHandler(this._handleHistoryClick);
 
+    this._commentsModel.addObserver(this._handleModelEvent);
+    this._moviesModel.addObserver(this._handleModelEvent);
 
-
-    if (prevMovieComponent === null){
-      render(this._containerForMovie, this._movieComponent, RenderPosition.BEFOREEND);
+    if (prevMovieComponent === null) {
+      render(
+        this._containerForMovie,
+        this._movieComponent,
+        RenderPosition.BEFOREEND,
+      );
       return;
     }
     replace(this._movieComponent, prevMovieComponent);
@@ -62,7 +71,8 @@ export default class Movie {
   }
 
   _getAndRenderComments() {
-    api.getComments(this._movie)
+    api
+      .getComments(this._movie)
       .then((comments) => {
         this._commentsModel.setComments(UpdateType.INIT, comments);
       })
@@ -85,7 +95,9 @@ export default class Movie {
 
   destroyCommenstBlock() {
     if (this._сollectionСommentsPresenter) {
-      this._сollectionСommentsPresenter.forEach((presenter) => presenter.destroy());
+      this._сollectionСommentsPresenter.forEach((presenter) =>
+        presenter.destroy(),
+      );
     }
     if (this._NewCommentPresenter) {
       this._NewCommentPresenter.destroy();
@@ -98,8 +110,7 @@ export default class Movie {
     }
   }
 
-  setViewState() {
-  }
+  setViewState() {}
 
   _replacePopupToCard() {
     remove(this._popupComponent);
@@ -118,38 +129,54 @@ export default class Movie {
   }
 
   _renderComments() {
+    this.destroyCommenstBlock();
     this._comment = this._getComments();
-    this._containerCommentsListInPopup = this._popupComponent.getElement().querySelector('.film-details__comments-list');
+    this._containerCommentsListInPopup = this._popupComponent
+      .getElement()
+      .querySelector('.film-details__comments-list');
+    const commentCount = this._popupComponent
+      .getElement()
+      .querySelector('.film-details__comments-count');
+    commentCount.innerHTML = this._comment.length;
     this._comment.forEach((comment) => {
-      let itemPresenter = '';
-      itemPresenter = new СommentPresenter(this._containerCommentsListInPopup, this._handleViewAction);
+      const itemPresenter = new СommentPresenter(
+        this._containerCommentsListInPopup,
+        this._handleViewAction,
+      );
       itemPresenter.init(comment);
       this._сollectionСommentsPresenter.set(comment.id, itemPresenter);
     });
 
-    this._containerNewCommentInPopup = this._popupComponent.getElement().querySelector('.film-details__comments-wrap');
-    this._NewCommentPresenter = new NewCommentPresenter(this._containerNewCommentInPopup, this._handleCommentViewAction);
+    this._containerNewCommentInPopup = this._popupComponent
+      .getElement()
+      .querySelector('.film-details__comments-wrap');
+    this._NewCommentPresenter = new NewCommentPresenter(
+      this._containerNewCommentInPopup,
+      this._handleCommentViewAction,
+    );
     this._NewCommentPresenter.init();
   }
 
   _clearComments() {
     this._comment = this._getComments();
     this._comment.forEach((element) => {
-      (this._сollectionСommentsPresenter.get(element.id)) ? this._сollectionСommentsPresenter.get(element.id).destroy() : '';
+      this._сollectionСommentsPresenter.get(element.id)
+        ? this._сollectionСommentsPresenter.get(element.id).destroy()
+        : '';
     });
     this._сollectionСommentsPresenter.clear();
     this._NewCommentPresenter.destroy();
   }
 
   _handleEscKeydown(e) {
-    if(e.key === 'Escape' || e.key === 'Esc') {
+    if (e.key === 'Escape' || e.key === 'Esc') {
       e.preventDefault();
       this._replacePopupToCard();
     }
   }
 
   _handleOpenPopupClick() {
-    this._popupComponent = new MoviePopupView(this._movie);
+    this._popupComponent = new MoviePopupView(this._movie, this);
     this._popupComponent.setCloseClickHandler(this._handleClosePopupClick);
     this._popupComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._popupComponent.setWatchlistClickHandler(this._handleWatchlistClick);
@@ -168,16 +195,19 @@ export default class Movie {
   }
 
   _handleWatchlistClick() {
+    this._movie.isWatchlist = !this._movie.isWatchlist;
     this._changeData(
       UserAction.UPDATE_MOVIE_DATA,
       UpdateType.MINOR,
-      Object.assign(
-        {},
-        this._movie,
-        {
-          isWatchlist: !this._movie.isWatchlist,
-        },
-      ),
+      this._movie,
+    );
+  }
+
+  _handleCommentViewAction(comment) {
+    this._handleViewAction(
+      UserAction.ADD_COMMENT,
+      UpdateType.MINOR,
+      {comment, movie: this._movie},
     );
   }
 
@@ -185,13 +215,9 @@ export default class Movie {
     this._changeData(
       UserAction.UPDATE_MOVIE_DATA,
       UpdateType.MINOR,
-      Object.assign(
-        {},
-        this._movie,
-        {
-          isFavorite: !this._movie.isFavorite,
-        },
-      ),
+      Object.assign({}, this._movie, {
+        isFavorite: !this._movie.isFavorite,
+      }),
     );
   }
 
@@ -199,32 +225,57 @@ export default class Movie {
     this._changeData(
       UserAction.UPDATE_MOVIE_DATA,
       UpdateType.MINOR,
-      Object.assign(
-        {},
-        this._movie,
-        {
-          isHistory: !this._movie.isHistory,
-        },
-      ),
+      Object.assign({}, this._movie, {
+        isHistory: !this._movie.isHistory,
+      }),
     );
   }
 
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.DELETE_COMMENT:
-        api.deleteComment(update)
-          .then((response) => {
+        api
+          .deleteComment(update)
+          .then(() => {
             this._commentsModel.deleteComments(updateType, update);
+            this._renderComments();
           })
           .then(() => {
-            api.updateMovie(this._movie)
+            api
+              .updateMovie(this._movie)
               .then((response) => {
                 this._moviesModel.updateMovie(updateType, response);
-                this._changeData(UserAction.UPDATE_MOVIE_DATA, UpdateType.PATCH, response);
+                this._changeData(
+                  UserAction.UPDATE_MOVIE_DATA,
+                  UpdateType.PATCH,
+                  response,
+                );
               })
               .catch(() => {});
           })
-          .catch(() => { });
+          .catch(() => {});
+        break;
+      case UserAction.ADD_COMMENT:
+        api
+          .addComment(update.comment, update.movie)
+          .then((res) => {
+            this._commentsModel.setComments(updateType, res.comments);
+            this._renderComments();
+          })
+          .then(() => {
+            api
+              .updateMovie(this._movie)
+              .then((response) => {
+                this._moviesModel.updateMovie(updateType, response);
+                this._changeData(
+                  UserAction.UPDATE_MOVIE_DATA,
+                  UpdateType.PATCH,
+                  response,
+                );
+              })
+              .catch(() => {});
+          })
+          .catch(() => {});
         break;
     }
   }

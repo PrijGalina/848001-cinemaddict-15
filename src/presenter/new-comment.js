@@ -28,14 +28,9 @@ export default class NewComment {
     }
     remove(this._newCommentComponent);
     this._newCommentComponent = null;
-    document.removeEventListener('keydown', this._handleFormSubmit);
   }
 
   _handleFormSubmit(comment) {
-    this._changeData(
-      UserAction.ADD_COMMENT,
-      UpdateType.PATCH,
-      Object.assign({ id: nanoid()}, comment),
-    );
+    this._changeData(comment);
   }
 }
