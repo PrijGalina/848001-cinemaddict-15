@@ -15,11 +15,10 @@ import {SortType, MoviesListType, RenderPosition, UserAction, UpdateType, MOVIE_
 import {api} from '../api/api';
 
 export default class MoviesList {
-  constructor(mainContainer, moviesModel, commentsModel, filterModel) {
+  constructor(mainContainer, moviesModel, filterModel) {
     this._isLoading = true;
     this._mainContainer = mainContainer;
     this._moviesModel = moviesModel;
-    this._commentsModel = commentsModel;
     this._filterModel = filterModel;
 
     this._moviePresenter = new Map();
@@ -145,7 +144,7 @@ export default class MoviesList {
       case MoviesListType.ALL:
         array.forEach((movie) => {
           const container = this._allMoviesSectionComponent;
-          moviePresenter = new MoviePresenter(container, this._moviesModel, this._commentsModel, this._handleViewAction, this._handlerModeChange);
+          moviePresenter = new MoviePresenter(container, this._moviesModel, this._handleViewAction, this._handlerModeChange);
           moviePresenter.init(movie);
           this._moviePresenter.set(movie.id, moviePresenter);
         });
@@ -154,7 +153,7 @@ export default class MoviesList {
       case MoviesListType.RATED:
         array.forEach((movie) => {
           const container = this._ratedMoviesSectionComponent;
-          moviePresenter = new MoviePresenter(container, this._moviesModel, this._commentsModel, this._handleViewAction, this._handlerModeChange);
+          moviePresenter = new MoviePresenter(container, this._moviesModel, this._handleViewAction, this._handlerModeChange);
           moviePresenter.init(movie);
           this._ratingMoviePresenter.set(movie.id, moviePresenter);
         });
@@ -162,7 +161,7 @@ export default class MoviesList {
       case MoviesListType.COMMENTED:
         array.forEach((movie) => {
           const container = this._commentedMoviesSectionComponent;
-          moviePresenter = new MoviePresenter(container, this._moviesModel, this._commentsModel, this._handleViewAction, this._handlerModeChange);
+          moviePresenter = new MoviePresenter(container, this._moviesModel, this._handleViewAction, this._handlerModeChange);
           moviePresenter.init(movie);
           this._commentedMoviePresenter.set(movie.id, moviePresenter);
         });

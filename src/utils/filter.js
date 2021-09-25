@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 
-import {FilterType, filterStatsType} from '../const';
+import {FilterType} from '../const';
 
 dayjs.extend(isBetween);
 dayjs.extend(isSameOrBefore);
@@ -31,6 +31,7 @@ const isIncluded = (movie, from, type) => {
   }
 };
 
+/*
 export const filterStats = {
   [filterStatsType.ALL_TIME]: (movies) => movies.filter((movie) => movie),
   [filterStatsType.TODAY]: (movies) => movies.filter((movie) => isIncluded(movie, daysToToday, 'day')),
@@ -38,5 +39,6 @@ export const filterStats = {
   [filterStatsType.MONTH]: (movies) => movies.filter((movie) => isIncluded(movie, monthsToDate, 'month')),
   [filterStatsType.YEAR]: (movies) => movies.filter((movie) => isIncluded(movie, yearsToDate, 'year')),
 };
+*/
 
-export const filterStatsDuration = (movies) => movies.reduce((total, movie) => total + movie.duration, 0);
+//export const filterStatsDuration = (movies) => movies.reduce((total, movie) => total + movie.duration, 0);

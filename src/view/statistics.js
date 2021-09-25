@@ -2,8 +2,11 @@ import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import SmartView from './smart.js';
 import {durationWatchedMovies, getGenreStat, getFavoriteGenre} from '../utils/statistic';
-import {filterStatsType, FilterType} from '../const';
-import {filterStats, filter} from '../utils/filter';
+import { FilterType, SortStatisticType} from '../const';
+import {filter} from '../utils/filter';
+import { duration } from 'dayjs';
+
+const minutesInHour = 60;
 
 const renderGenreChart = (container, movies) =>  {
   const genreStat = getGenreStat(movies);
@@ -78,19 +81,16 @@ const renderGenreChart = (container, movies) =>  {
   return chart;
 };
 
-const createStatisticsTemplate = (data, filters, current) => {
+const createStatisticsTemplate = (data) => {
   const movies = data;
-  const currentFilter = current;
-  const currentFilterInfo = filters.filter((filter) => {
-    if (filter.type === currentFilter) {
-      return filter;
-    }
-  });
-  const durationArray = durationWatchedMovies(currentFilterInfo[0].duration);
+  const durationInMinutes = movies.reduce((total, element) =>  (total + element.duration), 0);
+  const durationInHours = Math.floor(durationInMinutes / minutesInHour);
+  const remainderInMinutes = durationInMinutes - (durationInHours * minutesInHour);
 
   const genreStat = getGenreStat(movies);
   const favoriteGenre = getFavoriteGenre(genreStat);
-
+  //const currentSort = document.querySelector('.statistic__filters-input').value
+  const currentSort = 'all-time';
   return `<section class="statistic">
     <p class="statistic__rank">
       Your rank
@@ -101,19 +101,19 @@ const createStatisticsTemplate = (data, filters, current) => {
     <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
       <p class="statistic__filters-description">Show stats:</p>
 
-      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="${filterStatsType.ALL_TIME}" ${(currentFilter === filterStatsType.ALL_TIME) ? 'checked' : ''}>
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="${SortStatisticType.ALL_TIME}" ${(currentSort === SortStatisticType.ALL_TIME) ? 'checked' : ''}>
       <label for="statistic-all-time" class="statistic__filters-label">All time</label>
 
-      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-today" value="${filterStatsType.TODAY}" ${(currentFilter === filterStatsType.TODAY) ? 'checked' : ''}>
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-today" value="${SortStatisticType.TODAY}" ${(currentSort === SortStatisticType.TODAY) ? 'checked' : ''}>
       <label for="statistic-today" class="statistic__filters-label">Today</label>
 
-      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-week" value="${filterStatsType.WEEK}" ${(currentFilter === filterStatsType.WEEK) ? 'checked' : ''}>
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-week" value="${SortStatisticType.WEEK}" ${(currentSort === SortStatisticType.WEEK) ? 'checked' : ''}>
       <label for="statistic-week" class="statistic__filters-label">Week</label>
 
-      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-month" value="${filterStatsType.MONTH}" ${(currentFilter === filterStatsType.MONTH) ? 'checked' : ''}>
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-month" value="${SortStatisticType.MONTH}" ${(currentSort === SortStatisticType.MONTH) ? 'checked' : ''}>
       <label for="statistic-month" class="statistic__filters-label">Month</label>
 
-      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-year" value="${filterStatsType.YEAR}" ${(currentFilter === filterStatsType.YEAR) ? 'checked' : ''}>
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-year" value="${SortStatisticType.YEAR}" ${(currentSort === SortStatisticType.YEAR) ? 'checked' : ''}>
       <label for="statistic-year" class="statistic__filters-label">Year</label>
     </form>
 
@@ -124,7 +124,7 @@ const createStatisticsTemplate = (data, filters, current) => {
       </li>
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">Total duration</h4>
-        ${(movies.length > 0) ? `<p class="statistic__item-text">${durationArray[0]} <span class="statistic__item-description">h</span> ${durationArray[1]} <span class="statistic__item-description">m</span></p>` : '<p class="statistic__item-text">0</p>'}
+        ${(movies.length > 0) ? `<p class="statistic__item-text">${durationInHours} <span class="statistic__item-description">h</span> ${remainderInMinutes} <span class="statistic__item-description">m</span></p>` : '<p class="statistic__item-text">0</p>'}
       </li>
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">Top genre</h4>
@@ -139,14 +139,10 @@ const createStatisticsTemplate = (data, filters, current) => {
 };
 
 export default class Statistics extends SmartView {
-  constructor(moviesModel, filters, currentFilter) {
+  constructor(movies) {
     super();
-    this._moviesModel = moviesModel;
-    this._movies = this._moviesModel._movies;
-    this._filters = filters;
-    this._currentFilter = currentFilter;
+    this._movies = movies;
     this._filtredMovie = this._getMovies();
-    this._filterTypeChangeHandler = this._filterTypeChangeHandler.bind(this);
     this._createStatisticBlock = null;
     this._setCharts();
   }
@@ -156,7 +152,7 @@ export default class Statistics extends SmartView {
   }
 
   getTemplate() {
-    return createStatisticsTemplate(this._filtredMovie, this._filters, this._currentFilter);
+    return createStatisticsTemplate(this._filtredMovie);
   }
 
   restoreHandlers() {
@@ -177,9 +173,7 @@ export default class Statistics extends SmartView {
 
   _getMovies() {
     const watchedMovie = filter[FilterType.WATCHLIST](this._movies);
-    const filterType = this._currentFilter;
-    const filtredMovies = filterStats[filterType](watchedMovie);
-    return filtredMovies;
+    return watchedMovie;
   }
 
   _setCharts() {

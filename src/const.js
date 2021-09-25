@@ -9,12 +9,12 @@ export const SortType = {
   BY_COMMENTS_COUNT: 'comments',
 };
 
-export const filterStatsType = {
-  ALL_TIME: 'statistic-all-time',
-  TODAY: 'statistic-today',
-  WEEK: 'statistic-week',
-  MONTH: 'statistic-month',
-  YEAR: 'statistic-year',
+export const SortStatisticType = {
+  ALL_TIME: 'all-time',
+  TODAY: 'today',
+  WEEK: 'week',
+  MONTH: 'month',
+  YEAR: 'year',
 };
 
 export const RenderPosition = {
@@ -67,11 +67,6 @@ export const FilterType = {
 };
 
 export const MenuItem = {
-  MOVIES: 'MOVIES',
-  STATISTICS: 'STATISTICS',
-};
-
-export const movieDisplayType = {
-  CARD: 'CARD',
-  POPUP: 'POPUP',
+  MOVIES: 'movie',
+  STATISTICS: 'statistics',
 };

@@ -4,10 +4,13 @@ import MoviePopupView from '../view/movie-popup';
 import MovieCardView from '../view/movie-card';
 import {render, remove, replace} from '../utils/render';
 import {RenderPosition, Mode, UserAction, UpdateType} from './../const';
-import '../api/api';
+import {api} from '../api/api';
+import CommentsModel from '../model/comments';
+
+const commentsModel = new CommentsModel();
 
 export default class Movie {
-  constructor(container, moviesModel, commentsModel, changeData, changeMode) {
+  constructor(container, moviesModel, changeData, changeMode) {
     this._container = container;
     this._moviesModel = moviesModel;
     this._commentsModel = commentsModel;
@@ -31,6 +34,9 @@ export default class Movie {
     this._handleWatchlistClick = this._handleWatchlistClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleHistoryClick = this._handleHistoryClick.bind(this);
+
+    this._commentsModel.addObserver(this._handleModelEvent);
+    //this._moviesModel.addObserver(this._handleModelEvent);
   }
 
   init(movie) {
@@ -44,8 +50,7 @@ export default class Movie {
     this._movieComponent.setWatchlistClickHandler(this._handleWatchlistClick);
     this._movieComponent.setHistoryClickHandler(this._handleHistoryClick);
 
-    this._commentsModel.addObserver(this._handleModelEvent);
-    //this._moviesModel.addObserver(this._handleModelEvent);
+
 
     if (prevMovieComponent === null){
       render(this._containerForMovie, this._movieComponent, RenderPosition.BEFOREEND);
@@ -74,7 +79,7 @@ export default class Movie {
   }
 
   destroy() {
-    remove(this._popupComponent);
+    (this._popupComponent) ? remove(this._popupComponent) : '';
     remove(this._movieComponent);
   }
 

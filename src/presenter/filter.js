@@ -1,9 +1,7 @@
-import {moviesPresenter, siteMainElement} from '../main';
 import FilterView from '../view/filter';
-import StatisticsView from '../view/statistics';
-import {filter, filterStats, filterStatsDuration} from '../utils/filter';
-import {remove, render, replace} from '../utils/render';
-import {RenderPosition, FilterType, UpdateType, MenuItem, SortType, filterStatsType} from '../const';
+import {filter} from '../utils/filter';
+import {remove, render} from '../utils/render';
+import {RenderPosition, FilterType, UpdateType} from '../const';
 
 
 export default class Filter {
@@ -11,42 +9,28 @@ export default class Filter {
     this._filterContainer = filterContainer;
     this._filterModel = filterModel;
     this._moviesModel = moviesModel;
-    this._watchedMovies = [];
     this._filterComponent = null;
-    this._statisticComponent = null;
-    this._statsFilter = null;
-    this._container =
-
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
-    this._handleSiteMenuClick = this._handleSiteMenuClick.bind(this);
-    this._handlerFilterTypeStatistic = this._handlerFilterTypeStatistic.bind(this);
 
     this._moviesModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
   }
 
-  init() {
+  init(activeScreen) {
     const filters = this._getFilters();
-    this._statsFilter = this._getStatisticFilters();
-
-    const prevFilterComponent = this._filterComponent;
-
-    this._filterComponent = new FilterView(filters, this._filterModel.getFilter());
+    this._activeScreen = activeScreen;
+    this._filterComponent = new FilterView(filters, this._filterModel.getFilter(), this._activeScreen);
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
-    this._filterComponent.setMenuClickHandler(this._handleSiteMenuClick);
+    render(this._filterContainer, this._filterComponent, RenderPosition.AFTERBEGIN);
+  }
 
-    if (prevFilterComponent === null) {
-      render(this._filterContainer, this._filterComponent, RenderPosition.AFTERBEGIN);
-      return;
-    }
-
-    replace(this._filterComponent, prevFilterComponent);
-    remove(prevFilterComponent);
+  destroy() {
+    remove(this._filterComponent);
   }
 
   _handleModelEvent() {
-    this.init();
+
   }
 
   _handleFilterTypeChange(filterType) {
@@ -60,11 +44,6 @@ export default class Filter {
     const movies = this._moviesModel.getMovies();
 
     return [
-      {
-        type: FilterType.ALL,
-        name: 'All movies',
-        count: filter[FilterType.ALL](movies).length,
-      },
       {
         type: FilterType.FAVORITES,
         name: 'Favorites',
@@ -82,49 +61,9 @@ export default class Filter {
       },
     ];
   }
+}
 
-  _getStatisticFilters() {
-    const movies = filter[FilterType.WATCHLIST](this._moviesModel.getMovies());
-    const allTimeArray = filterStats[filterStatsType.ALL_TIME](movies);
-    const todayArray = filterStats[filterStatsType.TODAY](movies);
-    const weekArray = filterStats[filterStatsType.WEEK](movies);
-    const monthArray = filterStats[filterStatsType.MONTH](movies);
-    const yearArray = filterStats[filterStatsType.YEAR](movies);
-
-    return [
-      {
-        type: filterStatsType.ALL_TIME,
-        name: 'All time',
-        count: allTimeArray.length,
-        duration: filterStatsDuration(allTimeArray),
-      },
-      {
-        type: filterStatsType.TODAY,
-        name: 'Today',
-        count: todayArray.length,
-        duration: filterStatsDuration(todayArray),
-      },
-      {
-        type: filterStatsType.WEEK,
-        name: 'Week',
-        count: weekArray.length,
-        duration: filterStatsDuration(weekArray),
-      },
-      {
-        type: filterStatsType.MONTH,
-        name: 'Month',
-        count: monthArray.length,
-        duration: filterStatsDuration(monthArray),
-      },
-      {
-        type: filterStatsType.YEAR,
-        name: 'Year',
-        count: yearArray.length,
-        duration: filterStatsDuration(yearArray),
-      },
-    ];
-  }
-
+/*
   _linkActiveToogle(page) {
     if(page === 'stat') {
       document.querySelectorAll('a[data-menu = "false"]').forEach((link) => {
@@ -156,7 +95,7 @@ export default class Filter {
         this._linkActiveToogle('movie');
         break;
       case MenuItem.STATISTICS:
-        this._filterModel.setStatFilter(UpdateType.STAT, filterStatsType.ALL_TIME);
+        //this._filterModel.setStatFilter(UpdateType.STAT, filterStatsType.ALL_TIME);
         this._filterModel.setFilter(UpdateType.MAJOR, FilterType.ALL);
         moviesPresenter.destroy();
         this._statisticComponent = new StatisticsView(this._moviesModel, this._statsFilter, this._filterModel.getStatFilter());
@@ -167,6 +106,7 @@ export default class Filter {
     }
   }
 
+
   _handlerFilterTypeStatistic(filterType) {
     if (this._filterModel.getStatFilter() === filterType) {
       return;
@@ -176,6 +116,4 @@ export default class Filter {
     this._statisticComponent = new StatisticsView(this._moviesModel, this._statsFilter, this._filterModel.getStatFilter());
     this._statisticComponent.setFilterChangeStatistic(this._handlerFilterTypeStatistic);
     render(siteMainElement, this._statisticComponent, RenderPosition.BEFOREEND);
-  }
-}
-
+  }*/
